@@ -7,6 +7,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
@@ -68,7 +69,7 @@ public class Robot {
 
     public final Telemetry telemetry;
 
-    // Subsystems
+    // Subsystems and hardware
     public final MecanumDrive mecanumDrive;
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     public final Webcam leftWebcam;
@@ -79,6 +80,7 @@ public class Robot {
     public final Claw claw;
     public final Limelight limelight;
     public final SparkFunOTOS otos;
+    public final ColorSensor colorSensor;
 
     public final List<Webcam> webcams;
 
@@ -120,6 +122,7 @@ public class Robot {
         leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
         rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
         limelight = new Limelight(hardwareMap, telemetry);
+        colorSensor = new ColorSensor(hardwareMap, telemetry);
         otos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
         webcams = Arrays.asList(leftWebcam, rightWebcam);
