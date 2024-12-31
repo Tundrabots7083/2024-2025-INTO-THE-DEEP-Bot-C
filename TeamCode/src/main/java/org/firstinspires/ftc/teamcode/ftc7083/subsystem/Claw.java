@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.Servo;
 
 /**
  * The Claw class implements a claw used by the robot to pick up and score
@@ -21,16 +22,21 @@ import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
  */
 @Config
 public class Claw extends SubsystemBase {
-    public static long CLAW_WAIT_TIME = 250; // milliseconds
     public static String CLAW_SERVO = "clawServo";
+
+    // Time to wait for the claw to open or close, based on observed time
+    public static long CLAW_WAIT_TIME = 250; // milliseconds
+
     // Make default open/close degrees settable by FTC dashboard
     public static double DEFAULT_OPEN_DEGREES = 180.0;
     public static double DEFAULT_CLOSE_DEGREES = 20.0;
+
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 180.0;
+
     // Implement the claw using a Servo class
     private final Telemetry telemetry;
-    private Position clawPosition = Position.CLOSE;
+    private final Servo clawServo;
 
     /**
      * Constructor
@@ -40,59 +46,47 @@ public class Claw extends SubsystemBase {
      */
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
+        this.clawServo = new Servo(hardwareMap, CLAW_SERVO);
+        clawServo.setMaxDegrees(MAX_CLAW_DEGREES);
     }
 
     /**
-     * Opens claw to a default angle of 45 degrees from its zero position.
-     *
-     * @return double:  The degrees the claw was opened to.
-     *         Should be 45.
+     * Sets the claw to its opened position.
      */
-    public double open() {
-        return open(DEFAULT_OPEN_DEGREES);
+    public void open() {
+        setDegrees(DEFAULT_OPEN_DEGREES);
     }
 
     /**
-     * Opens the claw the number of degrees requested from its zero
-     * position.
-     *
-     * @param degrees: Number of degrees the claw is to be opened from
-     *                 its zero position.
-     * @return double:  The angle in degrees that the claw was opened to.
+     * Sets the claw to the specified number of degrees.
      */
-    public double open(double degrees) {
-        clawPosition = Position.OPEN;
-        return 90.0;
+    public void setDegrees(double degrees) {
+        clawServo.setDegrees(degrees);
     }
 
     /**
-     * Get the current position of the claw in degrees from
-     * it's start position.
+     * Get the current position of the claw.
      *
-     * @return double: The current position of the claw in degrees.
+     * @return The current position of the claw in degrees.
      */
     public double getCurrentPosition() {
-        return 90.0;
+        return clawServo.getPosition();
     }
 
     /**
-     * Close the claw back to its zero position.
+     * Get the current degrees of the claw.
      *
-     * @return double:  Degrees from claw's 0 position.
-     *         Should be zero.
+     * @return the current degrees for the claw.
      */
-    public double close() {
-        clawPosition = Position.CLOSE;
-        return 90.0;
+    public double getCurrentDegrees() {
+        return clawServo.getDegrees();
     }
 
     /**
-     * Gets the position the claw was last set to.
-     *
-     * @return the position the claw was last set to.
+     * Sets the claw to its closed position.
      */
-    public Position getPosition() {
-        return clawPosition;
+    public void close() {
+        setDegrees(DEFAULT_CLOSE_DEGREES);
     }
 
     /**
@@ -156,6 +150,14 @@ public class Claw extends SubsystemBase {
         }
 
         /**
+         * Initializes the claw, setting the claw to the <code>opened</code> position.
+         */
+        private void initialize() {
+            claw.open();
+            initialized = true;
+        }
+
+        /**
          * Opens the claw and completes execution.
          *
          * @param telemetryPacket telemetry used for output of data to the user
@@ -167,15 +169,6 @@ public class Claw extends SubsystemBase {
                 initialize();
             }
             return false;
-        }
-
-        /**
-         * Initializes the claw, setting the claw to the <code>opened</code> position.
-         */
-        private void initialize() {
-            claw.open();
-            claw.clawPosition = Position.OPEN;
-            initialized = true;
         }
     }
 
@@ -191,6 +184,14 @@ public class Claw extends SubsystemBase {
         }
 
         /**
+         * Initializes the claw, setting the claw to the <code>closed</code> position.
+         */
+        private void initialize() {
+            claw.close();
+            initialized = true;
+        }
+
+        /**
          * Closes the claw and completes execution.
          *
          * @param telemetryPacket telemetry used for output of data to the user
@@ -203,22 +204,5 @@ public class Claw extends SubsystemBase {
             }
             return false;
         }
-
-        /**
-         * Initializes the claw, setting the claw to the <code>closed</code> position.
-         */
-        private void initialize() {
-            claw.close();
-            claw.clawPosition = Position.CLOSE;
-            initialized = true;
-        }
-    }
-
-    /**
-     * Position of the claw
-     */
-    public enum Position {
-        OPEN,
-        CLOSE
     }
 }

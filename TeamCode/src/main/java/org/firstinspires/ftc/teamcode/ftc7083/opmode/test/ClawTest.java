@@ -40,15 +40,18 @@ public class ClawTest extends OpMode {
         double currentClawPosition; // Current position of claw in degrees
         if (DEFAULT_OPEN) {
             telemetry.addData("Open claw to default degrees", DEFAULT_OPEN_DEGREES);
-            currentClawPosition = claw.open();
+            claw.open();
+            currentClawPosition = claw.getCurrentPosition();
             telemetry.addData("Claw position after open claw to default", currentClawPosition);
         } else if (OPEN_WITH_DEGREES) {
             telemetry.addData("Open claw to specified degrees", CLAW_OPEN_DEGREES);
-            currentClawPosition = claw.open(CLAW_OPEN_DEGREES);
+            claw.setDegrees(CLAW_OPEN_DEGREES);
+            currentClawPosition = claw.getCurrentPosition();
             telemetry.addData("Claw position after open claw to specified degrees", currentClawPosition);
         } else if (CLOSE) {
             telemetry.addLine("Close claw");
-            currentClawPosition = claw.close();
+            claw.close();
+            currentClawPosition = claw.getCurrentPosition();
             telemetry.addData("Current position after close", currentClawPosition);
         }
         telemetry.update();
