@@ -53,12 +53,12 @@ public class LimelightIntakeTest extends OpMode {
 
         // Process gamepad controller inputs
         if (gamepad1.cross) {
-            intakeAndScoringSubsystem.moveToSampleIntakePosition();
+//            intakeAndScoringSubsystem.moveToSampleIntakePosition();
         }
 
         robot.arm.execute();
         robot.linearSlide.execute();
-        robot.limelight.execute();
+//        robot.limelight.execute();
         telemetry.update();
     }
 

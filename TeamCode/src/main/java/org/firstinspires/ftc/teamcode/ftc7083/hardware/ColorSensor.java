@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 @Config
 public class ColorSensor implements NormalizedColorSensor, DistanceSensor {
-    public static final String COLOR_SENSOR_NAME = "sensor_color";
+    public static final String COLOR_SENSOR_NAME = "colorSensor";
 
     public static float DEFAULT_GAIN = 15.0f;
     public static float MIN_RED_COLOR_VALUE = 2.0f;

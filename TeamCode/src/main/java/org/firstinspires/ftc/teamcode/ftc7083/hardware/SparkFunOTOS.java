@@ -73,9 +73,9 @@ public class SparkFunOTOS extends com.qualcomm.hardware.sparkfun.SparkFunOTOS {
     public SparkFunOTOS(I2cDeviceSynch deviceClient) {
         super(deviceClient);
 
-        Telemetry telemetry = Robot.getInstance().telemetry;
-
-        telemetry.addLine("[OTOS] initialization beginning!");
+//        Telemetry telemetry = Robot.getInstance().telemetry;
+//
+//        telemetry.addLine("[OTOS] initialization beginning!");
 
         // Don't change the units, it will stop FTCDashboard field view from working properly
         // and might cause various other issues
@@ -84,8 +84,8 @@ public class SparkFunOTOS extends com.qualcomm.hardware.sparkfun.SparkFunOTOS {
 
         Pose2D offset = new Pose2D(MOUNTING_OFFSET_X, MOUNTING_OFFSET_Y, Math.toRadians(MOUNTING_HEADING_IN_DEGREES));
         setOffset(offset);
-        telemetry.addData("[OTOS] linear scalar set", setLinearScalar(LINEAR_SCALAR));
-        telemetry.addData("[OTOS] angular scalar set", setAngularScalar(ANGULAR_SCALAR));
+//        telemetry.addData("[OTOS] linear scalar set", setLinearScalar(LINEAR_SCALAR));
+//        telemetry.addData("[OTOS] angular scalar set", setAngularScalar(ANGULAR_SCALAR));
 
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
         // have an offset. Note that as of firmware version 1.0, the calibration
@@ -104,19 +104,19 @@ public class SparkFunOTOS extends com.qualcomm.hardware.sparkfun.SparkFunOTOS {
         // this would allow your OpMode code to run while the calibration occurs.
         // However, that may cause other issues.
         // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
-        telemetry.addData("[OTOS] IBM calibrated", calibrateImu(NUM_IMU_CALIBRATION_SAMPLES, true));
+//        telemetry.addData("[OTOS] IBM calibrated", calibrateImu(NUM_IMU_CALIBRATION_SAMPLES, true));
 
         // Get the hardware and firmware version
-        com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version hwVersion = new com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version();
-        com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version fwVersion = new com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version();
-        getVersionInfo(hwVersion, fwVersion);
-
-        telemetry.addLine();
-        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
-        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
-
-        telemetry.addLine("[OTOS] initialization complete!");
-
-        telemetry.update();
+//        com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version hwVersion = new com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version();
+//        com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version fwVersion = new com.qualcomm.hardware.sparkfun.SparkFunOTOS.Version();
+//        getVersionInfo(hwVersion, fwVersion);
+//
+//        telemetry.addLine();
+//        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
+//        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
+//
+//        telemetry.addLine("[OTOS] initialization complete!");
+//
+//        telemetry.update();
     }
 }

@@ -35,9 +35,9 @@ public class Wrist extends SubsystemBase {
      */
     public Wrist(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry) {
         this.telemetry = telemetry;
-        frontServo = new Servo(hardwareMap, "wristFrontServo");
+        frontServo = new Servo(hardwareMap, "wristRoll");
         frontServo.setMaxDegrees(180);
-        backServo = new Servo(hardwareMap, "wristBackServo");
+        backServo = new Servo(hardwareMap, "wristPitch");
         backServo.setMaxDegrees(180);
     }
 

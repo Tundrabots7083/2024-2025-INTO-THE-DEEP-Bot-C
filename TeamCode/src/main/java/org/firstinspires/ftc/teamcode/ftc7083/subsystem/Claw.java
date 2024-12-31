@@ -22,14 +22,15 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Servo;
  */
 @Config
 public class Claw extends SubsystemBase {
-    public static String CLAW_SERVO = "clawServo";
+    public static String CLAW_SERVO = "claw";
 
     // Time to wait for the claw to open or close, based on observed time
     public static long CLAW_WAIT_TIME = 250; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
-    public static double DEFAULT_OPEN_DEGREES = 180.0;
-    public static double DEFAULT_CLOSE_DEGREES = 20.0;
+    public static double DEFAULT_OPEN_DEGREES = 172.0;
+    public static double DEFAULT_CLOSE_DEGREES = 110.0;
+    public static double DEFAULT_SAMPLE_DEGREES = 120.0;
 
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 180.0;
@@ -47,6 +48,7 @@ public class Claw extends SubsystemBase {
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.clawServo = new Servo(hardwareMap, CLAW_SERVO);
+        this.clawServo.setDirection(Servo.Direction.REVERSE);
         clawServo.setMaxDegrees(MAX_CLAW_DEGREES);
     }
 

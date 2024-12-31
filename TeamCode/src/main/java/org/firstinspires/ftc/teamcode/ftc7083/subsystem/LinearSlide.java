@@ -40,7 +40,7 @@ public class LinearSlide extends SubsystemBase {
      */
     public LinearSlide(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
-        slideMotor = new Motor(hardwareMap, telemetry, "armSlideMotor");
+        slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
         pidController = new PIDControllerImpl(KP, KI, KD);
     }
@@ -94,7 +94,7 @@ public class LinearSlide extends SubsystemBase {
         motor.setMotorType(motorConfigurationType);
         motor.setMode(Motor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(Motor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setDirection(Motor.Direction.FORWARD);
         motor.setInchesPerRev(Math.PI * SPOOL_DIAMETER);
     }
 

@@ -56,7 +56,7 @@ public class Arm extends SubsystemBase {
     public Arm(HardwareMap hardwareMap, Telemetry telemetry, double feedforward) {
         this.telemetry = telemetry;
         this.feedforward = feedforward;
-        shoulderMotor = new Motor(hardwareMap, telemetry, "armShoulderMotor");
+        shoulderMotor = new Motor(hardwareMap, telemetry, "arm");
         configMotor(shoulderMotor);
 
         LookUpTableArgs[] kpLUTArgs = new LookUpTableArgs[]{
