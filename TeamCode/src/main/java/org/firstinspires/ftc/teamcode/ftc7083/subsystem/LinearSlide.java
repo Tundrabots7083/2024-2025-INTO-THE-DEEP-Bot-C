@@ -161,7 +161,8 @@ public class LinearSlide extends SubsystemBase {
 
         @Override
         public double calculate(double target) {
-            return arm.getCurrentAngle() * kG;
+            double radians = Math.toRadians(arm.getCurrentAngle());
+            return Math.sin(radians) * kG;
         }
 
         /**
