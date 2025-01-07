@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide.LinearSlideFeedForward;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.LinearSlideFeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
 import org.firstinspires.ftc.vision.VisionPortal;
