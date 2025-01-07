@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 @Config
 public class MecanumDrive extends SubsystemBase {
-    public static double POWER_EXPONENT = 2.0;
+    public static double POWER_EXPONENT = 1.0;
     public static double STRAFING_ADJUSTMENT = 1.1;
     public static double MAX_DRIVE_POWER_GAIN = 1.0;
 
