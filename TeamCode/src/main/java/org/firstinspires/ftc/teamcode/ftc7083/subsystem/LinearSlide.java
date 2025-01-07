@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerEx;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
 /**
@@ -18,31 +20,47 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 @Config
 public class LinearSlide extends SubsystemBase {
     public static double SPOOL_DIAMETER = 1.4; // in inches
-    public static double TICKS_PER_REV = 384;
+    public static double TICKS_PER_REV = 537.7;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
-    public static double KP = 0.32;
-    public static double KI = 0.13;
-    public static double KD = 0.02;
-    public static double TOLERABLE_ERROR = 0.5; // inches
+
+    public static double KP = 0.3;
+    public static double KI = 0.4;
+    public static double KD = 0.05;
+    public static double KG = 0.3;
+
+    public static double TOLERABLE_ERROR = 0.05; // inches
     public static double MIN_EXTENSION_LENGTH = 0.3;
     public static double MAX_EXTENSION_LENGTH = 18;
+
+    public double GEARING = 1.0;
+
     private final Motor slideMotor;
     private final Telemetry telemetry;
     private final PIDController pidController;
-    public double GEARING = 1.0;
     private double targetLength = 0;
 
     /**
-     * Instantiates the linear slide for the robot.
+     * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
      *
      * @param hardwareMap Hardware Map
      * @param telemetry   Telemetry
      */
     public LinearSlide(HardwareMap hardwareMap, Telemetry telemetry) {
+        this(hardwareMap, telemetry, p->KG);
+    }
+
+    /**
+     * Instantiates the linear slide for the robot with the specified feed forward.
+     *
+     * @param hardwareMap  Hardware Map
+     * @param telemetry    Telemetry
+     * @param feedForward  Feed Forward
+     */
+    public LinearSlide(HardwareMap hardwareMap, Telemetry telemetry, FeedForward feedForward) {
         this.telemetry = telemetry;
         slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
-        pidController = new PIDControllerImpl(KP, KI, KD);
+        pidController = new PIDControllerEx(KP, KI, KD, feedForward);
     }
 
     /**
@@ -120,5 +138,43 @@ public class LinearSlide extends SubsystemBase {
         telemetry.addData("[Slide] target", targetLength);
         telemetry.addData("[Slide] current", getCurrentLength());
         return error <= TOLERABLE_ERROR;
+    }
+
+    /**
+     * Feed forward component for the linear slide. This is used by the arm's PID controller to
+     * compensate the pull of gravity on the linear slide, based on the angle of the arm.
+     */
+    public static class LinearSlideFeedForward implements FeedForward {
+        private final Arm arm;
+        private final double kG;
+
+        /**
+         * Instantiates a new feed forward component for the linear slide based on the arm.
+         *
+         * @param arm the arm for the intake subsystem
+         * @param kG  the gravity component to use in calculating the feed forward component
+         */
+        public LinearSlideFeedForward(Arm arm, double kG) {
+            this.arm = arm;
+            this.kG = kG;
+        }
+
+        @Override
+        public double calculate(double target) {
+            return arm.getCurrentAngle() * kG;
+        }
+
+        /**
+         * Returns a string representation for the linear slide feed forward function.
+         *
+         * @return a string representation for the linear slide feed forward function
+         */
+        @NonNull
+        public String toString() {
+            return "LinearSlideFeedForward{" +
+                    "ArmAngle=" + arm.getCurrentAngle() +
+                    ", kG=" + kG +
+                    "}";
+        }
     }
 }

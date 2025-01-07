@@ -2,26 +2,21 @@ package org.firstinspires.ftc.teamcode.ftc7083;
 
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
-import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
-import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide.LinearSlideFeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -153,7 +148,7 @@ public class Robot {
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         arm = new Arm(hardwareMap, telemetry, armFeedForward);
-        linearSlide = new LinearSlide(hardwareMap, telemetry);
+        linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
