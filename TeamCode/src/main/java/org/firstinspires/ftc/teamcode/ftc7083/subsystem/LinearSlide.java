@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerEx;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
 /**
@@ -18,12 +17,13 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 @Config
 public class LinearSlide extends SubsystemBase {
     public static double SPOOL_DIAMETER = 1.4; // in inches
-    public static double TICKS_PER_REV = 384;
+    public static double TICKS_PER_REV = 537.7;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
-    public static double KP = 0.32;
-    public static double KI = 0.13;
-    public static double KD = 0.02;
-    public static double TOLERABLE_ERROR = 0.5; // inches
+    public static double KP = 0.3;
+    public static double KI = 0.4;
+    public static double KD = 0.05;
+    public static double KG = 0.3;
+    public static double TOLERABLE_ERROR = 0.05; // inches
     public static double MIN_EXTENSION_LENGTH = 0.3;
     public static double MAX_EXTENSION_LENGTH = 18;
     private final Motor slideMotor;
@@ -42,7 +42,7 @@ public class LinearSlide extends SubsystemBase {
         this.telemetry = telemetry;
         slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
-        pidController = new PIDControllerImpl(KP, KI, KD);
+        pidController = new PIDControllerEx(KP, KI, KD, KG);
     }
 
     /**

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
@@ -24,7 +23,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 public class Arm extends SubsystemBase {
     public static double START_ANGLE = -47.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
-    public static double TICKS_PER_REV = 1397.1; // GoBuilda ticks per rev for 60 rpm
+    public static double TICKS_PER_REV = 537.7; // GoBuilda ticks per rev
     public static double TOLERABLE_ERROR = 0.7; // In degrees
     public static double MIN_ANGLE = -47.0;
     public static double MAX_ANGLE = 90.0;
@@ -90,7 +89,7 @@ public class Arm extends SubsystemBase {
         motor.setMotorType(motorConfigurationType);
         motor.setMode(Motor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(Motor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setDirection(Motor.Direction.FORWARD);
     }
 
     /**
