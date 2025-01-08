@@ -112,7 +112,7 @@ public class MecanumDriveController implements SubsystemController {
      * Convert the analog joystick values to tiered values.
      *
      * @param value the analog joystick value
-     * @return the corresponding tiered value.
+     * @return the corresponding tiered value
      */
     private double modifyGamepadValue(double value) {
         // Don't modify the input value at all
@@ -160,7 +160,8 @@ public class MecanumDriveController implements SubsystemController {
     public String toString() {
         return "MecanumDriveController{" +
                 "mecanumDrive=" + mecanumDrive +
-                "fastMode=" + fastMode +
+                ", fastMode=" + fastMode +
+                ", tiered=" + USE_TIERED_GAMEPAD_VALUES +
                 '}';
     }
 }
