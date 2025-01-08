@@ -34,6 +34,8 @@ public class MecanumDriveController implements SubsystemController {
     public static double DRIVE_GAIN_MAX = 1; // Fast drive speed gain
     public static double DRIVE_GAIN_MIN = 0.4; // Slow drive speed gain
 
+    public static boolean USE_TIERED_GAMEPAD_VALUES = false;
+
     private final MecanumDrive mecanumDrive;
     private final Telemetry telemetry;
 
@@ -76,7 +78,7 @@ public class MecanumDriveController implements SubsystemController {
 
     /**
      * Updates the robot drive speed based on the left and right joysticks on gamepad1. In addition,
-     * the left bumper on gampedad1 can be used to toggle the gain for the X axis, Y axis and
+     * the left bumper on gamepad1 can be used to toggle the gain for the X axis, Y axis and
      * turn speed.
      *
      * @param gamepad1 Gamepad1
@@ -85,14 +87,54 @@ public class MecanumDriveController implements SubsystemController {
     public void execute(Gamepad gamepad1, Gamepad gamepad2) {
         setGain(gamepad1);
 
-        double x = gamepad1.left_stick_x;
-        double y = -gamepad1.left_stick_y;
-        double turn = -gamepad1.right_stick_x * TURN_MULTIPLIER;
+        double x = modifyGamepadValue(gamepad1.left_stick_x);
+        double y = modifyGamepadValue(-gamepad1.left_stick_y);
+        double turn = modifyGamepadValue(-gamepad1.right_stick_x) * TURN_MULTIPLIER;
         telemetry.addData("[DRIVE] X", x);
         telemetry.addData("[DRIVE] Y", y);
         telemetry.addData("[DRIVE] Turn", turn);
 
         mecanumDrive.drive(x, y, turn);
+    }
+
+    /**
+     * Convert the analog joystick values to tiered values.
+     *
+     * @param value the analog joystick value
+     * @return the corresponding tiered value.
+     */
+    private double modifyGamepadValue(double value) {
+        // Don't modify the input value at all
+        if (!USE_TIERED_GAMEPAD_VALUES) {
+            return value;
+        }
+
+        // Modify the analog value to a value based on the tier.
+        double sign = value < 0.0 ? -1.0 : 1.0;
+        double absValue = Math.abs(value);
+        if (absValue < 0.10) {
+            return 0.0;
+        } else if (absValue < 0.19) {
+            return  sign * 0.1;
+        } else if (absValue < 0.28) {
+            return sign * 0.2;
+        } else if (absValue < 0.37) {
+            return sign * 0.3;
+        } else if (absValue < 0.46) {
+            return sign * 0.4;
+        } else if (absValue < 0.55) {
+            return sign * 0.5;
+        } else if (absValue < 0.64) {
+            return sign * 0.6;
+        } else if (absValue < 0.73) {
+            return sign * 0.7;
+        } else if (absValue < 0.82) {
+            return sign * 0.8;
+        } else if (absValue < 0.91) {
+            return sign * 0.9;
+        } else {
+            return sign;
+        }
     }
 
     /**
