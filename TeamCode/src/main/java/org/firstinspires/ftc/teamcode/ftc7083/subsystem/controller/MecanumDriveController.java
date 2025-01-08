@@ -35,6 +35,17 @@ public class MecanumDriveController implements SubsystemController {
     public static double DRIVE_GAIN_MIN = 0.4; // Slow drive speed gain
 
     public static boolean USE_TIERED_GAMEPAD_VALUES = false;
+    public static double TIER_9_PERCENT = 0.0;
+    public static double TIER_18_PERCENT = 0.1;
+    public static double TIER_27_PERCENT = 0.2;
+    public static double TIER_36_PERCENT = 0.3;
+    public static double TIER_45_PERCENT = 0.4;
+    public static double TIER_54_PERCENT = 0.5;
+    public static double TIER_63_PERCENT = 0.6;
+    public static double TIER_72_PERCENT = 0.7;
+    public static double TIER_81_PERCENT = 0.8;
+    public static double TIER_90_PERCENT = 0.9;
+    public static double TIER_100_PERCENT = 1.0;
 
     private final MecanumDrive mecanumDrive;
     private final Telemetry telemetry;
@@ -109,31 +120,33 @@ public class MecanumDriveController implements SubsystemController {
             return value;
         }
 
-        // Modify the analog value to a value based on the tier.
+        // Modify the analog value to a value based on the tier. Each "tier" is roughly 9% of the
+        // overall analog input values, and any control value within that "tier" is treated
+        // equally.
         double sign = value < 0.0 ? -1.0 : 1.0;
         double absValue = Math.abs(value);
-        if (absValue < 0.10) {
-            return 0.0;
-        } else if (absValue < 0.19) {
-            return  sign * 0.1;
-        } else if (absValue < 0.28) {
-            return sign * 0.2;
-        } else if (absValue < 0.37) {
-            return sign * 0.3;
-        } else if (absValue < 0.46) {
-            return sign * 0.4;
-        } else if (absValue < 0.55) {
-            return sign * 0.5;
-        } else if (absValue < 0.64) {
-            return sign * 0.6;
-        } else if (absValue < 0.73) {
-            return sign * 0.7;
-        } else if (absValue < 0.82) {
-            return sign * 0.8;
-        } else if (absValue < 0.91) {
-            return sign * 0.9;
+        if (absValue <= 0.09) {
+            return sign * TIER_9_PERCENT;
+        } else if (absValue <= 0.18) {
+            return  sign * TIER_18_PERCENT;
+        } else if (absValue <= 0.27) {
+            return sign * TIER_27_PERCENT;
+        } else if (absValue <= 0.36) {
+            return sign * TIER_36_PERCENT;
+        } else if (absValue <= 0.45) {
+            return sign * TIER_45_PERCENT;
+        } else if (absValue <= 0.54) {
+            return sign * TIER_54_PERCENT;
+        } else if (absValue <= 0.63) {
+            return sign * TIER_63_PERCENT;
+        } else if (absValue < 0.72) {
+            return sign * TIER_72_PERCENT;
+        } else if (absValue <= 0.81) {
+            return sign * TIER_81_PERCENT;
+        } else if (absValue <= 0.90) {
+            return sign * TIER_90_PERCENT;
         } else {
-            return sign;
+            return sign * TIER_100_PERCENT;
         }
     }
 
