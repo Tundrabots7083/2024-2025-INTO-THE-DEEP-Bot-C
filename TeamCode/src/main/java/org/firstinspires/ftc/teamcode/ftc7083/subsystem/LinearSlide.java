@@ -19,8 +19,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  */
 @Config
 public class LinearSlide extends SubsystemBase {
-    public static double SPOOL_DIAMETER = 1.4; // in inches
+    public static double SPOOL_DIAMETER = 2.025; // in inches
     public static double TICKS_PER_REV = 537.7;
+    public double GEARING = 1.0; // No gears
+
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
 
     public static double KP = 0.3;
@@ -31,8 +33,6 @@ public class LinearSlide extends SubsystemBase {
     public static double TOLERABLE_ERROR = 0.05; // inches
     public static double MIN_EXTENSION_LENGTH = 0.3;
     public static double MAX_EXTENSION_LENGTH = 18;
-
-    public double GEARING = 1.0;
 
     private final Motor slideMotor;
     private final Telemetry telemetry;
