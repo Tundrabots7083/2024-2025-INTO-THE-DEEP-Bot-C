@@ -21,13 +21,13 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // Robot measurements
     // Length of the arm and the wrist with zero extension in inches.
-    public static double ARM_LENGTH = 22.0;
+    public static double ARM_LENGTH = 15.0;
     // Height from the field to the center of rotation of the arm in inches.
-    public static double ARM_HEIGHT = 16.5;
+    public static double ARM_HEIGHT = 9.5;
     // Distance from the front of the robot to the back of the robot in inches.
-    public static double ROBOT_LENGTH = 18.0;
+    public static double ROBOT_LENGTH = 14.25;
     // Distance the arm can reach from the center of rotation of the arm in inches.
-    public static double MAX_ARM_LENGTH = 40.5;
+    public static double MAX_ARM_LENGTH = 43.5;
 
     // Intake constants
     public static double START_X = 14;

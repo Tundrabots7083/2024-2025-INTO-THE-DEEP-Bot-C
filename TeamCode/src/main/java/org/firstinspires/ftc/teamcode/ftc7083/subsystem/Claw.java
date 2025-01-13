@@ -28,12 +28,13 @@ public class Claw extends SubsystemBase {
     public static long CLAW_WAIT_TIME = 250; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
-    public static double DEFAULT_OPEN_DEGREES = 172.0;
-    public static double DEFAULT_CLOSE_DEGREES = 110.0;
-    public static double DEFAULT_SAMPLE_DEGREES = 120.0;
+    public static double DEFAULT_OPEN_DEGREES = 85.0;
+    public static double DEFAULT_CLOSE_DEGREES = 165.0;
+    public static double DEFAULT_SAMPLE_DEGREES_GRIPS = 42.5;
+    public static double DEFAULT_SAMPLE_DEGREES_SLIDES = 85.0;
 
     // Make max claw degrees settable by FTC dashboard
-    public static double MAX_CLAW_DEGREES = 180.0;
+    public static double MAX_CLAW_DEGREES = 355.0;
 
     // Implement the claw using a Servo class
     private final Telemetry telemetry;
@@ -48,7 +49,7 @@ public class Claw extends SubsystemBase {
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.clawServo = new Servo(hardwareMap, CLAW_SERVO);
-        this.clawServo.setDirection(Servo.Direction.REVERSE);
+        this.clawServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setMaxDegrees(MAX_CLAW_DEGREES);
     }
 

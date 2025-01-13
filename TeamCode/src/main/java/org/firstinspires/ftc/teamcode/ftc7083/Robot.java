@@ -44,10 +44,10 @@ import java.util.List;
  *         Arm
  *         <ul>
  *             <li>
- *                 Motor: Expansion Hub Port 1
+ *                 Motor: Expansion Hub Port 2
  *             </li>
  *             <li>
- *                 Encoder: Expansion Hub Port 1
+ *                 Encoder: Expansion Hub Port 2
  *             </li>
  *         </ul>
  *     </li>

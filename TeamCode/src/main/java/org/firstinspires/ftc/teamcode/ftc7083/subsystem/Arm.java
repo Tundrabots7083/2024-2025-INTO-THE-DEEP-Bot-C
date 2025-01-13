@@ -11,9 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.GainSchedulingPIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.LookUpTableArgs;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerEx;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 
 /**
  * An Arm is used to move the scoring subsystem in a circular arc, allowing the robot to both
@@ -21,6 +23,13 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  */
 @Config
 public class Arm extends SubsystemBase {
+    public static double KP = 0.12;
+    public static double KI = 0.0;
+    public static double KD = 0.0;
+    public static double KG = 0.17;
+
+    public static double GEARING = 22.0 / 10.0;
+
     public static double START_ANGLE = -47.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 537.7; // GoBuilda ticks per rev
@@ -31,8 +40,7 @@ public class Arm extends SubsystemBase {
     private final Motor shoulderMotor;
     private final Telemetry telemetry;
     private double feedforward;
-    private final GainSchedulingPIDController gainSchedulingPIDController;
-    public double GEARING = 22.0 / 10.0;
+    private final PIDController pidController;
     private double targetAngle = START_ANGLE;
 
     /**
@@ -73,7 +81,8 @@ public class Arm extends SubsystemBase {
                 new LookUpTableArgs(120, 0),
                 new LookUpTableArgs(200,0)};
 
-        gainSchedulingPIDController = new GainSchedulingPIDController(kpLUTArgs, kiLUTArgs, kdLUTArgs);
+        // pidController = new GainSchedulingPIDController(kpLUTArgs, kiLUTArgs, kdLUTArgs);
+        pidController = new PIDControllerEx(KP, KI, KD, new ArmFeedForward(this, KG));
     }
 
     /**
@@ -117,7 +126,7 @@ public class Arm extends SubsystemBase {
         double targetAngle = Range.clip(angle, MIN_ANGLE, MAX_ANGLE);
         if (this.targetAngle != targetAngle) {
             this.targetAngle = targetAngle;
-            gainSchedulingPIDController.reset();
+            pidController.reset();
         }
     }
 
@@ -128,7 +137,7 @@ public class Arm extends SubsystemBase {
      */
     public void execute() {
         double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
-        double power = gainSchedulingPIDController.calculate(targetAngle, degrees) + this.feedforward;
+        double power = pidController.calculate(targetAngle, degrees) + this.feedforward;
 
         shoulderMotor.setPower(power);
         telemetry.addData("[Arm] Target", targetAngle);
