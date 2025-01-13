@@ -31,7 +31,7 @@ public class LinearSlide extends SubsystemBase {
     public static double KG = 0.3;
 
     public static double TOLERABLE_ERROR = 0.05; // inches
-    public static double MIN_EXTENSION_LENGTH = 0.0;
+    public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 28;
 
     private final Motor slideMotor;

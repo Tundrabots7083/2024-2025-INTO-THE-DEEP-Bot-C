@@ -26,7 +26,7 @@ public class Arm extends SubsystemBase {
     public static double KP = 0.12;
     public static double KI = 0.0;
     public static double KD = 0.005;
-    public static double KG = 0.1;
+    public static double KG = 0.09;
 
     public static double GEARING = 2.45;
 
@@ -121,12 +121,13 @@ public class Arm extends SubsystemBase {
      * Sends power to the shoulder motor.
      */
     public void execute() {
-        double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
-        double power = pidController.calculate(targetAngle, degrees);
+        double currentDegrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
+        double power = pidController.calculate(targetAngle, currentDegrees);
 
         shoulderMotor.setPower(power);
-        telemetry.addData("[Arm] Target", targetAngle);
-        telemetry.addData("[Arm] Current", degrees);
+        telemetry.addData("[Arm] Target Deg", targetAngle);
+        telemetry.addData("[Arm] Current Deg", currentDegrees);
+        telemetry.addData("[Arm] Power", power);
     }
 
     /**
