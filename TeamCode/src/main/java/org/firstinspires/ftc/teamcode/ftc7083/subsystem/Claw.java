@@ -28,10 +28,11 @@ public class Claw extends SubsystemBase {
     public static long CLAW_WAIT_TIME = 250; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
-    public static double DEFAULT_OPEN_DEGREES = 85.0;
-    public static double DEFAULT_CLOSE_DEGREES = 165.0;
-    public static double DEFAULT_SAMPLE_DEGREES_GRIPS = 42.5;
-    public static double DEFAULT_SAMPLE_DEGREES_SLIDES = 85.0;
+    public static double CLOSE_DEGREE_OFFSET = 67.5;
+    public static double DEFAULT_CLOSE_DEGREES = 0.0;
+    public static double DEFAULT_OPEN_DEGREES = 95.0;
+    public static double DEFAULT_SAMPLE_DEGREES_GRIPS = 19.5;
+    public static double DEFAULT_SAMPLE_DEGREES_SLIDES = 22.0;
 
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 355.0;
@@ -64,7 +65,8 @@ public class Claw extends SubsystemBase {
      * Sets the claw to the specified number of degrees.
      */
     public void setDegrees(double degrees) {
-        clawServo.setDegrees(degrees);
+        double adjustedDegrees = degrees + CLOSE_DEGREE_OFFSET;
+        clawServo.setDegrees(adjustedDegrees);
     }
 
     /**
@@ -82,7 +84,7 @@ public class Claw extends SubsystemBase {
      * @return the current degrees for the claw.
      */
     public double getCurrentDegrees() {
-        return clawServo.getDegrees();
+        return clawServo.getDegrees() - CLOSE_DEGREE_OFFSET;
     }
 
     /**
