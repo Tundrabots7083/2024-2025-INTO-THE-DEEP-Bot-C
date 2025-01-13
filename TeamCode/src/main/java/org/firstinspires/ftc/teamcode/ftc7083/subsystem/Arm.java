@@ -25,21 +25,20 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 public class Arm extends SubsystemBase {
     public static double KP = 0.12;
     public static double KI = 0.0;
-    public static double KD = 0.0;
-    public static double KG = 0.17;
+    public static double KD = 0.005;
+    public static double KG = 0.1;
 
-    public static double GEARING = 22.0 / 10.0;
+    public static double GEARING = 2.45;
 
-    public static double START_ANGLE = -47.0;
+    public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
-    public static double TICKS_PER_REV = 537.7; // GoBuilda ticks per rev
-    public static double TOLERABLE_ERROR = 0.7; // In degrees
-    public static double MIN_ANGLE = -47.0;
-    public static double MAX_ANGLE = 90.0;
+    public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
+    public static double TOLERABLE_ERROR = 0.05; // In degrees
+    public static double MIN_ANGLE = -36.0;
+    public static double MAX_ANGLE = 100.0;
 
     private final Motor shoulderMotor;
     private final Telemetry telemetry;
-    private double feedforward;
     private final PIDController pidController;
     private double targetAngle = START_ANGLE;
 
@@ -50,19 +49,7 @@ public class Arm extends SubsystemBase {
      * @param telemetry   Telemetry
      */
     public Arm(HardwareMap hardwareMap, Telemetry telemetry) {
-        this(hardwareMap, telemetry, 0);
-    }
-
-    /**
-     * Makes an arm that can raise and lower.
-     *
-     * @param hardwareMap Hardware Map
-     * @param telemetry   Telemetry
-     * @param feedforward feedforward
-     */
-    public Arm(HardwareMap hardwareMap, Telemetry telemetry, double feedforward) {
         this.telemetry = telemetry;
-        this.feedforward = feedforward;
         shoulderMotor = new Motor(hardwareMap, telemetry, "arm");
         configMotor(shoulderMotor);
 
@@ -130,14 +117,12 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    public void setFeedforward (double feedforward) {this.feedforward = feedforward;}
-
     /**
      * Sends power to the shoulder motor.
      */
     public void execute() {
         double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
-        double power = pidController.calculate(targetAngle, degrees) + this.feedforward;
+        double power = pidController.calculate(targetAngle, degrees);
 
         shoulderMotor.setPower(power);
         telemetry.addData("[Arm] Target", targetAngle);

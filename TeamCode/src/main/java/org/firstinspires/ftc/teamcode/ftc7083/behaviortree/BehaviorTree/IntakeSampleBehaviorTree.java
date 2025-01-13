@@ -50,7 +50,7 @@ public class IntakeSampleBehaviorTree {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
         this.limelight = new Limelight(hardwareMap,telemetry);
         this.intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap,telemetry);
-        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO, 0.05);
+        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
         this.mecanumDrive = new MecanumDrive(hardwareMap,telemetry);
 
         this.root = new Sequence(

@@ -129,9 +129,8 @@ public class Robot {
      * @param hardwareMap    hardware map for the robot.
      * @param telemetry      telemetry class for displaying data.
      * @param opModeType     the type of opmode the robot is being used for
-     * @param armFeedForward feed forward value for the arm
      */
-    private Robot(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry, OpModeType opModeType, double armFeedForward) {
+    private Robot(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry, OpModeType opModeType) {
         robot = this;
         this.telemetry = telemetry;
 
@@ -147,7 +146,7 @@ public class Robot {
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        arm = new Arm(hardwareMap, telemetry, armFeedForward);
+        arm = new Arm(hardwareMap, telemetry);
         linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
@@ -187,20 +186,7 @@ public class Robot {
      * @return the robot instance
      */
     public static Robot init(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry, OpModeType opModeType) {
-        return init(hardwareMap, telemetry, OpModeType.TELEOP, 0.0);
-    }
-
-    /**
-     * Initializes the hardware mechanisms for the robot. This creates the singleton that is retrieved
-     * using the <code>getInstance</code> method.
-     *
-     * @param hardwareMap hardware map for the robot.
-     * @param telemetry   telemetry class for displaying data.
-     * @param opModeType  the type of opmode the robot is being used for
-     * @return the robot instance
-     */
-    public static Robot init(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry, OpModeType opModeType, double armFeedForward) {
-        robot = new Robot(hardwareMap, telemetry, opModeType, armFeedForward);
+        robot = new Robot(hardwareMap, telemetry, opModeType);
         return robot;
     }
 
