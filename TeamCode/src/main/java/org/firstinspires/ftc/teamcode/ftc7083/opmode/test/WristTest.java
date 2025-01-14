@@ -5,33 +5,31 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.Servo;
 
-/**
- * This OpMode tests the wrist using FTC Dashboard (<a href="http://192.168.43.1:8080/dash">...</a>)
- * to change the Pitch and Yaw servo positions.
- */
 @Config
-@TeleOp(name = "Wrist Test TeleOp", group = "tests")
+@TeleOp(name = "Wrist Test", group = "tests")
 public class WristTest extends OpMode {
+    public static String WRIST_PITCH_SERVO_NAME = "wristPitch";
+    public static String WRIST_ROLL_SERVO_NAME = "wristRoll";
+    // public static double SERVO_MAX_DEGREES = 270;
+    public static double PITCH_MAX_DEGREES = 270;
+    public static double ROLL_MAX_DEGREES = 355;
+    public static double PITCH_SERVO_DEGREES = 0.0;
+    public static double ROLL_SERVO_DEGREES = 0.0;
 
-    public static int UPWARD_PITCH_LIMIT = 90;
-    public static int DOWNWARD_PITCH_LIMIT = 90;
-    public static double PITCH = 0.0;
-    public static double YAW = 0.0;
-    private final Gamepad currentGamepad1 = new Gamepad();
-    public double gamepadPitch;
-    public double gamepadYaw;
-    Wrist wrist;
+    private Servo rollServo;
+    private Servo pitchServo;
 
     @Override
     public void init() {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        wrist = new Wrist(hardwareMap, telemetry);
+        rollServo = new Servo(hardwareMap, WRIST_ROLL_SERVO_NAME);
+        pitchServo = new Servo(hardwareMap, WRIST_PITCH_SERVO_NAME);
+        rollServo.setMaxDegrees(ROLL_MAX_DEGREES);
+        pitchServo.setMaxDegrees(PITCH_MAX_DEGREES);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -39,17 +37,15 @@ public class WristTest extends OpMode {
 
     @Override
     public void loop() {
-        // Always get a copy of the current gamepads. The gamepads are updated in near real time,
-        // so this ensures that a consistent set of values are used within each subsystem controller.
-        currentGamepad1.copy(gamepad1);
-
-        this.gamepadPitch = -gamepad1.right_stick_y * UPWARD_PITCH_LIMIT;
-        this.gamepadYaw = gamepad1.right_stick_x * DOWNWARD_PITCH_LIMIT;
-
-        wrist.setPosition(gamepadPitch, gamepadYaw);
-
-        telemetry.addData("Front/Right Servo: ", wrist.getFrontServoDegrees());
-        telemetry.addData("Back/Left Servo: ", wrist.getBackServoDegrees());
+        rollServo.setMaxDegrees(ROLL_MAX_DEGREES);
+        pitchServo.setMaxDegrees(PITCH_MAX_DEGREES);
+        pitchServo.setDegrees(PITCH_SERVO_DEGREES);
+        rollServo.setDegrees(ROLL_SERVO_DEGREES);
+        telemetry.addData("Target Degrees", PITCH_SERVO_DEGREES);
+        telemetry.addData("Retrieved pitchDegrees", pitchServo.getDegrees());
+        telemetry.addData("Retrieved rollDegrees", rollServo.getDegrees());
+        telemetry.addData("rollPosition", rollServo.getPosition());
+        telemetry.addData("pitchPosition", pitchServo.getPosition());
         telemetry.update();
     }
 }
