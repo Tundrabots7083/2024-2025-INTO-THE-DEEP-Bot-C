@@ -23,10 +23,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
  */
 @Config
 public class Arm extends SubsystemBase {
-    public static double KP = 0.12;
+    public static double KP = 0.08;
     public static double KI = 0.0;
     public static double KD = 0.005;
-    public static double KG = 0.09;
+    public static double KG = 0.05;
 
     public static double GEARING = 2.45;
 
