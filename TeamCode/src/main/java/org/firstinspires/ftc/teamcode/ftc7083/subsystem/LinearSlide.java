@@ -172,9 +172,8 @@ public class LinearSlide extends SubsystemBase {
          */
         @NonNull
         public String toString() {
-            return "LinearSlideFeedForward{" +
+            return "LinearSlide{" +
                     "ArmAngle=" + arm.getCurrentAngle() +
-                    ", kG=" + kG +
                     "}";
         }
     }
