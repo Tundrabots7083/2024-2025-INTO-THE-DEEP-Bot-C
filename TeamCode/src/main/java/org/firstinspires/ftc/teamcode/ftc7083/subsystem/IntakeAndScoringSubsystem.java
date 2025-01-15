@@ -69,7 +69,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 4.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y + 5;
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH;
+    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 3.5;
     public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT;
 
     // Other scoring constants
@@ -118,7 +118,10 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the subsystem to the starting position, with the claw closed.
      */
     public void moveToStartPosition() {
+        Robot robot = Robot.getInstance();
         moveToPosition(START_X, START_Y);
+        robot.wrist.setToStartPosition();
+        robot.claw.close();
         telemetry.addData("[IAS] position", "start");
     }
 
@@ -157,9 +160,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         double armAngle = getAngle(targetX, adjustedY);
         telemetry.addData("[IAS] arm angle", armAngle);
         robot.arm.setTargetAngle(armAngle);
-        // Don't use the wrist movement, as the arm can't reach the ground to pickup samples if the
-        // wrist is articulated
-        // robot.wrist.setPitch(-armAngle * 2.0);
     }
 
     /**
@@ -209,6 +209,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToIntakeShortPosition() {
         moveToPosition(INTAKE_SHORT_X, INTAKE_SHORT_Y);
+        robot.wrist.setToIntakeSample();
+        robot.claw.open();
         telemetry.addData("[IAS] position", "intake short");
     }
 
@@ -219,6 +221,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToIntakeLongPosition() {
         moveToPosition(INTAKE_LONG_X, INTAKE_LONG_Y);
+        robot.wrist.setToIntakeSample();
+        robot.claw.open();
         telemetry.addData("[IAS] position", "intake long");
     }
 
@@ -228,6 +232,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToNeutralPosition() {
         moveToPosition(NEUTRAL_X, NEUTRAL_Y);
+        robot.wrist.setToIntakeSpecimen();
         telemetry.addData("[IAS] position", "neutral");
     }
 
@@ -237,6 +242,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketHighScoringPosition() {
         moveToPosition(HIGH_BASKET_SCORING_X, HIGH_BASKET_SCORING_Y);
+        robot.wrist.setToScoreBasket();
         telemetry.addData("[IAS] position", "high basket");
     }
 
@@ -246,6 +252,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketLowScoringPosition() {
         moveToPosition(LOW_BASKET_SCORING_X, LOW_BASKET_SCORING_Y);
+        robot.wrist.setToScoreBasket();
         telemetry.addData("[IAS] position", "low basket");
     }
 
@@ -255,6 +262,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToChamberHighScoringPosition() {
         moveToPosition(HIGH_CHAMBER_SCORING_X, HIGH_CHAMBER_SCORING_Y);
+        robot.wrist.setToScoreChamber();
         telemetry.addData("[IAS] position", "high chamber");
     }
 
@@ -264,18 +272,16 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToChamberLowScoringPosition() {
         moveToPosition(LOW_CHAMBER_SCORING_X, LOW_CHAMBER_SCORING_Y);
+        robot.wrist.setToScoreChamber();
         telemetry.addData("[IAS] position", "low chamber");
     }
 
     /**
-     * Moves the arm, slide, and wrist to prepare the robot
-     * to intake a sample.
+     * Moves the arm and slide to touch the lower ascent bar.
      */
-//    public void moveToSampleIntakePosition() {
-//        double xDistance = (double) robot.limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE);
-//        double sampleHeight = 1.1;
-//        moveToPosition(xDistance,sampleHeight);
-//    }
+    public void moveToAscentLevelOne() {
+        moveToPosition(LOW_ASCENT_BAR_X, LOW_ASCENT_BAR_Y);
+    }
 
     /**
      * Moves the arm, slide, wrist, and claw to downward.

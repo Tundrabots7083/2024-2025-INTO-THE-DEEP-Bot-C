@@ -63,6 +63,46 @@ public class Wrist extends SubsystemBase {
     }
 
     /**
+     * Sets the wrist to its starting position.
+     */
+    public void setToStartPosition() {
+        setPitchDegrees(START_POSITION_PITCH);
+        setRollDegrees(START_POSITION_ROLL);
+    }
+
+    /**
+     * Sets the wrist so that it can intake a sample off the ground.
+     */
+    public void setToIntakeSample() {
+        setPitchDegrees(INTAKE_SAMPLE_PITCH);
+        setRollDegrees(INTAKE_SAMPLE_ROLL);
+    }
+
+    /**
+     * Sets the wrist so that it can intake a specimen off the wall.
+     */
+    public void setToIntakeSpecimen() {
+        setPitchDegrees(INTAKE_SPECIMEN_PITCH);
+        setRollDegrees(INTAKE_SPECIMEN_ROLL);
+    }
+
+    /**
+     * Sets the wrist for scoring in the high basket.
+     */
+    public void setToScoreBasket() {
+        setPitchDegrees(SCORE_BASKET_PITCH);
+        setRollDegrees(SCORE_BASKET_ROLL);
+    }
+
+    /**
+     * Sets the wrist for scoring on the high chamber.
+     */
+    public void setToScoreChamber() {
+        setPitchDegrees(SCORE_CHAMBER_PITCH);
+        setRollDegrees(SCORE_CHAMBER_ROLL);
+    }
+
+    /**
      * getPitchPosition returns the current set pitch position.
      *
      * @return returns pitch position
