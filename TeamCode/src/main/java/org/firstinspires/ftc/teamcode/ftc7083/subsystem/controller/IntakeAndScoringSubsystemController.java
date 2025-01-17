@@ -10,10 +10,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  * Manages the intake and scoring subsystem within a TeleOp OpMode. The following controls are
  * used to manage the subsystem:
  * <ul>
- *     <li>
- *         <em>gamepad2.dpad_down</em>: a toggle that moves the scoring subsystem to the low chamber
- *          position when first pressed and retracts the linear slide if pressed a second time.
- *     </li>
  *           <em>gamepad2.dpad_up</em>: a toggle that moves the scoring subsystem to the high chamber
  *  *          position when first pressed and retracts the linear slide if pressed a second time.
  *     </li>
@@ -50,13 +46,11 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *         <em>gamepad2.dpad_right</em>: raises the arm on the scoring subsystem.
  *     </li>
  *     <li>
- *         <em>gamepad2.left_stick_y</em>: manually extend and retract the linear slide.
- *     </li>
- *     <li>
- *         <em>gamepad2.right_stick_y</em>: manually raise and lower the arm.
- *     </li>
- *     <li>
  *         <em>gamepad2.left_bumper</em>: open or close the claw.
+ *     </li>
+ *     <li>
+ *         <em>gamepad2.right_bumper</em>: move the scoring subsystem into a position where the
+ *         linear slide can touch the low chamber bar, achieving an ascent level 1.
  *     </li>
  * </ul>
  */
@@ -93,15 +87,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      */
     public void execute(Gamepad gamepad1, Gamepad gamepad2) {
         // Preset positions for the arm and linear slide
-        if (gamepad2.dpad_down && !previousGamepad2.dpad_down) {
-            if (state != State.LOW_CHAMBER_SCORING_POSITION) {
-                intakeAndScoringSubsystem.moveToChamberLowScoringPosition();
-                state = State.LOW_CHAMBER_SCORING_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractLinearSlide();
-                state = State.RETRACTED_POSITION;
-            }
-        } else if (gamepad2.dpad_up && !previousGamepad2.dpad_up) {
+        if (gamepad2.dpad_up && !previousGamepad2.dpad_up) {
             if (state != State.HIGH_CHAMBER_SCORING_POSITION) {
                 intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
                 state = State.HIGH_CHAMBER_SCORING_POSITION;
@@ -139,6 +125,14 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 state = State.INTAKE_FAR_POSITION;
             } else {
                 intakeAndScoringSubsystem.retractFromSubmersible();
+                state = State.RETRACTED_POSITION;
+            }
+        } else if (gamepad2.right_bumper && !previousGamepad2.right_bumper) {
+            if (state != State.ASCENT_LEVEL_ONE) {
+                intakeAndScoringSubsystem.moveToAscentLevelOne();
+                state = State.ASCENT_LEVEL_ONE;
+            } else {
+                intakeAndScoringSubsystem.retractLinearSlide();
                 state = State.RETRACTED_POSITION;
             }
         } else if (gamepad2.share && !previousGamepad2.share) {
@@ -204,6 +198,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         LOW_CHAMBER_SCORING_POSITION,
         HIGH_CHAMBER_SCORING_POSITION,
         INTAKE_CLOSE_POSITION,
-        INTAKE_FAR_POSITION
+        INTAKE_FAR_POSITION,
+        ASCENT_LEVEL_ONE
     }
 }

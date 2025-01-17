@@ -20,20 +20,20 @@ public class Wrist extends SubsystemBase {
     public static double ROLL_SERVO_MAX_DEGREES = 355;
 
     // Offset for the pitch and roll servos to make the "zero" position the middle
-    public static double PITCH_DEGREES_OFFSET = 150.0;
+    public static double PITCH_DEGREES_OFFSET = 0.0;
     public static double ROLL_DEGREES_OFFSET = 156.0;
 
     // Minimum and maximum pitch and roll values we allow to be set
-    public static double MIN_ROLL = -90;
-    public static double MAX_ROLL = 90;
+    public static double MIN_ROLL = -45;
+    public static double MAX_ROLL = 45;
     public static double MIN_PITCH = 0;
     public static double MAX_PITCH = 180;
 
     // Pre-set positions
     public static double INTAKE_SAMPLE_PITCH = 0.0;
     public static double INTAKE_SAMPLE_ROLL = 0.0;
-    public static double INTAKE_SPECIMEN_PITCH = 0.0;
-    public static double INTAKE_SPECIMEN_ROLL = 100.0;
+    public static double INTAKE_SPECIMEN_PITCH = 100.0;
+    public static double INTAKE_SPECIMEN_ROLL = 0.0;
     public static double SCORE_BASKET_PITCH = 120.0;
     public static double SCORE_BASKET_ROLL = 0.0;
     public static double SCORE_CHAMBER_PITCH = 100.0;

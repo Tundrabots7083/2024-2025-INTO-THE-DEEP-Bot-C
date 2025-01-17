@@ -33,7 +33,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double START_X = 14;
     public static double START_Y = 0.0;
     public static double NEUTRAL_X = ARM_LENGTH;
-    public static double NEUTRAL_Y = ARM_HEIGHT;
+    public static double NEUTRAL_Y = ARM_HEIGHT - 5.0;
     public static double RETRACT_X = ARM_LENGTH;
     public static double RETRACT_Y = 5.0;
     public static double INTAKE_SHORT_X = 15.0;
@@ -46,7 +46,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // Heights of scoring places for game are in inches
     public static double HIGH_CHAMBER_HEIGHT = 26.0;
     public static double LOW_CHAMBER_HEIGHT = 13.0;
-    public static double HIGH_BASKET_HEIGHT = 48.6;
+    public static double HIGH_BASKET_HEIGHT = 43.0;
     public static double LOW_BASKET_HEIGHT = 25.75;
     public static double LOW_ASCENT_BAR_HEIGHT = 20.0;
     public static double HIGH_ASCENT_BAR_HEIGHT = 36.0;
@@ -58,14 +58,12 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // the arm that the scoring subsystem needs to reach to score in
     // different places.
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT + 2.5;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 6;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
-    public static double LOW_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double LOW_CHAMBER_SCORING_Y = LOW_CHAMBER_HEIGHT + 3.5;
-    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH;
-    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_HEIGHT + 5.5;
-    public static double LOW_BASKET_SCORING_X = ARM_LENGTH;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.5;
+    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 20.0;
+    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_HEIGHT + 5.0;
+    public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 4.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y + 5;
@@ -264,16 +262,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         moveToPosition(HIGH_CHAMBER_SCORING_X, HIGH_CHAMBER_SCORING_Y);
         robot.wrist.setToScoreChamber();
         telemetry.addData("[IAS] position", "high chamber");
-    }
-
-    /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the low chamber bar.
-     */
-    public void moveToChamberLowScoringPosition() {
-        moveToPosition(LOW_CHAMBER_SCORING_X, LOW_CHAMBER_SCORING_Y);
-        robot.wrist.setToScoreChamber();
-        telemetry.addData("[IAS] position", "low chamber");
     }
 
     /**
