@@ -27,7 +27,7 @@ public class Wrist extends SubsystemBase {
     public static double MIN_ROLL = -45;
     public static double MAX_ROLL = 45;
     public static double MIN_PITCH = 0;
-    public static double MAX_PITCH = 180;
+    public static double MAX_PITCH = 208;
 
     // Pre-set positions
     public static double INTAKE_SAMPLE_PITCH = 0.0;
@@ -38,7 +38,7 @@ public class Wrist extends SubsystemBase {
     public static double SCORE_BASKET_ROLL = 0.0;
     public static double SCORE_CHAMBER_PITCH = 100.0;
     public static double SCORE_CHAMBER_ROLL = 0.0;
-    public static double START_POSITION_PITCH = 0.0;
+    public static double START_POSITION_PITCH = 208.0;
     public static double START_POSITION_ROLL = 0.0;
 
     private final Telemetry telemetry;

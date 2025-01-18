@@ -30,17 +30,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double MAX_ARM_LENGTH = 43.5;
 
     // Intake constants
-    public static double START_X = 14;
-    public static double START_Y = 0.0;
+    public static double START_X = ARM_LENGTH - 4.5;
+    public static double START_Y = 0.5;
     public static double NEUTRAL_X = ARM_LENGTH;
     public static double NEUTRAL_Y = ARM_HEIGHT - 5.0;
     public static double RETRACT_X = ARM_LENGTH;
     public static double RETRACT_Y = 5.0;
-    public static double INTAKE_SHORT_X = 15.0;
+    public static double INTAKE_SHORT_X = ARM_LENGTH + 7.5;
     public static double INTAKE_SHORT_Y = 5.5;
-    public static double INTAKE_LONG_X = 27.0;
+    public static double INTAKE_LONG_X = ARM_LENGTH + 15.0;
     public static double INTAKE_LONG_Y = 5.5;
-    public static double DEPOSIT_SAMPLE_X = 27.0;
+    public static double DEPOSIT_SAMPLE_X = ARM_LENGTH + 12.0;
     public static double DEPOSIT_SAMPLE_Y = 7.5;
 
     // Heights of scoring places for game are in inches
@@ -59,11 +59,19 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // different places.
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
     public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 6;
+    public static double HIGH_CHAMBER_RETRACTED_X = ARM_LENGTH;
+    public static double HIGH_CHAMBER_RETRACTED_Y = ARM_HEIGHT + 0.5;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
-    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 20.0;
+    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_HEIGHT + 5.0;
+    public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;
+    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;
+    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 5.0;
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
     public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.0;
+    public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
+    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 4.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y + 5;
@@ -245,6 +253,25 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Moves the arm, slide, wrist, and claw to an extended position that is straight up and down
+     * at a height that can score on the high basket.
+     */
+    public void moveToBasketHighRaisedPosition() {
+        moveToPosition(HIGH_BASKET_RAISED_X, HIGH_BASKET_RAISED_Y);
+        robot.wrist.setToIntakeSpecimen();
+        telemetry.addData("[IAS] position", "high basket");
+    }
+
+    /**
+     * Moves the arm, slide, wrist, and claw to a retracted position angled toward the baskets.
+     */
+    public void moveToBasketHighRetractedPosition() {
+        moveToPosition(HIGH_BASKET_RETRACTED_X, HIGH_BASKET_RETRACTED_Y);
+        robot.wrist.setToIntakeSpecimen();
+        telemetry.addData("[IAS] position", "high basket");
+    }
+
+    /**
      * Moves the arm, slide, wrist, and claw to prepare the robot
      * to score on the low basket.
      */
@@ -256,10 +283,30 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     /**
      * Moves the arm, slide, wrist, and claw to prepare the robot
+     * to score on the low basket.
+     */
+    public void moveToBasketLowRetractedPosition() {
+        moveToPosition(LOW_BASKET_RETRACTED_X, LOW_BASKET_RETRACTED_Y);
+        robot.wrist.setToScoreBasket();
+        telemetry.addData("[IAS] position", "low basket");
+    }
+
+    /**
+     * Moves the arm, slide, wrist, and claw to prepare the robot
      * to score on the high chamber bar.
      */
     public void moveToChamberHighScoringPosition() {
         moveToPosition(HIGH_CHAMBER_SCORING_X, HIGH_CHAMBER_SCORING_Y);
+        robot.wrist.setToScoreChamber();
+        telemetry.addData("[IAS] position", "high chamber");
+    }
+
+    /**
+     * Moves the arm, slide, wrist, and claw to prepare the robot
+     * to score on the high chamber bar.
+     */
+    public void moveToChamberHighRetractedPosition() {
+        moveToPosition(HIGH_CHAMBER_RETRACTED_X, HIGH_CHAMBER_RETRACTED_Y);
         robot.wrist.setToScoreChamber();
         telemetry.addData("[IAS] position", "high chamber");
     }

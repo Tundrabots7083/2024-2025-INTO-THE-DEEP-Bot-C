@@ -88,83 +88,196 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public void execute(Gamepad gamepad1, Gamepad gamepad2) {
         // Preset positions for the arm and linear slide
         if (gamepad2.dpad_up && !previousGamepad2.dpad_up) {
-            if (state != State.HIGH_CHAMBER_SCORING_POSITION) {
-                intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
-                state = State.HIGH_CHAMBER_SCORING_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractLinearSlide();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+                    state = State.HIGH_CHAMBER_SCORING_POSITION;
+                case HIGH_CHAMBER_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToChamberHighRetractedPosition();
+                    state = State.HIGH_CHAMBER_RETRACTED_POSITION;
+                    break;
+                case HIGH_CHAMBER_RETRACTED_POSITION:
+                    intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+                    state = State.HIGH_CHAMBER_SCORING_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+                    state = State.HIGH_CHAMBER_SCORING_POSITION;
+                    break;
             }
         } else if (gamepad2.cross && !previousGamepad2.cross) {
-            if (state != State.LOW_BASKET_SCORING_POSITION) {
-                intakeAndScoringSubsystem.moveToBasketLowScoringPosition();
-                state = State.LOW_BASKET_SCORING_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractLinearSlide();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketLowRetractedPosition();
+                    state = State.LOW_BASKET_RETRACTED_POSITION;
+                    break;
+                case LOW_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketLowRetractedPosition();
+                    state = State.LOW_BASKET_RETRACTED_POSITION;
+                    break;
+                case LOW_BASKET_RETRACTED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketLowScoringPosition();
+                    state = State.LOW_BASKET_SCORING_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToBasketLowRetractedPosition();
+                    state = State.LOW_BASKET_RETRACTED_POSITION;
             }
         } else if (gamepad2.triangle && !previousGamepad2.triangle) {
-            if (state != State.HIGH_BASKET_SCORING_POSITION) {
-                intakeAndScoringSubsystem.moveToBasketHighScoringPosition();
-                state = State.HIGH_BASKET_SCORING_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractLinearSlide();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_RETRACTED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_PRE_SCORING_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighScoringPosition();
+                    state = State.HIGH_BASKET_SCORING_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
             }
         } else if (gamepad2.square && !previousGamepad2.square) {
-            if (state != State.INTAKE_CLOSE_POSITION) {
-                intakeAndScoringSubsystem.moveToIntakeShortPosition();
-                state = State.INTAKE_CLOSE_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractFromSubmersible();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToIntakeShortPosition();
+                    state = State.INTAKE_CLOSE_POSITION;
+                    break;
+                case INTAKE_CLOSE_POSITION:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
             }
         } else if (gamepad2.circle && !previousGamepad2.circle) {
-            if (state != State.INTAKE_FAR_POSITION) {
-                intakeAndScoringSubsystem.moveToIntakeLongPosition();
-                state = State.INTAKE_FAR_POSITION;
-            } else {
-                intakeAndScoringSubsystem.retractFromSubmersible();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToIntakeLongPosition();
+                    state = State.INTAKE_FAR_POSITION;
+                    break;
+                case INTAKE_FAR_POSITION:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
             }
         } else if (gamepad2.right_bumper && !previousGamepad2.right_bumper) {
-            if (state != State.ASCENT_LEVEL_ONE) {
-                intakeAndScoringSubsystem.moveToAscentLevelOne();
-                state = State.ASCENT_LEVEL_ONE;
-            } else {
-                intakeAndScoringSubsystem.retractLinearSlide();
-                state = State.RETRACTED_POSITION;
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToAscentLevelOne();
+                    state = State.ASCENT_LEVEL_ONE;
+                    break;
+                case ASCENT_LEVEL_ONE:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToAscentLevelOne();
+                    state = State.ASCENT_LEVEL_ONE;
             }
         } else if (gamepad2.share && !previousGamepad2.share) {
-            intakeAndScoringSubsystem.moveToNeutralPosition();
-            state = State.NEUTRAL_POSITION;
+            switch (state) {
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+            }
         } else if (gamepad2.options) {
-            intakeAndScoringSubsystem.moveToStartPosition();
-            state = State.START_POSITION;
+            switch (state) {
+                case HIGH_BASKET_PRE_SCORING_POSITION:
+                case HIGH_BASKET_RAISED_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED_POSITION;
+                    break;
+                case HIGH_BASKET_SCORING_POSITION:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_RAISED_POSITION;
+                    break;
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToStartPosition();
+                    state = State.START_POSITION;
+                    break;
+                case START_POSITION:
+                    // NO-OP
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+            }
         } else if (gamepad2.dpad_left && !previousGamepad2.dpad_left) {
             intakeAndScoringSubsystem.raiseArm();
         } else if (gamepad2.dpad_right && !previousGamepad2.dpad_right) {
             intakeAndScoringSubsystem.lowerArm();
         }
-
-        // Manual override controls for the arm and linear slide. The left joystick will raise and
-        // lower the arm; the right joystick will extend and retract the linear slide.
-       /* if (Math.abs(gamepad2.left_stick_y) > MIN_JOYSTICK_VALUE) {
-            double adjustY = MANUAL_Y_ADJUSTMENT;
-            if (gamepad2.left_stick_y > 0.0) {
-                adjustY *= -1;
-            }
-            intakeAndScoringSubsystem.adjustY(adjustY);
-            telemetry.addData("[IAS C] adj arm height", adjustY);
-        }
-        if (Math.abs(gamepad2.right_stick_y) > MIN_JOYSTICK_VALUE) {
-            double adjustX = MANUAL_X_ADJUSTMENT;
-            if (gamepad2.right_stick_y > 0.0) {
-                adjustX *= -1;
-            }
-            intakeAndScoringSubsystem.adjustX(adjustX);
-            telemetry.addData("[IAS C] adj slide length", adjustX);
-        }*/
 
         // Open and close the claw; used for acquiring samples/specimens and scoring
         // or depositing them
@@ -182,6 +295,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         // components as they move to a target position.
         intakeAndScoringSubsystem.execute();
 
+        telemetry.addData("[IAS-C] state", state);
+
         previousGamepad1.copy(gamepad1);
         previousGamepad2.copy(gamepad2);
     }
@@ -190,15 +305,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      * State of the intake and scoring subsystem
      */
     enum State {
-        START_POSITION,
-        NEUTRAL_POSITION,
-        RETRACTED_POSITION,
-        LOW_BASKET_SCORING_POSITION,
+        ASCENT_LEVEL_ONE,
+        HIGH_BASKET_PRE_SCORING_POSITION,
+        HIGH_BASKET_RAISED_POSITION,
+        HIGH_BASKET_RETRACTED_POSITION,
         HIGH_BASKET_SCORING_POSITION,
-        LOW_CHAMBER_SCORING_POSITION,
+        HIGH_CHAMBER_RETRACTED_POSITION,
         HIGH_CHAMBER_SCORING_POSITION,
         INTAKE_CLOSE_POSITION,
         INTAKE_FAR_POSITION,
-        ASCENT_LEVEL_ONE
+        LOW_BASKET_RETRACTED_POSITION,
+        LOW_BASKET_SCORING_POSITION,
+        NEUTRAL_POSITION,
+        START_POSITION,
     }
 }
