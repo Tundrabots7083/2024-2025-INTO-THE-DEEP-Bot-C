@@ -15,12 +15,15 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *          position when first pressed and retracts the linear slide if pressed a second time.
  *     </li>
  *     <li>
+ *         <em>gamepad2.dpad_down</em>: move the scoring subsystem to intake a specimen off the wall.
+ *     </li>
+ *     <li>
  *         <em>gamepad2.cross</em>: a toggle that moves the scoring subsystem to the low basket
  *          position when first pressed and retracts the linear slide if pressed a second time.
  *     </li>
  *     <li>
  *         <em>gamepad2.triangle</em>: a toggle that moves the scoring subsystem to the high basket
- *  *          position when first pressed and retracts the linear slide if pressed a second time.
+ *         position when first pressed and retracts the linear slide if pressed a second time.
  *     </li>
  *     <li>
  *         <em>gamepad2.square</em>: a toggle that moves the scoring subsystem into the submersible
@@ -29,12 +32,12 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *     </li>
  *     <li>
  *         <em>gamepad2.circle</em>: a toggle that moves the scoring subsystem into the submersible
- *  *         at a position relatively far from the robot when first pressed and retracts the linear
- *  *         slide if pressed a second time.
+ *         at a position relatively far from the robot when first pressed and retracts the linear
+ *         slide if pressed a second time.
  *     </li>
  *     <li>
- *         <em>gamepad2.dpad_down</em>: move the scoring subsystem to a neutral position, where the arm is
- *         extended horizontal to the ground and the linear slide is fully retracted.
+ *         <em>gamepad2.right_bumper</em>: move the scoring subsystem into a position where the
+ *         linear slide can touch the low chamber bar, achieving an ascent level 1.
  *     </li>
  *     <li>
  *         <em>gamepad2.option</em>: move the scoring subsystem to a starting position, where the arm is
@@ -48,10 +51,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *     </li>
  *     <li>
  *         <em>gamepad2.left_bumper</em>: open or close the claw.
- *     </li>
- *     <li>
- *         <em>gamepad2.right_bumper</em>: move the scoring subsystem into a position where the
- *         linear slide can touch the low chamber bar, achieving an ascent level 1.
  *     </li>
  * </ul>
  */
