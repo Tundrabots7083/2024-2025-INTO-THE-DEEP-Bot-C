@@ -26,7 +26,7 @@ public class RaiseArmToNeutralPosition implements ActionFunction {
             return lastStatus;
         }
 
-        intakeAndScoringSubsystem.moveToNeutralPosition();
+        intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
         intakeAndScoringSubsystem.execute();
 
         if(intakeAndScoringSubsystem.isAtTarget()) {

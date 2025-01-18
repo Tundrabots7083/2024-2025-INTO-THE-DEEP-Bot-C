@@ -10,8 +10,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  * Manages the intake and scoring subsystem within a TeleOp OpMode. The following controls are
  * used to manage the subsystem:
  * <ul>
- *           <em>gamepad2.dpad_up</em>: a toggle that moves the scoring subsystem to the high chamber
- *  *          position when first pressed and retracts the linear slide if pressed a second time.
+ *     <li>
+ *          <em>gamepad2.dpad_up</em>: a toggle that moves the scoring subsystem to the high chamber
+ *          position when first pressed and retracts the linear slide if pressed a second time.
  *     </li>
  *     <li>
  *         <em>gamepad2.cross</em>: a toggle that moves the scoring subsystem to the low basket
@@ -32,7 +33,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *  *         slide if pressed a second time.
  *     </li>
  *     <li>
- *         <em>gamepad2.share</em>: move the scoring subsystem to a neutral position, where the arm is
+ *         <em>gamepad2.dpad_down</em>: move the scoring subsystem to a neutral position, where the arm is
  *         extended horizontal to the ground and the linear slide is fully retracted.
  *     </li>
  *     <li>
@@ -40,10 +41,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *         all the way down and the linear slide is fully retracted.
  *     </li>
  *     <li>
- *         <em>gamepad2.dpad_left</em>: lowers the arm on the scoring subsystem.
+ *         <em>gamepad2.dpad_left</em>: raises the arm on the scoring subsystem.
  *     </li>
  *     <li>
- *         <em>gamepad2.dpad_right</em>: raises the arm on the scoring subsystem.
+ *         <em>gamepad2.dpad_right</em>: lowers the arm on the scoring subsystem.
  *     </li>
  *     <li>
  *         <em>gamepad2.left_bumper</em>: open or close the claw.
@@ -62,7 +63,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private final Gamepad previousGamepad1 = new Gamepad();
     private final Gamepad previousGamepad2 = new Gamepad();
 
-    private State state = State.NEUTRAL_POSITION;
+    private State state = State.INTAKE_SPECIMEN_OFF_WALL;
     private boolean clawOpen = false;
 
     /**
@@ -89,7 +90,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         // Preset positions for the arm and linear slide
         if (gamepad2.dpad_up && !previousGamepad2.dpad_up) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
                     state = State.HIGH_CHAMBER_SCORING_POSITION;
                 case HIGH_CHAMBER_SCORING_POSITION:
@@ -116,7 +117,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         } else if (gamepad2.cross && !previousGamepad2.cross) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToBasketLowRetractedPosition();
                     state = State.LOW_BASKET_RETRACTED_POSITION;
                     break;
@@ -143,7 +144,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         } else if (gamepad2.triangle && !previousGamepad2.triangle) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
                     state = State.HIGH_BASKET_RETRACTED_POSITION;
                     break;
@@ -164,18 +165,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.HIGH_BASKET_RETRACTED_POSITION;
                     break;
                 default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
             }
         } else if (gamepad2.square && !previousGamepad2.square) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToIntakeShortPosition();
                     state = State.INTAKE_CLOSE_POSITION;
                     break;
                 case INTAKE_CLOSE_POSITION:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
                     break;
                 case HIGH_BASKET_PRE_SCORING_POSITION:
                 case HIGH_BASKET_RAISED_POSITION:
@@ -187,18 +188,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.HIGH_BASKET_RAISED_POSITION;
                     break;
                 default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
             }
         } else if (gamepad2.circle && !previousGamepad2.circle) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToIntakeLongPosition();
                     state = State.INTAKE_FAR_POSITION;
                     break;
                 case INTAKE_FAR_POSITION:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
                     break;
                 case HIGH_BASKET_PRE_SCORING_POSITION:
                 case HIGH_BASKET_RAISED_POSITION:
@@ -210,18 +211,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.HIGH_BASKET_RAISED_POSITION;
                     break;
                 default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
             }
         } else if (gamepad2.right_bumper && !previousGamepad2.right_bumper) {
             switch (state) {
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToAscentLevelOne();
                     state = State.ASCENT_LEVEL_ONE;
                     break;
                 case ASCENT_LEVEL_ONE:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
                     break;
                 case HIGH_BASKET_PRE_SCORING_POSITION:
                 case HIGH_BASKET_RAISED_POSITION:
@@ -236,7 +237,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToAscentLevelOne();
                     state = State.ASCENT_LEVEL_ONE;
             }
-        } else if (gamepad2.share && !previousGamepad2.share) {
+        } else if (gamepad2.dpad_down && !previousGamepad2.dpad_down) {
             switch (state) {
                 case HIGH_BASKET_PRE_SCORING_POSITION:
                 case HIGH_BASKET_RAISED_POSITION:
@@ -248,8 +249,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.HIGH_BASKET_RAISED_POSITION;
                     break;
                 default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
             }
         } else if (gamepad2.options) {
             switch (state) {
@@ -262,7 +263,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                     state = State.HIGH_BASKET_RAISED_POSITION;
                     break;
-                case NEUTRAL_POSITION:
+                case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToStartPosition();
                     state = State.START_POSITION;
                     break;
@@ -270,8 +271,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     // NO-OP
                     break;
                 default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
             }
         } else if (gamepad2.dpad_left && !previousGamepad2.dpad_left) {
             intakeAndScoringSubsystem.raiseArm();
@@ -316,7 +317,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         INTAKE_FAR_POSITION,
         LOW_BASKET_RETRACTED_POSITION,
         LOW_BASKET_SCORING_POSITION,
-        NEUTRAL_POSITION,
+        INTAKE_SPECIMEN_OFF_WALL,
         START_POSITION,
     }
 }

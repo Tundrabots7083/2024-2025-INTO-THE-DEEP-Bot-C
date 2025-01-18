@@ -36,7 +36,7 @@ public class LimelightIntakeTest extends OpMode {
 
     @Override
     public void start() {
-        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
+        robot.intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
     }
 
     @Override

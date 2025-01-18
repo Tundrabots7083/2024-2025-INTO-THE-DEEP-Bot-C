@@ -236,7 +236,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the arm after a sample or specimen has been picked up. This will raise and retract the
      * arm so the robot may be maneuvered into a scoring position by the IntakeAndScoringSubsystem.
      */
-    public void moveToNeutralPosition() {
+    public void moveToIntakeSpecimenOffWallPosition() {
         moveToPosition(NEUTRAL_X, NEUTRAL_Y);
         robot.wrist.setToIntakeSpecimen();
         telemetry.addData("[IAS] position", "neutral");
