@@ -92,6 +92,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case INTAKE_SPECIMEN_OFF_WALL:
                     intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
                     state = State.HIGH_CHAMBER_SCORING_POSITION;
+                    break;
                 case HIGH_CHAMBER_SCORING_POSITION:
                     intakeAndScoringSubsystem.moveToChamberHighRetractedPosition();
                     state = State.HIGH_CHAMBER_RETRACTED_POSITION;
