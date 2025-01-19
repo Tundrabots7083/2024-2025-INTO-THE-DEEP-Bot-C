@@ -245,6 +245,15 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Moves the subsystem to a position where it may drop off a sample in the observation zone.
+     */
+    public void moveToDropOffSamplePosition() {
+        moveToPosition(INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y);
+        robot.wrist.setToIntakeSample();
+        telemetry.addData("[IAS] position", "intake drop-off above");
+    }
+
+    /**
      * Moves the subsystem to a position where it may acquire a sample or a specimen that is
      * relative far from the front of the robot. This will lower and extend the arm so the claw
      * may be used to pickup a sample or specimen.

@@ -36,6 +36,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *         slide if pressed a second time.
  *     </li>
  *     <li>
+ *         <em>gamepad2.share</em>: used to drop the sample off in the observation zone so the
+ *         human player can turn it into a specimen.
+ *     </li>
+ *     <li>
  *         <em>gamepad2.right_bumper</em>: move the scoring subsystem into a position where the
  *         linear slide can touch the low chamber bar, achieving an ascent level 1.
  *     </li>
@@ -222,6 +226,33 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
+        } else if (gamepad2.share && !previousGamepad2.share) {
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.moveToDropOffSamplePosition();
+                    state = State.DROP_OFF_SPECIMEN;
+                    break;
+                case DROP_OFF_SPECIMEN:
+                    intakeAndScoringSubsystem.openClaw();
+                    state = State.DROP_OFF_SPECIMEN_CLAW_OPEN;
+                    break;
+                case DROP_OFF_SPECIMEN_CLAW_OPEN:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+                    break;
+                case HIGH_BASKET_PRE_SCORING:
+                case HIGH_BASKET_POST_SCORING:
+                    intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+                    state = State.HIGH_BASKET_RETRACTED;
+                    break;
+                case HIGH_BASKET_SCORING:
+                    intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                    state = State.HIGH_BASKET_POST_SCORING;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+            }
         } else if (gamepad2.right_bumper && !previousGamepad2.right_bumper) {
             switch (state) {
                 case INTAKE_SPECIMEN_OFF_WALL:
@@ -327,6 +358,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      */
     enum State {
         ASCENT_LEVEL_ONE,
+        DROP_OFF_SPECIMEN,
+        DROP_OFF_SPECIMEN_CLAW_OPEN,
         HIGH_BASKET_PRE_SCORING,
         HIGH_BASKET_POST_SCORING,
         HIGH_BASKET_RETRACTED,
