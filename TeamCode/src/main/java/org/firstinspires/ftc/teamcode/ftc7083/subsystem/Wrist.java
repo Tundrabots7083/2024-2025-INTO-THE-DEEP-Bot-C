@@ -32,11 +32,11 @@ public class Wrist extends SubsystemBase {
     // Pre-set positions
     public static double INTAKE_SAMPLE_PITCH = 0.0;
     public static double INTAKE_SAMPLE_ROLL = 0.0;
-    public static double INTAKE_SPECIMEN_PITCH = 100.0;
+    public static double INTAKE_SPECIMEN_PITCH = 140.0;
     public static double INTAKE_SPECIMEN_ROLL = 0.0;
     public static double SCORE_BASKET_PITCH = 120.0;
     public static double SCORE_BASKET_ROLL = 0.0;
-    public static double SCORE_CHAMBER_PITCH = 100.0;
+    public static double SCORE_CHAMBER_PITCH = 65.0;
     public static double SCORE_CHAMBER_ROLL = 0.0;
     public static double START_POSITION_PITCH = 208.0;
     public static double START_POSITION_ROLL = 0.0;

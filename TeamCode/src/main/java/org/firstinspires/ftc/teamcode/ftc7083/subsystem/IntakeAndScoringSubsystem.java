@@ -29,19 +29,33 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // Distance the arm can reach from the center of rotation of the arm in inches.
     public static double MAX_ARM_LENGTH = 43.5;
 
+    // Arm Movement Constants
+    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.5;
+    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 2.0;
+
     // Intake constants
-    public static double START_X = ARM_LENGTH - 4.5;
-    public static double START_Y = 0.5;
+    public static double DEPOSIT_SAMPLE_ABOVE_X = ARM_LENGTH + 12.0;
+    public static double DEPOSIT_SAMPLE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
+    public static double DEPOSIT_SAMPLE_LOWERED_X = DEPOSIT_SAMPLE_ABOVE_X;
+    public static double DEPOSIT_SAMPLE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
+    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
+    public static double INTAKE_FAR_ABOVE_Y =INTAKE_HEIGHT_ABOVE;
+    public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 15.0;
+    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
+    public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
+    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
+    public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;
+    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
+    public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;
+    public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;
+    public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;
+    public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;
     public static double NEUTRAL_X = ARM_LENGTH;
-    public static double NEUTRAL_Y = ARM_HEIGHT - 5.0;
+    public static double NEUTRAL_Y = ARM_HEIGHT;
     public static double RETRACT_X = ARM_LENGTH;
     public static double RETRACT_Y = 5.0;
-    public static double INTAKE_SHORT_X = ARM_LENGTH + 7.5;
-    public static double INTAKE_SHORT_Y = 5.5;
-    public static double INTAKE_LONG_X = ARM_LENGTH + 15.0;
-    public static double INTAKE_LONG_Y = 5.5;
-    public static double DEPOSIT_SAMPLE_X = ARM_LENGTH + 12.0;
-    public static double DEPOSIT_SAMPLE_Y = 7.5;
+    public static double START_X = ARM_LENGTH - 4.5;
+    public static double START_Y = 0.5;
 
     // Heights of scoring places for game are in inches
     public static double HIGH_CHAMBER_HEIGHT = 26.0;
@@ -57,26 +71,26 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // (x, y) distances in inches from the center of rotation of
     // the arm that the scoring subsystem needs to reach to score in
     // different places.
-    public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 6;
-    public static double HIGH_CHAMBER_RETRACTED_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_RETRACTED_Y = ARM_HEIGHT + 0.5;
-    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
-    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
-    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_HEIGHT + 5.0;
+    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 12.0;
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 7.0;
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;
     public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;
-    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;
-    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 5.0;
-    public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.0;
+    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
+    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
+    public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 2;
+    public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
+    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
+    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
+    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 0.5;
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
     public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_X = ARM_LENGTH + 6.0;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 4.5;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y + 5;
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 3.5;
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT;
+    public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.0;
+    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X = ARM_LENGTH + 6.0;
+    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
+    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
+    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
 
     // Other scoring constants
     public static double MOVE_ARM_AMOUNT = 3.0;
@@ -196,7 +210,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         double y = getY(angle, hypotenuse) + ARM_HEIGHT;
 
         moveToPosition(x, y);
-        telemetry.addData("[IAS] position", "retract slide");
+        telemetry.addData("[IAS] position", "retracted");
     }
 
     /**
@@ -205,19 +219,29 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void retractFromSubmersible() {
         moveToPosition(RETRACT_X, RETRACT_Y);
-        telemetry.addData("[IAS] position", "retract submersible");
+        telemetry.addData("[IAS] position", "submersible retracted");
     }
 
     /**
      * Moves the subsystem to a position where it may acquire a sample or a specimen that is
      * relative close to the front of the robot. This will lower and extend the arm so the claw
-     * may be used to pickup a sample or specimen.
+     * is above the specimen.
      */
-    public void moveToIntakeShortPosition() {
-        moveToPosition(INTAKE_SHORT_X, INTAKE_SHORT_Y);
+    public void moveToIntakeCloseAboveSamplePosition() {
+        moveToPosition(INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y);
         robot.wrist.setToIntakeSample();
         robot.claw.open();
-        telemetry.addData("[IAS] position", "intake short");
+        telemetry.addData("[IAS] position", "intake close above");
+    }
+
+    /**
+     * Lowers the arm from a close intake position to where the claw is in a position to pick up
+     * a sample.
+     */
+    public void moveToIntakeCloseLoweredPosition() {
+        moveToPosition(INTAKE_CLOSE_LOWERED_X, INTAKE_CLOSE_LOWERED_Y);
+        robot.wrist.setToIntakeSample();
+        telemetry.addData("[IAS] position", "intake close lowered");
     }
 
     /**
@@ -225,94 +249,122 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * relative far from the front of the robot. This will lower and extend the arm so the claw
      * may be used to pickup a sample or specimen.
      */
-    public void moveToIntakeLongPosition() {
-        moveToPosition(INTAKE_LONG_X, INTAKE_LONG_Y);
+    public void moveToIntakeFarAboveSamplePosition() {
+        moveToPosition(INTAKE_FAR_ABOVE_X, INTAKE_FAR_ABOVE_Y);
         robot.wrist.setToIntakeSample();
         robot.claw.open();
-        telemetry.addData("[IAS] position", "intake long");
+        telemetry.addData("[IAS] position", "intake far above");
     }
 
     /**
-     * Moves the arm after a sample or specimen has been picked up. This will raise and retract the
-     * arm so the robot may be maneuvered into a scoring position by the IntakeAndScoringSubsystem.
+     * Lowers the arm from a far intake position to where the claw is in a position to pick up a
+     * sample.
+     */
+    public void moveToIntakeFarLoweredPosition() {
+        moveToPosition(INTAKE_FAR_LOWERED_X, INTAKE_FAR_LOWERED_Y);
+        robot.wrist.setToIntakeSample();
+        telemetry.addData("[IAS] position", "intake far lowered");
+    }
+
+    /**
+     * Moves the arm to a position where it may pick up a specimen hung on the field wall.
      */
     public void moveToIntakeSpecimenOffWallPosition() {
-        moveToPosition(NEUTRAL_X, NEUTRAL_Y);
+        moveToPosition(INTAKE_SPECIMEN_FROM_WALL_X, INTAKE_SPECIMEN_FROM_WALL_Y);
         robot.wrist.setToIntakeSpecimen();
-        telemetry.addData("[IAS] position", "neutral");
+        robot.claw.open();
+        telemetry.addData("[IAS] position", "intake specimen");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the high basket.
+     * Raises the arm after acquiring a specimen from the wall so that the sample is no longer
+     * "clipped" to the wall.
+     */
+    public void moveToIntakeSpecimenRaisedPosition() {
+        moveToPosition(INTAKE_SPECIMEN_RAISED_X, INTAKE_SPECIMEN_RAISED_Y);
+        robot.wrist.setToIntakeSpecimen();
+        telemetry.addData("[IAS] position", "intake specimen raised");
+    }
+
+    /**
+     * Moves the arm to an intermediate "neutral" position that can be used as an intermediate position
+     * when transitioning between various other positions.
+     */
+    public void moveToNeutralPosition() {
+        moveToPosition(NEUTRAL_X, NEUTRAL_Y);
+        robot.wrist.setToIntakeSpecimen();
+        telemetry.addData("[IAS] position", "intake specimen");
+    }
+
+    /**
+     * Moves the arm, slide, wrist, and claw to prepare the robot to score on the high basket.
      */
     public void moveToBasketHighScoringPosition() {
         moveToPosition(HIGH_BASKET_SCORING_X, HIGH_BASKET_SCORING_Y);
         robot.wrist.setToScoreBasket();
-        telemetry.addData("[IAS] position", "high basket");
+        telemetry.addData("[IAS] position", "high basket score");
     }
 
     /**
      * Moves the arm, slide, wrist, and claw to an extended position that is straight up and down
-     * at a height that can score on the high basket.
+     * at a height that can score on the high basket. This is done prior to tiling the arm back
+     * so that it can score in the basket.
      */
     public void moveToBasketHighRaisedPosition() {
         moveToPosition(HIGH_BASKET_RAISED_X, HIGH_BASKET_RAISED_Y);
         robot.wrist.setToIntakeSpecimen();
-        telemetry.addData("[IAS] position", "high basket");
+        telemetry.addData("[IAS] position", "high basket raised");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to a retracted position angled toward the baskets.
+     * Moves the arm, slide, wrist, and claw to a retracted position where the arm is straight up
+     * and down.
      */
     public void moveToBasketHighRetractedPosition() {
         moveToPosition(HIGH_BASKET_RETRACTED_X, HIGH_BASKET_RETRACTED_Y);
         robot.wrist.setToIntakeSpecimen();
-        telemetry.addData("[IAS] position", "high basket");
+        telemetry.addData("[IAS] position", "high basket retracted");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the low basket.
+     * Moves the arm, slide, wrist, and claw to prepare the robot to score on the low basket.
      */
     public void moveToBasketLowScoringPosition() {
         moveToPosition(LOW_BASKET_SCORING_X, LOW_BASKET_SCORING_Y);
         robot.wrist.setToScoreBasket();
-        telemetry.addData("[IAS] position", "low basket");
+        telemetry.addData("[IAS] position", "low basket score");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the low basket.
+     * Moves the arm to a position where it is retracted from the low basket.
      */
     public void moveToBasketLowRetractedPosition() {
         moveToPosition(LOW_BASKET_RETRACTED_X, LOW_BASKET_RETRACTED_Y);
         robot.wrist.setToScoreBasket();
-        telemetry.addData("[IAS] position", "low basket");
+        telemetry.addData("[IAS] position", "low basket retracted");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the high chamber bar.
+     * Moves the arm, slide, wrist, and claw to prepare the robot to score a specimen on the
+     * high chamber bar.
      */
     public void moveToChamberHighScoringPosition() {
         moveToPosition(HIGH_CHAMBER_SCORING_X, HIGH_CHAMBER_SCORING_Y);
         robot.wrist.setToScoreChamber();
-        telemetry.addData("[IAS] position", "high chamber");
+        telemetry.addData("[IAS] position", "high chamber score");
     }
 
     /**
-     * Moves the arm, slide, wrist, and claw to prepare the robot
-     * to score on the high chamber bar.
+     * Moves the arm down so as to "clip" the specimen on the high chamber bar.
      */
-    public void moveToChamberHighRetractedPosition() {
-        moveToPosition(HIGH_CHAMBER_RETRACTED_X, HIGH_CHAMBER_RETRACTED_Y);
+    public void moveToChamberHighLoweredPosition() {
+        moveToPosition(HIGH_CHAMBER_SCORING_RELEASE_X, HIGH_CHAMBER_SCORING_RELEASE_Y);
         robot.wrist.setToScoreChamber();
-        telemetry.addData("[IAS] position", "high chamber");
+        telemetry.addData("[IAS] position", "high chamber release");
     }
 
     /**
-     * Moves the arm and slide to touch the lower ascent bar.
+     * Moves the arm and slide to a position where it can touch the lower ascent bar.
      */
     public void moveToAscentLevelOne() {
         moveToPosition(LOW_ASCENT_BAR_X, LOW_ASCENT_BAR_Y);
@@ -388,8 +440,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public ActionEx actionScoreSpecimenHighChamber() {
         return new SequentialAction(
-                new MoveTo(this, HIGH_CHAMBER_SCORING_X, HIGH_CHAMBER_SCORING_Y),
-                new MoveTo(this, HIGH_BASKET_SCORING_X, HIGH_CHAMBER_SCORING_RELEASE_Y),
+                new MoveTo(this, HIGH_CHAMBER_SCORING_RELEASE_X, HIGH_CHAMBER_SCORING_Y),
+                new MoveTo(this, HIGH_CHAMBER_SCORING_RELEASE_X, HIGH_CHAMBER_SCORING_RELEASE_Y),
                 actionOpenClawWithWait(),
                 actionRetractLinearSlide()
         );
@@ -419,7 +471,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         return new SequentialAction(
                 // TODO: this is not correct - it will need to use the LimeLight camera to orient the wrist and
                 //       adjust the length of the linear slide
-                new MoveTo(this, INTAKE_SHORT_X, INTAKE_SHORT_Y),
+                new MoveTo(this, INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y),
                 actionCloseClawWithWait(),
                 actionRetractLinearSlide()
         );
@@ -433,7 +485,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public ActionEx actionDepositSample() {
         return new SequentialAction(
-                new MoveTo(this, DEPOSIT_SAMPLE_X, DEPOSIT_SAMPLE_Y),
+                new MoveTo(this, DEPOSIT_SAMPLE_ABOVE_X, DEPOSIT_SAMPLE_ABOVE_Y),
                 actionOpenClawWithWait(),
                 actionRetractLinearSlide()
         );
@@ -449,9 +501,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         return new SequentialAction(
                 // TODO: this is not correct - it will need to use the LimeLight camera to orient the wrist and
                 //       adjust the length of the linear slide
-                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y),
+                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y),
                 actionCloseClawWithWait(),
-                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y),
+                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y),
                 actionRetractLinearSlide()
         );
     }
