@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.teleop;
 
-import android.annotation.SuppressLint;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -12,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.IntakeAndScoringSubsystemController;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.SubsystemController;
@@ -76,10 +76,7 @@ public class PrimaryTeleOp extends OpMode {
         robot.localizer.update();
 
         // Print out the loop time, in milliseconds, to two decimal places
-        double elapsedTime = timer.time();
-        @SuppressLint("DefaultLocale") String elapsedTimeStr = String.format("%.2f", elapsedTime);
-        elapsedTime = Double.parseDouble(elapsedTimeStr);
-        telemetry.addData("Loop Time", elapsedTime);
+        telemetry.addData("Loop Time", FTCMath.round(timer.time(), 2));
 
         telemetry.update();
     }

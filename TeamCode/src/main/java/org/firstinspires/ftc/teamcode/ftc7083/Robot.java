@@ -166,8 +166,19 @@ public class Robot {
         webcams = Arrays.asList(leftWebcam, rightWebcam);
         localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
 
+        // Wait for all webcams to initialize
+        boolean webcamsInitialized = false;
+        while (!webcamsInitialized) {
+            webcamsInitialized = true;
+            for (Webcam webcam : webcams) {
+                if (!webcam.webcamInitialized()) {
+                    webcamsInitialized = false;
+                    break;
+                }
+            }
+        }
+
         this.telemetry.addLine("[Robot] initialized");
-        this.telemetry.update();
     }
 
     /**

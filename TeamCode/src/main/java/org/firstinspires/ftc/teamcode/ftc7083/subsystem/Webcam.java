@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamServer;
+import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -213,7 +214,7 @@ public class Webcam extends SubsystemBase {
     public String toString() {
         return "Webcam{" +
                 location +
-                ", fps=" + getFps() +
+                ", fps=" + FTCMath.round(getFps(), 2) +
                 '}';
     }
 

@@ -53,7 +53,6 @@ public class Motor implements DcMotorEx {
      * @param inchesPerRev the number of inches moved per revolution of the motor
      */
     public void setInchesPerRev(double inchesPerRev) {
-        telemetry.addData("[Motor] set inches per rev", inchesPerRev);
         this.inchesPerRev = inchesPerRev;
     }
 
