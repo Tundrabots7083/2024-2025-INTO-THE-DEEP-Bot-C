@@ -132,7 +132,7 @@ public class AprilTagLocalizer implements Localizer {
         // determined by that detection.
         int numDetections = 0;
         for (Webcam webcam : webcams) {
-            telemetry.addLine(String.format("\nWebcam %s", webcam));
+            telemetry.addLine(webcam.toString());
 
             ArrayList<AprilTagDetection> detections = webcam.getDetections();
             for (AprilTagDetection detection : detections) {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.teleop;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -7,6 +9,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.IntakeAndScoringSubsystemController;
@@ -25,6 +28,7 @@ public class PrimaryTeleOp extends OpMode {
     public static boolean RAN_AUTONOMOUS = false;
     private final Gamepad currentGamepad1 = new Gamepad();
     private final Gamepad currentGamepad2 = new Gamepad();
+    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     private Robot robot;
     private Collection<SubsystemController> controllers;
 
@@ -50,6 +54,8 @@ public class PrimaryTeleOp extends OpMode {
 
     @Override
     public void loop() {
+        timer.reset();
+
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
         for (LynxModule hub : robot.allHubs) {
@@ -67,9 +73,14 @@ public class PrimaryTeleOp extends OpMode {
         }
 
         // Update the location of the robot on the field using April Tag localization
-//        robot.localizer.update();
+        robot.localizer.update();
+
+        // Print out the loop time, in milliseconds, to two decimal places
+        double elapsedTime = timer.time();
+        @SuppressLint("DefaultLocale") String elapsedTimeStr = String.format("%.2f", elapsedTime);
+        elapsedTime = Double.parseDouble(elapsedTimeStr);
+        telemetry.addData("Loop Time", elapsedTime);
 
         telemetry.update();
     }
-
 }

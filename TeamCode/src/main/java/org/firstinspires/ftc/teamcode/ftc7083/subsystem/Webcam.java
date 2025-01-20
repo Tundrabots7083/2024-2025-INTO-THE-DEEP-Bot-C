@@ -212,8 +212,8 @@ public class Webcam extends SubsystemBase {
     @Override
     public String toString() {
         return "Webcam{" +
-                ", visionPortal=" + visionPortal +
-                ", location=" + location +
+                location +
+                ", fps=" + getFps() +
                 '}';
     }
 
