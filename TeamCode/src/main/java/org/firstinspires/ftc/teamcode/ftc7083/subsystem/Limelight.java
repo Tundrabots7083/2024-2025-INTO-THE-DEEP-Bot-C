@@ -44,7 +44,7 @@ public class Limelight extends SubsystemBase {
      * @param telemetry   telemetry
      */
     public Limelight(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        this.limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         this.telemetry = telemetry;
         configureLimelight();
     }

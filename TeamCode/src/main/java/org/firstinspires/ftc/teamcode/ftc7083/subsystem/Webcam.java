@@ -221,8 +221,8 @@ public class Webcam extends SubsystemBase {
      * Position of the webcam on the robot
      */
     public enum Location {
-        LEFT("Webcam 2"),
-        RIGHT("Webcam 1");
+        LEFT("Left Webcam"),
+        RIGHT("Right Webcam");
 
         private final String webcamName;
 
