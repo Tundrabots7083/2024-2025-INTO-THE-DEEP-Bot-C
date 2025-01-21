@@ -497,10 +497,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         return new SequentialAction(
                 new MoveToChamberHighScoringPosition(this),
                 new MoveToChamberHighLoweredPosition(this),
-                new ParallelAction(
-                        actionOpenClawWithWait(),
-                        new MoveToNeutralPosition(this)
-                )
+                actionOpenClawWithWait(),
+                new MoveToNeutralPosition(this)
         );
     }
 
