@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
@@ -25,7 +26,7 @@ public class Claw extends SubsystemBase {
     public static String CLAW_SERVO = "claw";
 
     // Time to wait for the claw to open or close, based on observed time
-    public static long CLAW_WAIT_TIME = 250; // milliseconds
+    public static long CLAW_SERVO_TIME = 250; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
     public static double CLOSE_DEGREE_OFFSET = 67.5;
@@ -38,8 +39,11 @@ public class Claw extends SubsystemBase {
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 355.0;
 
-    // Implement the claw using a Servo class
     private final Telemetry telemetry;
+
+    private final ElapsedTime clawServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
+    // Implement the claw using a Servo class
     private final Servo clawServo;
 
     /**
@@ -97,6 +101,13 @@ public class Claw extends SubsystemBase {
     }
 
     /**
+     * Checks if the claw is at the target position.
+     */
+    public boolean isAtTarget() {
+        return clawServoTimer.time() < CLAW_SERVO_TIME;
+    }
+
+    /**
      * Gets an action to open the claw. This action does not wait for the claw to be successfully
      * opened.
      *
@@ -114,7 +125,7 @@ public class Claw extends SubsystemBase {
     public ActionEx actionOpenClawWithWait() {
         return new SequentialAction(
                 new OpenClaw(this),
-                new WaitAction(CLAW_WAIT_TIME)
+                new WaitAction(CLAW_SERVO_TIME)
         );
     }
 
@@ -136,7 +147,7 @@ public class Claw extends SubsystemBase {
     public ActionEx actionCloseClawWithWait() {
         return new SequentialAction(
                 new CloseClaw(this),
-                new WaitAction(CLAW_WAIT_TIME)
+                new WaitAction(CLAW_SERVO_TIME)
         );
     }
 

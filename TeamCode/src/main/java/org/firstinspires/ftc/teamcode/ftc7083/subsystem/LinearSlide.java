@@ -30,7 +30,7 @@ public class LinearSlide extends SubsystemBase {
     public static double KD = 0.05;
     public static double KG = 0.3;
 
-    public static double TOLERABLE_ERROR = 0.05; // inches
+    public static double TOLERABLE_ERROR = 0.25; // inches
     public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 28;
 
@@ -120,13 +120,12 @@ public class LinearSlide extends SubsystemBase {
      * sets the power for the pid controller
      */
     public void execute() {
-        if (!isAtTarget()) {
-            double power = pidController.calculate(targetLength, getCurrentLength());
-            slideMotor.setPower(power);
-            telemetry.addData("[Slide] power", power);
-            telemetry.addData("[Slide] inches", getCurrentLength());
-            telemetry.addData("[Slide] ticks", slideMotor.getCurrentPosition());
-        }
+        double power = pidController.calculate(targetLength, getCurrentLength());
+        slideMotor.setPower(power);
+
+        telemetry.addData("[Slide] Current Inches", getCurrentLength());
+        telemetry.addData("[Slide] Target Inches", targetLength);
+        telemetry.addData("[Slide] Power", power);
     }
 
     /**
@@ -134,47 +133,26 @@ public class LinearSlide extends SubsystemBase {
      */
     public boolean isAtTarget() {
         double error = Math.abs(targetLength - getCurrentLength());
-        telemetry.addData("[Slide] error", error);
-        telemetry.addData("[Slide] target", targetLength);
-        telemetry.addData("[Slide] current", getCurrentLength());
+
+        telemetry.addData("[Slide] Error", error);
+        telemetry.addData("[Slide] Target", targetLength);
+        telemetry.addData("[Slide] Current", getCurrentLength());
+
         return error <= TOLERABLE_ERROR;
     }
 
     /**
-     * Feed forward component for the linear slide. This is used by the arm's PID controller to
-     * compensate the pull of gravity on the linear slide, based on the angle of the arm.
+     * Returns a string representation of the linear slide.
+     *
+     * @return a string representation of the linear slide
      */
-    public static class LinearSlideFeedForward implements FeedForward {
-        private final Arm arm;
-        private final double kG;
-
-        /**
-         * Instantiates a new feed forward component for the linear slide based on the arm.
-         *
-         * @param arm the arm for the intake subsystem
-         * @param kG  the gravity component to use in calculating the feed forward component
-         */
-        public LinearSlideFeedForward(Arm arm, double kG) {
-            this.arm = arm;
-            this.kG = kG;
-        }
-
-        @Override
-        public double calculate(double target) {
-            double radians = Math.toRadians(arm.getCurrentAngle());
-            return Math.sin(radians) * kG;
-        }
-
-        /**
-         * Returns a string representation for the linear slide feed forward function.
-         *
-         * @return a string representation for the linear slide feed forward function
-         */
-        @NonNull
-        public String toString() {
-            return "LinearSlide{" +
-                    "ArmAngle=" + arm.getCurrentAngle() +
-                    "}";
-        }
+    @Override
+    @NonNull
+    public String toString() {
+        return "LinearSlide{" +
+                "target=" + targetLength +
+                ", current=" + getCurrentLength() +
+                ", atTarget=" + isAtTarget() +
+                "}";
     }
 }

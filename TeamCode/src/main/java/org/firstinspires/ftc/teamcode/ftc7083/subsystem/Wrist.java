@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -41,7 +42,14 @@ public class Wrist extends SubsystemBase {
     public static double START_POSITION_PITCH = 208.0;
     public static double START_POSITION_ROLL = 0.0;
 
+    // Time to move to the target position
+    public static double PITCH_SERVO_TIME = 250; // ms
+    public static double ROLL_SERVO_TIME = 250; // ms
+
     private final Telemetry telemetry;
+
+    private final ElapsedTime pitchServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private final ElapsedTime rollServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     private final Servo pitchServo;
     private final Servo rollServo;
@@ -128,6 +136,7 @@ public class Wrist extends SubsystemBase {
     public void setPitchDegrees(double degrees) {
         double pitch = Range.clip(degrees, MIN_PITCH, MAX_PITCH) + PITCH_DEGREES_OFFSET;
         pitchServo.setDegrees(pitch);
+        pitchServoTimer.reset();
     }
 
     /**
@@ -147,6 +156,7 @@ public class Wrist extends SubsystemBase {
     public void setRollDegrees(double degrees) {
         double roll = Range.clip(degrees, MIN_ROLL, MAX_ROLL) + ROLL_DEGREES_OFFSET;
         rollServo.setDegrees(roll);
+        rollServoTimer.reset();
     }
 
     /**
@@ -156,6 +166,27 @@ public class Wrist extends SubsystemBase {
      */
     public double getRollDegrees() {
         return rollServo.getDegrees() - ROLL_DEGREES_OFFSET;
+    }
+
+    /**
+     * Checks if the wrist is at the target position.
+     */
+    public boolean isAtTarget() {
+        return isPitchServoAtTarget() && isRollServoAtTarget();
+    }
+
+    /**
+     * Checks if the pitch servo is at the target position.
+     */
+    public boolean isPitchServoAtTarget() {
+        return pitchServoTimer.time() < PITCH_SERVO_TIME;
+    }
+
+    /**
+     * Checks if the roll servo is at the target position.
+     */
+    public boolean isRollServoAtTarget() {
+        return rollServoTimer.time() < ROLL_SERVO_TIME;
     }
 
     @NonNull
