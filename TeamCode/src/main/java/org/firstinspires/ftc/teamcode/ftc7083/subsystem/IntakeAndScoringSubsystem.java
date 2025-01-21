@@ -433,25 +433,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Gets an action to touch the low ascent bar. The robot must be in the correct position prior
-     * to calling this method.
-     *
-     * @return an action to touch the low ascent bar
-     */
-    public ActionEx actionTouchAscentBarLow() {
-        return new MoveToAscentLevelOne(this);
-    }
-
-    /**
-     * Gets an action to move the scoring subsystem to the start position.
-     *
-     * @return an action to move the scoring subsystem to the start position.
-     */
-    public ActionEx actionMoveToStartPosition() {
-        return new MoveToStartPosition(this);
-    }
-
-    /**
      * Gets an action to open the claw. This action waits for the claw to be successfully opened.
      *
      * @return an action to open the claw
@@ -486,6 +467,25 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public ActionEx actionCloseClawWithWait() {
         return robot.claw.actionCloseClawWithWait();
+    }
+
+    /**
+     * Gets an action to touch the low ascent bar. The robot must be in the correct position prior
+     * to calling this method.
+     *
+     * @return an action to touch the low ascent bar
+     */
+    public ActionEx actionTouchAscentBarLow() {
+        return new MoveToAscentLevelOne(this);
+    }
+
+    /**
+     * Gets an action to move the scoring subsystem to the start position.
+     *
+     * @return an action to move the scoring subsystem to the start position.
+     */
+    public ActionEx actionMoveToStartPosition() {
+        return new MoveToStartPosition(this);
     }
 
     /**
