@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.roadrunner;
 
+import static com.acmerobotics.roadrunner.ftc.OTOSKt.OTOSPoseToRRPose;
+import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -32,6 +35,7 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -40,6 +44,8 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumLocalizerInputsMessage;
@@ -54,12 +60,10 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // IMU orientation
-        // TODO: fill in these values based on
-        //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
         // drive model parameters
         public double inPerTick = 1;
@@ -111,8 +115,11 @@ public final class MecanumDrive {
 
     public final LazyImu lazyImu;
 
+    public final org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS otos;
+
     public final Localizer localizer;
     public Pose2d pose;
+    private Pose2d lastOtosPose = pose;
 
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
@@ -137,8 +144,8 @@ public final class MecanumDrive {
 
             imu = lazyImu.get();
 
-            // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftFront.setDirection(Motor.Direction.REVERSE);
+            leftBack.setDirection(Motor.Direction.REVERSE);
         }
 
         @Override
@@ -214,29 +221,29 @@ public final class MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TODO: make sure your config has motors with these names (or change them)
-        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFrontWheel");
+        leftBack = hardwareMap.get(DcMotorEx.class, "leftRearWheel");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rightRearWheel");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFrontWheel");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // TODO: reverse motor directions if needed
-        //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(Motor.Direction.REVERSE);
+        leftBack.setDirection(Motor.Direction.REVERSE);
 
-        // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
-        //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         localizer = new DriveLocalizer();
+
+        otos = hardwareMap.get(org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS.class, "otos");
+        otos.resetTracking();
+        otos.calibrateImu();
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
@@ -440,9 +447,32 @@ public final class MecanumDrive {
     }
 
     public PoseVelocity2d updatePoseEstimate() {
-        Twist2dDual<Time> twist = localizer.update();
-        pose = pose.plus(twist.value());
+        if (lastOtosPose != pose) {
+            // RR localizer note:
+            // Something else is modifying our pose (likely for relocalization),
+            // so we override otos pose with the new pose.
+            // This could potentially cause up to 1 loop worth of drift.
+            // I don't like this solution at all, but it preserves compatibility.
+            // The only alternative is to add getter and setters, but that breaks compat.
+            // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
+            otos.setPosition(RRPoseToOTOSPose(pose));
+        }
+        // RR localizer note:
+        // The values are passed by reference, so we create variables first,
+        // then pass them into the function, then read from them.
 
+        // Reading acceleration worsens loop times by 1ms,
+        // but not reading it would need a custom driver and would break compatibility.
+        // The same is true for speed: we could calculate speed ourselves from pose and time,
+        // but it would be hard, less accurate, and would only save 1ms of loop time.
+        SparkFunOTOS.Pose2D otosPose = new SparkFunOTOS.Pose2D();
+        SparkFunOTOS.Pose2D otosVel = new SparkFunOTOS.Pose2D();
+        SparkFunOTOS.Pose2D otosAcc = new SparkFunOTOS.Pose2D();
+        otos.getPosVelAcc(otosPose, otosVel, otosAcc);
+        pose = OTOSPoseToRRPose(otosPose);
+        lastOtosPose = pose;
+
+        // RR standard
         poseHistory.add(pose);
         while (poseHistory.size() > 100) {
             poseHistory.removeFirst();
@@ -450,7 +480,9 @@ public final class MecanumDrive {
 
         estimatedPoseWriter.write(new PoseMessage(pose));
 
-        return twist.velocity().value();
+        // RR localizer note:
+        // OTOS velocity units happen to be identical to Roadrunners, so we don't need any conversion!
+        return new PoseVelocity2d(new Vector2d(otosVel.x, otosVel.y), otosVel.h);
     }
 
     private void drawPoseHistory(Canvas c) {
