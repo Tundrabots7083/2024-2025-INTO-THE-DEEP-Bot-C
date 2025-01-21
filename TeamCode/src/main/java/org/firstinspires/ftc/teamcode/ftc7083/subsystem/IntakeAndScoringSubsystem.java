@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
-import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
 
 /**
@@ -507,7 +506,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      *
      * @return an action to score a sample in the high basket
      */
-    public ActionEx actionScoreSpecimenHighBasket() {
+    public ActionEx actionScoreSampleHighBasket() {
         return new SequentialAction(
                 new MoveToBasketHighRetractedPosition(this),
                 new MoveToBasketHighRaisedPosition(this),
