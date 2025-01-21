@@ -439,7 +439,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * @return an action to touch the low ascent bar
      */
     public ActionEx actionTouchAscentBarLow() {
-        return new MoveTo(this, LOW_ASCENT_BAR_X, LOW_ASCENT_BAR_Y);
+        return new MoveToAscentLevelOne(this);
     }
 
     /**
