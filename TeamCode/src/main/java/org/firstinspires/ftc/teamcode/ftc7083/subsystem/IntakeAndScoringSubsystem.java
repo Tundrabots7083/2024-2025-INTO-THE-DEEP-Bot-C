@@ -448,7 +448,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * @return an action to move the scoring subsystem to the start position.
      */
     public ActionEx actionMoveToStartPosition() {
-        return new MoveTo(this, START_X, START_Y);
+        return new MoveToStartPosition(this);
     }
 
     /**
