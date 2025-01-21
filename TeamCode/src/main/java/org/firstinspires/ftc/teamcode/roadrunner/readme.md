@@ -51,22 +51,22 @@ After the prefix, other conventions will apply:
 * Concept class names are constructed as:   Concept - Topic - OpModetype
 
 Once you are familiar with the range of samples available, you can choose one to be the
-basis for your own robot. In all cases, the desired sample(s) needs to be copied into
+basis for your own robot.  In all cases, the desired sample(s) needs to be copied into
 your TeamCode module to be used.
 
 This is done inside Android Studio directly, using the following steps:
 
-1) Locate the desired sample class in the Project/Android tree.
+ 1) Locate the desired sample class in the Project/Android tree.
 
-2) Right click on the sample class and select "Copy"
+ 2) Right click on the sample class and select "Copy"
 
-3) Expand the TeamCode/java folder
+ 3) Expand the  TeamCode/java folder
 
-4) Right click on the org.firstinspires.ftc.teamcode folder and select "Paste"
+ 4) Right click on the org.firstinspires.ftc.teamcode folder and select "Paste"
 
-5) You will be prompted for a class name for the copy.
-   Choose something meaningful based on the purpose of this class.
-   Start with a capital letter, and remember that there may be more similar classes later.
+ 5) You will be prompted for a class name for the copy.
+    Choose something meaningful based on the purpose of this class.
+    Start with a capital letter, and remember that there may be more similar classes later.
 
 Once your copy has been created, you should prepare it for use on your robot.
 This is done by adjusting the OpMode's name, and enabling it to be displayed on the
@@ -80,13 +80,15 @@ Each OpMode sample class begins with several lines of code like the ones shown b
 ```
 
 The name that will appear on the driver station's "opmode list" is defined by the code:
-``name="Template: Linear OpMode"``
+ ``name="Template: Linear OpMode"``
 You can change what appears between the quotes to better describe your opmode.
 The "group=" portion of the code can be used to help organize your list of OpModes.
 
 As shown, the current OpMode will NOT appear on the driver station's OpMode list because of the
-``@Disabled`` annotation which has been included.
+  ``@Disabled`` annotation which has been included.
 This line can simply be deleted , or commented out, to make the OpMode visible.
+
+
 
 ## ADVANCED Multi-Team App management:  Cloning the TeamCode Module
 
@@ -104,27 +106,26 @@ prior to clicking to the green Run arrow.
 Warning:  This is not for the inexperienced Software developer.
 You will need to be comfortable with File manipulations and managing Android Studio Modules.
 These changes are performed OUTSIDE of Android Studios, so close Android Studios before you do this.
-
+ 
 Also.. Make a full project backup before you start this :)
 
 To clone TeamCode, do the following:
 
-Note: Some names start with "Team" and others start with "team". This is intentional.
+Note: Some names start with "Team" and others start with "team".  This is intentional.
 
-1) Using your operating system file management tools, copy the whole "TeamCode"
-   folder to a sibling folder with a corresponding new name, eg: "Team0417".
+1)  Using your operating system file management tools, copy the whole "TeamCode"
+    folder to a sibling folder with a corresponding new name, eg: "Team0417".
 
-2) In the new Team0417 folder, delete the TeamCode.iml file.
+2)  In the new Team0417 folder, delete the TeamCode.iml file.
 
-3) the new Team0417 folder, rename the "src/main/java/org/firstinspires/ftc/teamcode" folder
-   to a matching name with a lowercase 'team' eg:  "team0417".
+3)  the new Team0417 folder, rename the "src/main/java/org/firstinspires/ftc/teamcode" folder
+    to a matching name with a lowercase 'team' eg:  "team0417".
 
-4) In the new Team0417/src/main folder, edit the "AndroidManifest.xml" file, change the line that
-   contains
-   package="org.firstinspires.ftc.teamcode"
-   to be
-   package="org.firstinspires.ftc.team0417"
+4)  In the new Team0417/src/main folder, edit the "AndroidManifest.xml" file, change the line that contains
+         package="org.firstinspires.ftc.teamcode"
+    to be
+         package="org.firstinspires.ftc.team0417"
 
-5) Add:    include ':Team0417' to the "/settings.gradle" file.
-
-6) Open up Android Studios and clean out any old files by using the menu to "Build/Clean Project""
+5)  Add:    include ':Team0417' to the "/settings.gradle" file.
+    
+6)  Open up Android Studios and clean out any old files by using the menu to "Build/Clean Project""
