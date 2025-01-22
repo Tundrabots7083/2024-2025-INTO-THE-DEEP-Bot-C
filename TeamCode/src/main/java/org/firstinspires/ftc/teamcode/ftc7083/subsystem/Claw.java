@@ -30,10 +30,7 @@ public class Claw extends SubsystemBase {
 
     // Make default open/close degrees settable by FTC dashboard
     public static double CLOSE_DEGREE_OFFSET = 67.5;
-    public static double DEFAULT_SAMPLE_DEGREES_GRIPS = 19.5;
-    public static double DEFAULT_SAMPLE_DEGREES_SLIDES = 30.0;
-    public static double FULLY_CLOSED_DEGREES = 0.0;
-    public static double DEFAULT_CLOSE_DEGREES = DEFAULT_SAMPLE_DEGREES_SLIDES;
+    public static double DEFAULT_CLOSE_DEGREES = 30.0;
     public static double DEFAULT_OPEN_DEGREES = 95.0;
 
     // Make max claw degrees settable by FTC dashboard
@@ -42,6 +39,7 @@ public class Claw extends SubsystemBase {
     private final Telemetry telemetry;
 
     private final ElapsedTime clawServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private double clawAngle = -1;
 
     // Implement the claw using a Servo class
     private final Servo clawServo;
@@ -72,7 +70,11 @@ public class Claw extends SubsystemBase {
      */
     public void setDegrees(double degrees) {
         double adjustedDegrees = degrees + CLOSE_DEGREE_OFFSET;
-        clawServo.setDegrees(adjustedDegrees);
+        if (clawAngle != adjustedDegrees) {
+            clawServo.setDegrees(adjustedDegrees);
+            clawAngle = adjustedDegrees;
+            clawServoTimer.reset();
+        }
     }
 
     /**
@@ -104,7 +106,19 @@ public class Claw extends SubsystemBase {
      * Checks if the claw is at the target position.
      */
     public boolean isAtTarget() {
-        return clawServoTimer.time() < CLAW_SERVO_TIME;
+        double elapsedTime = clawServoTimer.time();
+        boolean atTarget = elapsedTime >= CLAW_SERVO_TIME;
+        telemetry.addData("[Claw] time", elapsedTime);
+        telemetry.addData("[Claw] wait", CLAW_SERVO_TIME);
+        telemetry.addData("[Claw] atTarget", atTarget);
+        return atTarget;
+    }
+
+    @NonNull
+    public String toString() {
+        return "Claw{" +
+                "angle=" + clawAngle +
+                "}";
     }
 
     /**

@@ -56,7 +56,7 @@ public class RedChamberOpMode extends OpMode {
         trajectory = trajectoryBuilder.getTrajectory();
         canvas = new Canvas();
         trajectory.preview(canvas);
-        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
+        robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
 
     @Override

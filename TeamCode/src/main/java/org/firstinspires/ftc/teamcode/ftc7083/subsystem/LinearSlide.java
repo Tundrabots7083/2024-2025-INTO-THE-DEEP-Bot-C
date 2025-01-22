@@ -126,6 +126,7 @@ public class LinearSlide extends SubsystemBase {
         telemetry.addData("[Slide] Current Inches", getCurrentLength());
         telemetry.addData("[Slide] Target Inches", targetLength);
         telemetry.addData("[Slide] Power", power);
+        telemetry.addData("[Slide] atTarget", isAtTarget());
     }
 
     /**

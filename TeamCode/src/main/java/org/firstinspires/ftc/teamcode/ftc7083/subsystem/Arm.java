@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase {
     public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
-    public static double TOLERABLE_ERROR = 0.5; // In degrees
+    public static double TOLERABLE_ERROR = 0.75; // In degrees
     public static double MIN_ANGLE = -36.0;
     public static double MAX_ANGLE = 100.0;
 
@@ -128,6 +128,7 @@ public class Arm extends SubsystemBase {
         telemetry.addData("[Arm] Target Deg", targetAngle);
         telemetry.addData("[Arm] Current Deg", currentAngle);
         telemetry.addData("[Arm] Power", power);
+        telemetry.addData("[Arm] atTarget", isAtTarget());
     }
 
     /**

@@ -54,6 +54,7 @@ public class ClawTest extends OpMode {
             currentClawPosition = claw.getCurrentPosition();
             telemetry.addData("Current position after close", currentClawPosition);
         }
+        telemetry.addData("At Target", claw.isAtTarget());
         telemetry.update();
     }
 }

@@ -21,7 +21,7 @@ public class SparkFunOTOS extends com.qualcomm.hardware.sparkfun.SparkFunOTOS {
     // Initial robot position. This can be overridden using the setPosition() method.
     public static int INITIAL_POS_X = 0;
     public static int INITIAL_POS_Y = 0;
-    public static int INITIAL_POS_HEADING = 0;
+    public static int INITIAL_POS_HEADING = 180;
 
     // RR localizer note: It is technically possible to change the number of samples to slightly reduce init times,
     // however, I found that it caused pretty severe heading drift.
