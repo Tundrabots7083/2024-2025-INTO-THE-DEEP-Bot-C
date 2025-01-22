@@ -86,13 +86,13 @@ public class RedChamber {
     public Action getTrajectory() {
         IntakeAndScoringSubsystem ias = Robot.getInstance().intakeAndScoringSubsystem;
         return actionBuilder
-                // Move to the chamber and score the specimen
-                .strafeTo(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y))
-                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
-                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
-                .strafeTo(new Vector2d(RED_SPIKE_MARK_X, RED_SPIKE_MARK_Y))
-                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-//                .turn(DEBUG_ROTATE_180_DEGREES)
+//                // Move to the chamber and score the specimen
+//                .strafeTo(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y))
+//                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
+//                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
+//                .strafeTo(new Vector2d(RED_SPIKE_MARK_X, RED_SPIKE_MARK_Y))
+//                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
+                .turn(DEBUG_ROTATE_180_DEGREES)
 //                .turnTo(ORIENTATION_TOWARD_WALL)
 //                .stopAndAdd(ias.actionDropOffSample())
 //                // Move the sample from Spike Mark 2 to the observation zone

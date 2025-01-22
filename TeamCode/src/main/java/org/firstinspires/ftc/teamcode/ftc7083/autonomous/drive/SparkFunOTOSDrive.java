@@ -3,13 +3,17 @@ package org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive;
 import static com.acmerobotics.roadrunner.ftc.OTOSKt.OTOSPoseToRRPose;
 import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 
@@ -21,20 +25,23 @@ import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
  * Unless otherwise noted, comments are from SparkFun
  */
 public class SparkFunOTOSDrive extends AutoMecanumDrive {
-    public static Params PARAMS = new Params();
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private Pose2d lastOtosPose = pose;
-    private final Robot robot;
+    public final org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS otos;
 
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
 
-        robot = Robot.getInstance();
-        robot.otos.setPosition(RRPoseToOTOSPose(pose));
+        Robot robot = Robot.getInstance();
+        otos = robot.otos;
+        otos.setPosition(RRPoseToOTOSPose(pose));
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public PoseVelocity2d updatePoseEstimate() {
+        Telemetry telemetry = Robot.getInstance().telemetry;
+
         if (lastOtosPose != pose) {
             // RR localizer note:
             // Something else is modifying our pose (likely for relocalization),
@@ -43,7 +50,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
             // I don't like this solution at all, but it preserves compatibility.
             // The only alternative is to add getter and setters, but that breaks compat.
             // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
-            robot.otos.setPosition(RRPoseToOTOSPose(pose));
+            otos.setPosition(RRPoseToOTOSPose(pose));
         }
         // RR localizer note:
         // The values are passed by reference, so we create variables first,
@@ -56,7 +63,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
         SparkFunOTOS.Pose2D otosPose = new SparkFunOTOS.Pose2D();
         SparkFunOTOS.Pose2D otosVel = new SparkFunOTOS.Pose2D();
         SparkFunOTOS.Pose2D otosAcc = new SparkFunOTOS.Pose2D();
-        robot.otos.getPosVelAcc(otosPose, otosVel, otosAcc);
+        otos.getPosVelAcc(otosPose, otosVel, otosAcc);
         pose = OTOSPoseToRRPose(otosPose);
         lastOtosPose = pose;
 
@@ -70,6 +77,11 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
 
         // RR localizer note:
         // OTOS velocity units happen to be identical to Roadrunners, so we don't need any conversion!
-        return new PoseVelocity2d(new Vector2d(otosVel.x, otosVel.y), otosVel.h);
+        PoseVelocity2d vel = new PoseVelocity2d(new Vector2d(otosVel.x, otosVel.y), otosVel.h);
+
+        telemetry.addLine(String.format("[Auto] pose: x=%.2f, y=%.2f, h=%.2f", pose.position.x, pose.position.y, pose.heading.toDouble()));
+        telemetry.addLine(String.format("[Auto] vel: x=%.2f, y=%.2f, ang=%.2f", vel.linearVel.x, vel.linearVel.y,  vel.angVel));
+
+        return vel;
     }
 }

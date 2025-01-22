@@ -22,7 +22,7 @@ public class MecanumDrive extends SubsystemBase {
     public static double MAX_DRIVE_POWER_GAIN = 1.0;
 
     private final Telemetry telemetry;
-    private final Motor rightFront, rightRear, leftFront, leftRear;
+    public final Motor rightFront, rightRear, leftFront, leftRear;
     private double driveGain = MAX_DRIVE_POWER_GAIN;
 
     /**

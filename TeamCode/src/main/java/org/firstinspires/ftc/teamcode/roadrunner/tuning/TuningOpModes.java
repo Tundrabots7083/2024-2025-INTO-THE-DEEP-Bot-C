@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.SparkFunOTOSDrive;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.TankDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.TwoDeadWheelLocalizer;
@@ -60,8 +60,8 @@ public final class TuningOpModes {
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                parEncs.add(new OtosEncoder(od.otos,false,false, od.leftBack));
-                perpEncs.add(new OtosEncoder(od.otos,true,false, od.leftBack));
+                parEncs.add(new OtosEncoder(od.otos,false,false, od.mecanumDrive.leftRear));
+                perpEncs.add(new OtosEncoder(od.otos,true,false, od.mecanumDrive.leftRear));
 
                 return new DriveView(
                         DriveType.MECANUM,
@@ -71,12 +71,12 @@ public final class TuningOpModes {
                         MecanumDrive.PARAMS.maxProfileAccel,
                         hardwareMap.getAll(LynxModule.class),
                         Arrays.asList(
-                                od.leftFront,
-                                od.leftBack
+                                od.mecanumDrive.leftFront,
+                                od.mecanumDrive.leftRear
                         ),
                         Arrays.asList(
-                                od.rightFront,
-                                od.rightBack
+                                od.mecanumDrive.rightFront,
+                                od.mecanumDrive.rightRear
                         ),
                         leftEncs,
                         rightEncs,

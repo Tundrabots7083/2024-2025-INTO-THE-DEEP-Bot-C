@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 /**
@@ -9,6 +10,12 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
  */
 @Config
 public class Params {
+    // IMU orientation
+    public static RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
+            RevHubOrientationOnRobot.LogoFacingDirection.UP;
+    public static RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
+            RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+
     // drive model parameters
     public static double inPerTick = 1;
     public static double lateralInPerTick = 1;

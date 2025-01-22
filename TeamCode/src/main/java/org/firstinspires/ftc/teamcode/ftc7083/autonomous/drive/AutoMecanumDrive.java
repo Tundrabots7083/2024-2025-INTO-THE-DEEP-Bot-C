@@ -28,7 +28,9 @@ import com.acmerobotics.roadrunner.TrajectoryBuilderParams;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.LynxFirmware;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -95,6 +97,8 @@ public class AutoMecanumDrive {
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
     public Pose2d pose;
 
+    public final LazyImu lazyImu;
+
     public AutoMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         this.pose = pose;
         this.mecanumDrive = Robot.getInstance().mecanumDrive;
@@ -105,6 +109,9 @@ public class AutoMecanumDrive {
 
         localizer = Robot.getInstance().localizer;
         localizer.setPose2d(pose);
+
+        lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+                Params.logoFacingDirection, Params.usbFacingDirection));
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {
