@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ftc7083;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
+import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
@@ -102,7 +104,9 @@ import java.util.List;
  *     </li>
  * </ul>
  */
+@Config
 public class Robot {
+    private static boolean USE_WEBCAMS = false;
     private static Robot robot = null;
 
     public final Telemetry telemetry;
@@ -110,8 +114,8 @@ public class Robot {
     // Subsystems and hardware
     public final MecanumDrive mecanumDrive;
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
-    public final Webcam leftWebcam;
-    public final Webcam rightWebcam;
+    public Webcam leftWebcam;
+    public Webcam rightWebcam;
     public final Arm arm;
     public final LinearSlide linearSlide;
     public final Wrist wrist;
@@ -120,7 +124,7 @@ public class Robot {
     public final SparkFunOTOS otos;
     public final ColorSensor colorSensor;
 
-    public final List<Webcam> webcams;
+    public List<Webcam> webcams;
 
     // Road Runner localization
     public final Localizer localizer;
@@ -156,27 +160,32 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
-        rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
         limelight = new Limelight(hardwareMap, telemetry);
         colorSensor = new ColorSensor(hardwareMap, telemetry);
         otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         calibrateOTOS();
 
-        webcams = Arrays.asList(leftWebcam, rightWebcam);
-        localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+        // Use a localizer with the OTOS and webcams, or just the OTOS
+        if (USE_WEBCAMS) {
+            leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
+            rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
+            webcams = Arrays.asList(leftWebcam, rightWebcam);
+            localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+        } else {
+            localizer = new SparkFunOTOSLocalizer(otos);
+        }
 
         // Wait for all webcams to initialize
-        boolean webcamsInitialized = false;
-        while (!webcamsInitialized) {
-            webcamsInitialized = true;
-            for (Webcam webcam : webcams) {
-                if (!webcam.webcamInitialized()) {
-                    webcamsInitialized = false;
-                    break;
-                }
-            }
-        }
+//        boolean webcamsInitialized = false;
+//        while (!webcamsInitialized) {
+//            webcamsInitialized = true;
+//            for (Webcam webcam : webcams) {
+//                if (!webcam.webcamInitialized()) {
+//                    webcamsInitialized = false;
+//                    break;
+//                }
+//            }
+//        }
 
         this.telemetry.addLine("[Robot] initialized");
     }

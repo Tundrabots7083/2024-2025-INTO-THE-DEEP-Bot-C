@@ -496,8 +496,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         return new SequentialAction(
                 new MoveToChamberHighScoringPosition(this),
                 new MoveToChamberHighLoweredPosition(this),
-                actionOpenClawWithWait(),
-                new MoveToNeutralPosition(this)
+                actionOpenClawWithWait()
         );
     }
 
@@ -525,7 +524,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public ActionEx actionIntakeSampleFromSpikeMark() {
         return new SequentialAction(
-                new MoveToIntakeFarAboveSamplePosition(this),
+                new MoveToIntakeCloseAboveSamplePosition(this),
                 new MoveToIntakeCloseLoweredPosition(this),
                 actionCloseClawWithWait(),
                 new MoveToNeutralPosition(this)
@@ -973,7 +972,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+            intakeAndScoringSubsystem.moveToChamberHighLoweredPosition();
         }
     }
 
