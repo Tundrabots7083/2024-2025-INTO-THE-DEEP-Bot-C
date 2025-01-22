@@ -25,6 +25,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
  * Unless otherwise noted, comments are from SparkFun
  */
 public class SparkFunOTOSDrive extends AutoMecanumDrive {
+    private static final int POSE_HISTORY_SIZE = 100;
+
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private Pose2d lastOtosPose = pose;
     public final org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS otos;
@@ -69,7 +71,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
 
         // RR standard
         poseHistory.add(pose);
-        while (poseHistory.size() > 100) {
+        while (poseHistory.size() > POSE_HISTORY_SIZE) {
             poseHistory.removeFirst();
         }
 
