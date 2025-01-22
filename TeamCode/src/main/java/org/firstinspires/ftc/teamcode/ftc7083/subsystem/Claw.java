@@ -108,8 +108,6 @@ public class Claw extends SubsystemBase {
     public boolean isAtTarget() {
         double elapsedTime = clawServoTimer.time();
         boolean atTarget = elapsedTime >= CLAW_SERVO_TIME;
-        telemetry.addData("[Claw] time", elapsedTime);
-        telemetry.addData("[Claw] wait", CLAW_SERVO_TIME);
         telemetry.addData("[Claw] atTarget", atTarget);
         return atTarget;
     }

@@ -162,8 +162,6 @@ public class Wrist extends SubsystemBase {
     public void setRollDegrees(double degrees) {
         double roll = Range.clip(degrees, MIN_ROLL, MAX_ROLL) + ROLL_DEGREES_OFFSET;
         if (rollServoAngle != roll) {
-            telemetry.addData("[Wrist] roll current", rollServo.getDegrees()); // TODO: delete
-            telemetry.addData("[Wrist] roll target", roll);                    // TODO: delete
             rollServo.setDegrees(roll);
             rollServoAngle = roll;
             rollServoTimer.reset();
@@ -194,8 +192,6 @@ public class Wrist extends SubsystemBase {
     public boolean isPitchServoAtTarget() {
         double elapsedTime = pitchServoTimer.time();
         boolean atTarget = elapsedTime >= PITCH_SERVO_TIME;
-        telemetry.addData("[Wrist] pitch time", elapsedTime);
-        telemetry.addData("[Wrist] pitch wait", PITCH_SERVO_TIME);
         telemetry.addData("[Wrist] pitch atTarget", atTarget);
         return atTarget;
     }
@@ -206,8 +202,6 @@ public class Wrist extends SubsystemBase {
     public boolean isRollServoAtTarget() {
         double elapsedTime = rollServoTimer.time();
         boolean atTarget = elapsedTime >= ROLL_SERVO_TIME;
-        telemetry.addData("[Wrist] roll time", elapsedTime);
-        telemetry.addData("[Wrist] roll wait", ROLL_SERVO_TIME);
         telemetry.addData("[Wrist] roll atTarget", atTarget);
         return atTarget;
     }
