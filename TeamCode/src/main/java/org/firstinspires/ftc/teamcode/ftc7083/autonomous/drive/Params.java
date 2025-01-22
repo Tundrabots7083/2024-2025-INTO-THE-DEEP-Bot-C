@@ -10,13 +10,13 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 @Config
 public class Params {
     // drive model parameters
-    public static double inPerTick = 3.0;
-    public static double lateralInPerTick = 1.15;
+    public static double inPerTick = 1;
+    public static double lateralInPerTick = 1;
     public static double trackWidthTicks = 1; // No idea what to use here; RR tuning doesn't give any values
 
     // feedforward parameters (in tick units)
-    public static double kS = 3.13143827622474;;
-    public static double kV = -0.597597482624909;
+    public static double kS = 0.25;;
+    public static double kV = 0.219;
     public static double kA = 0;
 
     // path profile parameters (in inches)
@@ -31,7 +31,7 @@ public class Params {
     // path controller gains
     public static double axialGain = 0.0;
     public static double lateralGain = 0.0;
-    public static double headingGain = -1.0; // shared with turn
+    public static double headingGain = 1.0; // shared with turn
 
     public static double axialVelGain = 0.0;
     public static double lateralVelGain = 0.0;

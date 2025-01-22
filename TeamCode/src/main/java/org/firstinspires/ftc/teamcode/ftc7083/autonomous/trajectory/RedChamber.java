@@ -15,25 +15,26 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  */
 @Config
 public class RedChamber {
+    public static double DEBUG_ROTATE_180_DEGREES = Math.toRadians(180);
     // Orientations for the robot, in degrees
     public static double ORIENTATION_CHAMBER = 90;
     public static double ORIENTATION_TOWARD_WALL = -90;
-    public static double ORIENTATION_SPIKE_MARK_1 = 120;
-    public static double ORIENTATION_SPIKE_MARK_2 = 90;
-    public static double ORIENTATION_SPIKE_MARK_3 = 60;
+    public static double ORIENTATION_SPIKE_MARK_1 = 60;
+    public static double ORIENTATION_SPIKE_MARK_2 = -90;
+    public static double ORIENTATION_SPIKE_MARK_3 = 120;
 
     // Initial pose for the robot
     public static double INITIAL_POSE_X = 22.5;
     public static double INITIAL_POSE_Y = -60.0;
-    public static double INITIAL_HEADING = ORIENTATION_TOWARD_WALL;
+    public static double INITIAL_HEADING = ORIENTATION_CHAMBER;
 
     // Position for scoring on the high chamber
     public static double CHAMBER_HIGH_X = 0;
     public static double CHAMBER_HIGH_Y = -40;
 
     // Positions for the spike marks
-    public static double RED_SPIKE_MARK_X = 32;
-    public static double RED_SPIKE_MARK_Y = -45;
+    public static double RED_SPIKE_MARK_X = 43.5;
+    public static double RED_SPIKE_MARK_Y = -44.5;
 
     // Pickup specimen from wall
     public static double OBSERVATION_ZONE_X = 47;
@@ -88,10 +89,11 @@ public class RedChamber {
                 // Move to the chamber and score the specimen
                 .strafeTo(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y))
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
-//                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
+                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
                 .strafeTo(new Vector2d(RED_SPIKE_MARK_X, RED_SPIKE_MARK_Y))
                 .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-//                .turnTo(Math.toRadians(ORIENTATION_TOWARD_WALL))
+//                .turn(DEBUG_ROTATE_180_DEGREES)
+//                .turnTo(ORIENTATION_TOWARD_WALL)
 //                .stopAndAdd(ias.actionDropOffSample())
 //                // Move the sample from Spike Mark 2 to the observation zone
 //                .turnTo(Math.toRadians(ORIENTATION_SPIKE_MARK_2))

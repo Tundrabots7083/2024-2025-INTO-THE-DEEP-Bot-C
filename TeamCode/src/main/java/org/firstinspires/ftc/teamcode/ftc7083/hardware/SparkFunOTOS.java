@@ -44,8 +44,7 @@ public class SparkFunOTOS extends com.qualcomm.hardware.sparkfun.SparkFunOTOS {
     // tweaked slightly to compensate for imperfect mounting (eg. 1.3 degrees).
     public static double MOUNTING_OFFSET_X = 0.0;
     public static double MOUNTING_OFFSET_Y = 0.0;
-    public static double MOUNTING_HEADING_IN_DEGREES = 180.0;
-
+    public static double MOUNTING_HEADING_IN_DEGREES = -180.0;
     // Here we can set the linear and angular scalars, which can compensate for
     // scaling issues with the sensor measurements. Note that as of firmware
     // version 1.0, these values will be lost after a power cycle, so you will
