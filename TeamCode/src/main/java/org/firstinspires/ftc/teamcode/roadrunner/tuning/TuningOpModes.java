@@ -24,6 +24,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.TankDrive;
@@ -62,15 +63,15 @@ public final class TuningOpModes {
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                parEncs.add(new OtosEncoder(od.otos,false,false, od.mecanumDrive.leftRear));
-                perpEncs.add(new OtosEncoder(od.otos,true,false, od.mecanumDrive.leftRear));
+                parEncs.add(new OtosEncoder(od.otos,false,true, od.mecanumDrive.leftRear));
+                perpEncs.add(new OtosEncoder(od.otos,true,true, od.mecanumDrive.leftRear));
 
                 return new DriveView(
                         DriveType.MECANUM,
-                        MecanumDrive.PARAMS.inPerTick,
-                        MecanumDrive.PARAMS.maxWheelVel,
-                        MecanumDrive.PARAMS.minProfileAccel,
-                        MecanumDrive.PARAMS.maxProfileAccel,
+                        Params.inPerTick,
+                        Params.maxWheelVel,
+                        Params.minProfileAccel,
+                        Params.maxProfileAccel,
                         hardwareMap.getAll(LynxModule.class),
                         Arrays.asList(
                                 od.mecanumDrive.leftFront,
@@ -86,9 +87,9 @@ public final class TuningOpModes {
                         perpEncs,
                         od.lazyImu,
                         od.voltageSensor,
-                        () -> new MotorFeedforward(MecanumDrive.PARAMS.kS,
-                                MecanumDrive.PARAMS.kV / MecanumDrive.PARAMS.inPerTick,
-                                MecanumDrive.PARAMS.kA / MecanumDrive.PARAMS.inPerTick)
+                        () -> new MotorFeedforward(Params.kS,
+                                Params.kV / Params.inPerTick,
+                                Params.kA / Params.inPerTick)
                 );
             };
         } else if (DRIVE_CLASS.equals(MecanumDrive.class)) {

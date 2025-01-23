@@ -286,8 +286,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_SPECIMEN_RAISED;
                     break;
                 case INTAKE_SPECIMEN_RAISED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+                    state = State.INTAKE_SPECIMEN_OFF_WALL;
                     break;
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:

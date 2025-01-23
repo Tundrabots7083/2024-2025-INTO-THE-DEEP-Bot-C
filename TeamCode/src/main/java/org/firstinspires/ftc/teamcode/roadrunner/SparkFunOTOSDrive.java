@@ -62,7 +62,7 @@ public class SparkFunOTOSDrive extends MecanumDrive {
     }
 
     public static SparkFunOTOSDrive.Params PARAMS = new SparkFunOTOSDrive.Params();
-    public org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS otos;
+    public SparkFunOTOSCorrected otos;
     private Pose2d lastOtosPose = pose;
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
@@ -70,7 +70,8 @@ public class SparkFunOTOSDrive extends MecanumDrive {
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
         FlightRecorder.write("OTOS_PARAMS",PARAMS);
-        otos = hardwareMap.get(org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS.class,"otos");
+        otos = hardwareMap.get(SparkFunOTOSCorrected.class,"otos");
+
         // RR localizer note:
         // don't change the units, it will stop Dashboard field view from working properly
         // and might cause various other issues
@@ -142,6 +143,4 @@ public class SparkFunOTOSDrive extends MecanumDrive {
         // OTOS velocity units happen to be identical to Roadrunners, so we don't need any conversion!
         return new PoseVelocity2d(new Vector2d(otosVel.x, otosVel.y),otosVel.h);
     }
-
-
 }

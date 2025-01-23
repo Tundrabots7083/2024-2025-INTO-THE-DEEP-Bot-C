@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.ftc7083.localization;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class AprilTagAndOTOSLocalizer implements Localizer {
      * @param webcams thw list of webcams used for April Tag localization
      * @param otos    the SparkFun OTOS used for localization
      */
-    public AprilTagAndOTOSLocalizer(List<Webcam> webcams, SparkFunOTOS otos) {
+    public AprilTagAndOTOSLocalizer(List<Webcam> webcams, SparkFunOTOSCorrected otos) {
         aprilTagLocalizer = new AprilTagLocalizer(webcams);
         otosLocalizer = new SparkFunOTOSLocalizer(otos);
     }

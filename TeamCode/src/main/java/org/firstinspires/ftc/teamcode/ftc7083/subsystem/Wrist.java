@@ -211,6 +211,7 @@ public class Wrist extends SubsystemBase {
         return "Wrist{" +
                 "pitch=" + pitchServoAngle +
                 ", roll=" + rollServoAngle +
+                ", atTarget=" + isAtTarget() +
                 "}";
     }
 }

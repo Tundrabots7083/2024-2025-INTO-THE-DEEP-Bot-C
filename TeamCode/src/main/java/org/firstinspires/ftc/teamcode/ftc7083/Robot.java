@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.ftc7083;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
@@ -106,7 +110,8 @@ import java.util.List;
  */
 @Config
 public class Robot {
-    private static boolean USE_WEBCAMS = false;
+    public static boolean USE_WEBCAMS = false;
+
     private static Robot robot = null;
 
     public final Telemetry telemetry;
@@ -121,7 +126,7 @@ public class Robot {
     public final Wrist wrist;
     public final Claw claw;
     public final Limelight limelight;
-    public final SparkFunOTOS otos;
+    public final SparkFunOTOSCorrected otos;
     public final ColorSensor colorSensor;
 
     public List<Webcam> webcams;
@@ -162,7 +167,7 @@ public class Robot {
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap, telemetry);
         colorSensor = new ColorSensor(hardwareMap, telemetry);
-        otos = hardwareMap.get(SparkFunOTOS.class, "otos");
+        otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
         calibrateOTOS();
 
         // Use a localizer with the OTOS and webcams, or just the OTOS
@@ -171,31 +176,23 @@ public class Robot {
             rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
             webcams = Arrays.asList(leftWebcam, rightWebcam);
             localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+
+            //Wait for all webcams to initialize
+            boolean webcamsInitialized = false;
+            while (!webcamsInitialized) {
+                webcamsInitialized = true;
+                for (Webcam webcam : webcams) {
+                    if (!webcam.webcamInitialized()) {
+                        webcamsInitialized = false;
+                        break;
+                    }
+                }
+            }
         } else {
             localizer = new SparkFunOTOSLocalizer(otos);
         }
 
-        // Wait for all webcams to initialize
-//        boolean webcamsInitialized = false;
-//        while (!webcamsInitialized) {
-//            webcamsInitialized = true;
-//            for (Webcam webcam : webcams) {
-//                if (!webcam.webcamInitialized()) {
-//                    webcamsInitialized = false;
-//                    break;
-//                }
-//            }
-//        }
-
         this.telemetry.addLine("[Robot] initialized");
-    }
-
-    /**
-     * Calibrate the SparkFun OTOS.
-     */
-    public void calibrateOTOS() {
-        otos.resetTracking();
-        otos.calibrateImu();
     }
 
     /**
@@ -229,6 +226,70 @@ public class Robot {
      */
     public static Robot getInstance() {
         return robot;
+    }
+
+    /**
+     * Calibrate the SparkFun OTOS.
+     */
+    private void calibrateOTOS() {
+        System.out.println("OTOS calibration beginning!");
+
+        // RR localizer note:
+        // don't change the units, it will stop Dashboard field view from working properly
+        // and might cause various other issues
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+
+        // Set the offset for the OTOS
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(Params.MOUNTING_OFFSET_X,
+                                                             Params.MOUNTING_OFFSET_Y,
+                                                             Math.toRadians(Params.MOUNTING_HEADING_IN_DEGREES));
+        otos.setOffset(offset);
+
+        // Here we can set the linear and angular scalars, which can compensate for
+        // scaling issues with the sensor measurements. Note that as of firmware
+        // version 1.0, these values will be lost after a power cycle, so you will
+        // need to set them each time you power up the sensor. They can be any value
+        // from 0.872 to 1.127 in increments of 0.001 (0.1%). It is recommended to
+        // first set both scalars to 1.0, then calibrate the angular scalar, then
+        // the linear scalar. To calibrate the angular scalar, spin the robot by
+        // multiple rotations (eg. 10) to get a precise error, then set the scalar
+        // to the inverse of the error. Remember that the angle wraps from -180 to
+        // 180 degrees, so for example, if after 10 rotations counterclockwise
+        // (positive rotation), the sensor reports -15 degrees, the required scalar
+        // would be 3600/3585 = 1.004. To calibrate the linear scalar, move the
+        // robot a known distance and measure the error; do this multiple times at
+        // multiple speeds to get an average, then set the linear scalar to the
+        // inverse of the error. For example, if you move the robot 100 inches and
+        // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
+        System.out.println(otos.setLinearScalar(Params.LINEAR_SCALAR));
+        System.out.println(otos.setAngularScalar(Params.ANGULAR_SCALAR));
+
+        // Don't change the units, it will stop FTCDashboard field view from working properly
+        // and might cause various other issues
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+
+        // RR localizer note: It is technically possible to change the number of samples to slightly reduce init times,
+        // however, I found that it caused pretty severe heading drift.
+        // Also, if you're careful to always wait more than 612ms in init, you could technically disable waitUntilDone;
+        // this would allow your OpMode code to run while the calibration occurs.
+        // However, that may cause other issues.
+        // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
+        otos.calibrateImu(Params.NUM_IMU_CALIBRATION_SAMPLES, true);
+
+        // Reset the tracking algorithm - this resets the position to the origin,
+        // but can also be used to recover from some rare tracking errors
+        otos.resetTracking();
+
+        // After resetting the tracking, the OTOS will report that the robot is at
+        // the origin. If your robot does not start at the origin, or you have
+        // another source of location information (eg. vision odometry), you can set
+        // the OTOS location to match and it will continue to track from there.
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(Params.INITIAL_POS_X, Params.INITIAL_POS_Y, Params.INITIAL_POS_HEADING);
+        otos.setPosition(currentPosition);
+
+        System.out.println("OTOS calibration complete!");
     }
 
     /**

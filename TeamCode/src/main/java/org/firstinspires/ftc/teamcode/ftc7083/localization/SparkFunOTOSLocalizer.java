@@ -6,18 +6,18 @@ import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 
 /**
  * A localizer that uses the SparkFun OTOS to determine the field pose and velocity.
  */
 public class SparkFunOTOSLocalizer implements Localizer {
-    private final SparkFunOTOS otos;
+    private final SparkFunOTOSCorrected otos;
     private Pose2d pose;
-    private SparkFunOTOS.Pose2D otosVel;
+    private SparkFunOTOSCorrected.Pose2D otosVel;
 
     /**
      * Instantiates a new SparkFun OTOS localizer, using the SparkFun OTOS provided to calculate
@@ -25,15 +25,15 @@ public class SparkFunOTOSLocalizer implements Localizer {
      *
      * @param otos the SparkFun OTOS to use for localization
      */
-    public SparkFunOTOSLocalizer(SparkFunOTOS otos) {
+    public SparkFunOTOSLocalizer(SparkFunOTOSCorrected otos) {
         this.otos = otos;
     }
 
     @Override
     public void update() {
         com.qualcomm.hardware.sparkfun.SparkFunOTOS.Pose2D otosPose = new com.qualcomm.hardware.sparkfun.SparkFunOTOS.Pose2D();
-        otosVel = new SparkFunOTOS.Pose2D();
-        SparkFunOTOS.Pose2D otosAcc = new SparkFunOTOS.Pose2D();
+        otosVel = new SparkFunOTOSCorrected.Pose2D();
+        SparkFunOTOSCorrected.Pose2D otosAcc = new SparkFunOTOSCorrected.Pose2D();
         otos.getPosVelAcc(otosPose, otosVel, otosAcc);
         pose = OTOSPoseToRRPose(otosPose);
     }

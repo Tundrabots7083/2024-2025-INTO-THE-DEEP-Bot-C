@@ -29,9 +29,9 @@ public class Claw extends SubsystemBase {
     public static long CLAW_SERVO_TIME = 250; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
-    public static double CLOSE_DEGREE_OFFSET = 67.5;
-    public static double DEFAULT_CLOSE_DEGREES = 30.0;
-    public static double DEFAULT_OPEN_DEGREES = 95.0;
+    public static double CLOSE_DEGREE_OFFSET = 226;
+    public static double DEFAULT_CLOSE_DEGREES = 14;
+    public static double DEFAULT_OPEN_DEGREES = 55;
 
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 355.0;
@@ -53,9 +53,9 @@ public class Claw extends SubsystemBase {
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.clawServo = new Servo(hardwareMap, CLAW_SERVO);
-        this.clawServo.setDirection(Servo.Direction.FORWARD);
+        this.clawServo.setDirection(Servo.Direction.REVERSE);
         clawServo.setMaxDegrees(MAX_CLAW_DEGREES);
-        clawServo.setDegrees(DEFAULT_CLOSE_DEGREES);
+        clawServo.close();
     }
 
     /**
@@ -116,6 +116,7 @@ public class Claw extends SubsystemBase {
     public String toString() {
         return "Claw{" +
                 "angle=" + clawAngle +
+                ", atTarget=" + isAtTarget() +
                 "}";
     }
 
