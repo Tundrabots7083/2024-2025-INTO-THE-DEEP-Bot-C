@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
@@ -78,7 +79,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 2;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1.5;
     public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
     public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
@@ -91,6 +92,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
+
+    // Time to lower arm when scoring on a chamber
+    public static long ARM_LOWER_TIME = 500; // milliseconds
 
     // Other scoring constants
     public static double MOVE_ARM_AMOUNT = 3.0;
@@ -488,13 +492,23 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Gets an action to move the intake and scoring system so it is prepared to score on the
+     * high chamber.
+     *
+     * @return an action to move the intake and scoring system so it is prepared to score on the
+     *         high chamber
+     */
+    public ActionEx actionMoveToScoreSpecimenHighChamber() {
+        return new MoveToChamberHighScoringPosition(this);
+    }
+
+    /**
      * Gets an action to score a sample in the high chamber.
      *
      * @return an action to score a sample in the high chamber
      */
     public ActionEx actionScoreSpecimenHighChamber() {
         return new SequentialAction(
-                new MoveToChamberHighScoringPosition(this),
                 new MoveToChamberHighLoweredPosition(this),
                 actionOpenClawWithWait()
         );
@@ -576,7 +590,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public static abstract class MoveToActionBase extends ActionExBase {
         protected final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
-        private boolean initialized = false;
+        protected boolean initialized = false;
 
         public MoveToActionBase(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
             this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
@@ -959,13 +973,18 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     /**
      * An action to lower the intake and scoring subsystem's arm to clip a specimen on the high chamber.
      */
+    @Config
     public static class MoveToChamberHighLoweredPosition extends MoveToActionBase {
+        private boolean initialized = false;
+        private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
         /**
          * Instantiates an action to lower the intake and scoring subsystem's arm to clip a specimen
          * on the high chamber.
          *
          * @param intakeAndScoringSubsystem the intake and scoring subsystem
          */
+
         public MoveToChamberHighLoweredPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
             super(intakeAndScoringSubsystem);
         }
@@ -973,6 +992,26 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             intakeAndScoringSubsystem.moveToChamberHighLoweredPosition();
+            timer.reset();
+        }
+
+        /**
+         * Moves the intake and scoring subsystem to the target position.
+         *
+         * @param telemetryPacket the telemetry used to output data to the user.
+         * @return <code>true</code> if the intake and scoring subsystem are still moving to the
+         *         target position; <code>false</code> if it is at the target position.
+         */
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized) {
+                initialize();
+                initialized = true;
+            }
+            intakeAndScoringSubsystem.execute();
+
+            double elapsedTime = timer.time();
+            return elapsedTime < ARM_LOWER_TIME;
         }
     }
 

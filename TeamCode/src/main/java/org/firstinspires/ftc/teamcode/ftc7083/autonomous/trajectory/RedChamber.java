@@ -30,7 +30,8 @@ public class RedChamber {
 
     // Position for scoring on the high chamber
     public static double CHAMBER_HIGH_X = 0;
-    public static double CHAMBER_HIGH_Y = -40;
+    public static double CHAMBER_HIGH_Y = -38;
+    public static double HIGH_CHAMBER_DRIVE_FORWARD = 6.5;
 
     // Positions for the spike marks
     public static double RED_SPIKE_MARK_X = 43.5;
@@ -88,7 +89,9 @@ public class RedChamber {
         return actionBuilder
                 // Move to the chamber and score the specimen
                 .strafeTo(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y))
-//                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
+                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
+                .lineToYConstantHeading(CHAMBER_HIGH_Y + HIGH_CHAMBER_DRIVE_FORWARD)
+                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 //                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
 //                .strafeTo(new Vector2d(RED_SPIKE_MARK_X, RED_SPIKE_MARK_Y))
 //                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())

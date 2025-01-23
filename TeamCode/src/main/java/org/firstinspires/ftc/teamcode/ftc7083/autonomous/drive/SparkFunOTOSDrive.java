@@ -29,7 +29,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private Pose2d lastOtosPose = pose;
-    public final SparkFunOTOSCorrected otos;
+    public final SparkFunOTOS otos;
 
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
