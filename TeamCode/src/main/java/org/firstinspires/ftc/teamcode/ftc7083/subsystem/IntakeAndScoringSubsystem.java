@@ -40,7 +40,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double DEPOSIT_SAMPLE_LOWERED_X = DEPOSIT_SAMPLE_ABOVE_X;
     public static double DEPOSIT_SAMPLE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
-    public static double INTAKE_FAR_ABOVE_Y =INTAKE_HEIGHT_ABOVE + 1.0;
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.0;
     public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 15.0;
     public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
