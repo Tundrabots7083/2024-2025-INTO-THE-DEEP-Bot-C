@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase {
     public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
-    public static double TOLERABLE_ERROR = 0.05; // In degrees
+    public static double TOLERABLE_ERROR = 1.0; // In degrees
     public static double MIN_ANGLE = -36.0;
     public static double MAX_ANGLE = 100.0;
 
@@ -121,13 +121,14 @@ public class Arm extends SubsystemBase {
      * Sends power to the shoulder motor.
      */
     public void execute() {
-        double currentDegrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
-        double power = pidController.calculate(targetAngle, currentDegrees);
-
+        double currentAngle = getCurrentAngle();
+        double power = pidController.calculate(targetAngle, currentAngle);
         shoulderMotor.setPower(power);
+
         telemetry.addData("[Arm] Target Deg", targetAngle);
-        telemetry.addData("[Arm] Current Deg", currentDegrees);
+        telemetry.addData("[Arm] Current Deg", currentAngle);
         telemetry.addData("[Arm] Power", power);
+        telemetry.addData("[Arm] atTarget", isAtTarget());
     }
 
     /**
@@ -138,7 +139,27 @@ public class Arm extends SubsystemBase {
     public boolean isAtTarget() {
         double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
         double error = Math.abs(targetAngle - degrees);
+
+        telemetry.addData("[Arm] Error", error);
+        telemetry.addData("[Arm] Target", targetAngle);
+        telemetry.addData("[Arm] Current", degrees);
+
         return error <= TOLERABLE_ERROR;
+    }
+
+    /**
+     * Returns a string representation of the arm.
+     *
+     * @return a string representation of the arm
+     */
+    @Override
+    @NonNull
+    public String toString() {
+        return "Arm{" +
+                "target=" + targetAngle +
+                ", current=" + getCurrentAngle() +
+                ", atTarget=" + isAtTarget() +
+                "}";
     }
 
     /**

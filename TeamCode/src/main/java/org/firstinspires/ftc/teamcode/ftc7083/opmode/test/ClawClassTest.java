@@ -7,21 +7,20 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 
-@TeleOp(name = "Ascent Test", group = "tests")
-public class AscentTest extends OpMode {
-    private Robot robot;
+@Config
+@TeleOp(name = "Claw Class Test", group = "tests")
+public class ClawClassTest extends OpMode {
+    private Claw claw;
+    private boolean clawOpened = false;
     private final Gamepad previousGamepad1 = new Gamepad();
-    private boolean ascend = false;
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot = Robot.init(hardwareMap, telemetry);
+        claw = new Claw(hardwareMap, telemetry);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -30,21 +29,20 @@ public class AscentTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.cross && !previousGamepad1.cross) {
-            ascend = !ascend;
+            if (clawOpened) {
+                claw.close();
+                clawOpened = false;
+            } else {
+                claw.open();
+                clawOpened = true;
+            }
         }
 
-        if (ascend) {
-            robot.intakeAndScoringSubsystem.moveToAscentLevelOne();
-            telemetry.addData("[ASCENT] pos", "ascent");
-        } else {
-            robot.intakeAndScoringSubsystem.moveToStartPosition();
-            telemetry.addData("[ASCENT] pos", "start");
-        }
+        telemetry.addData("Claw opened", clawOpened);
 
-        robot.arm.execute();
-        robot.linearSlide.execute();
+        telemetry.addData("Retrieved degrees", claw.getCurrentDegrees());
+        telemetry.update();
 
         previousGamepad1.copy(gamepad1);
     }
-
 }

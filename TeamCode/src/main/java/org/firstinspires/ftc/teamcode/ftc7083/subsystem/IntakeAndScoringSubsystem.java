@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
@@ -38,9 +39,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double DEPOSIT_SAMPLE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
     public static double DEPOSIT_SAMPLE_LOWERED_X = DEPOSIT_SAMPLE_ABOVE_X;
     public static double DEPOSIT_SAMPLE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
-    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
-    public static double INTAKE_FAR_ABOVE_Y =INTAKE_HEIGHT_ABOVE + 1.0;
-    public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 15.0;
+    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 20.0;
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.0;
+    public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 20.0;
     public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
@@ -72,33 +73,36 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // the arm that the scoring subsystem needs to reach to score in
     // different places.
     public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 12.0;
-    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 7.0;
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 17.0;
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;
     public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 2;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT + 1.5;
     public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
     public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 0.5;
+    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
     public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5.0;
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 6.25;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
+
+    // Time to lower arm when scoring on a chamber
+    public static long ARM_LOWER_TIME = 500; // milliseconds
 
     // Other scoring constants
     public static double MOVE_ARM_AMOUNT = 3.0;
 
     private final Telemetry telemetry;
     private final Robot robot;
-    private double targetX = RETRACT_X;
-    private double targetY = RETRACT_Y;
+    private double targetX = START_X;
+    private double targetY = START_Y;
 
     /**
      * Constructor
@@ -131,18 +135,10 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      *         <code>false</code> otherwise
      */
     public boolean isAtTarget() {
-        return robot.arm.isAtTarget() && robot.linearSlide.isAtTarget();
-    }
-
-    /**
-     * Moves the subsystem to the starting position, with the claw closed.
-     */
-    public void moveToStartPosition() {
-        Robot robot = Robot.getInstance();
-        moveToPosition(START_X, START_Y);
-        robot.wrist.setToStartPosition();
-        robot.claw.close();
-        telemetry.addData("[IAS] position", "start");
+        return robot.arm.isAtTarget()
+                && robot.linearSlide.isAtTarget()
+                && robot.wrist.isAtTarget()
+                && robot.claw.isAtTarget();
     }
 
     /**
@@ -194,32 +190,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Fully retract the linear slide while not changing the arm angle.
+     * Moves the subsystem to the starting position, with the claw closed.
      */
-    public void retractLinearSlide() {
-        // Get angle on the triangle. This is not going to change as the arm is retracted, as the
-        // new triangle will be complementary to the current triangle.
-        double angle = robot.arm.getCurrentAngle();
-
-        // Fully retract the slide by setting the hypotenuse to the arm length, which will effectively
-        // set the slide length to zero. Use the hypotenuse to calculate the new X and Y coordinates
-        // for the right triangle. ARM_HEIGHT is added to the Y value, as the ARM_HEIGHT is
-        // subtracted from the Y value by the moveToPosition() method.
-        double hypotenuse = ARM_LENGTH;
-        double x = getX(angle, hypotenuse);
-        double y = getY(angle, hypotenuse) + ARM_HEIGHT;
-
-        moveToPosition(x, y);
-        telemetry.addData("[IAS] position", "retracted");
-    }
-
-    /**
-     * Retracts the linear slide from the submersible, slightly raising the arm so the slide does
-     * not hit the 2" lip around the submersible.
-     */
-    public void retractFromSubmersible() {
-        moveToPosition(RETRACT_X, RETRACT_Y);
-        telemetry.addData("[IAS] position", "submersible retracted");
+    public void moveToStartPosition() {
+        Robot robot = Robot.getInstance();
+        moveToPosition(START_X, START_Y);
+        robot.wrist.setToStartPosition();
+        robot.claw.close();
+        telemetry.addData("[IAS] position", "start");
     }
 
     /**
@@ -442,106 +420,19 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Rotates the wrist by the given angle.
-     */
-    public void setWristRoll(double rollAngle) {
-        robot.wrist.setRollDegrees(rollAngle);
-
-        telemetry.addData("rotateWrist", "start");
-    }
-    /**
-     * Gets an action to score a specimen on the high chamber. The robot must be in the correct
-     * scoring position prior to calling this method.
+     * Returns a string representation of the intake and scoring subsystem.
      *
-     * @return an action to score a specimen on the high chamber
+     * @return a string representation of the intake and scoring subsystem
      */
-    public ActionEx actionScoreSpecimenHighChamber() {
-        return new SequentialAction(
-                new MoveTo(this, HIGH_CHAMBER_SCORING_RELEASE_X, HIGH_CHAMBER_SCORING_Y),
-                new MoveTo(this, HIGH_CHAMBER_SCORING_RELEASE_X, HIGH_CHAMBER_SCORING_RELEASE_Y),
-                actionOpenClawWithWait(),
-                actionRetractLinearSlide()
-        );
-    }
-
-    /**
-     * Gets an action to score a specimen on the high chamber. The robot must be in the correct
-     * scoring position prior to calling this method.
-     *
-     * @return an action to score a specimen on the high chamber
-     */
-    public ActionEx actionScoreSpecimenHighBasket() {
-        return new SequentialAction(
-                new MoveTo(this, HIGH_BASKET_SCORING_X, HIGH_BASKET_SCORING_Y),
-                actionOpenClawWithWait(),
-                actionRetractLinearSlide()
-        );
-    }
-
-    /**
-     * Gets an action to intake a specimen from the ground. The robot must be in the
-     * correct position prior to calling this method.
-     *
-     * @return an action to intake a specimen from the observation zone wall
-     */
-    public ActionEx actionIntakeSample() {
-        return new SequentialAction(
-                // TODO: this is not correct - it will need to use the LimeLight camera to orient the wrist and
-                //       adjust the length of the linear slide
-                new MoveTo(this, INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y),
-                actionCloseClawWithWait(),
-                actionRetractLinearSlide()
-        );
-    }
-
-    /**
-     * Gets an action to intake a specimen from the ground. The robot must be in the
-     * correct position prior to calling this method.
-     *
-     * @return an action to intake a specimen from the observation zone wall
-     */
-    public ActionEx actionDepositSample() {
-        return new SequentialAction(
-                new MoveTo(this, DEPOSIT_SAMPLE_ABOVE_X, DEPOSIT_SAMPLE_ABOVE_Y),
-                actionOpenClawWithWait(),
-                actionRetractLinearSlide()
-        );
-    }
-
-    /**
-     * Gets an action to intake a specimen from the observation zone wall. The robot must be in the
-     * correct position prior to calling this method.
-     *
-     * @return an action to intake a specimen from the observation zone wall
-     */
-    public ActionEx actionIntakeSpecimen() {
-        return new SequentialAction(
-                // TODO: this is not correct - it will need to use the LimeLight camera to orient the wrist and
-                //       adjust the length of the linear slide
-                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y),
-                actionCloseClawWithWait(),
-                new MoveTo(this, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X, OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y),
-                actionRetractLinearSlide()
-        );
-    }
-
-    /**
-     * Gets an action to touch the low ascent bar. The robot must be in the correct position prior
-     * to calling this method.
-     *
-     * @return an action to touch the low ascent bar
-     */
-    public ActionEx actionTouchAscentBarLow() {
-        return new MoveTo(this, LOW_ASCENT_BAR_X, LOW_ASCENT_BAR_Y);
-    }
-
-    /**
-     * Gets an action to move the scoring subsystem to the start position.
-     *
-     * @return an action to move the scoring subsystem to the start position.
-     */
-    public ActionEx actionMoveToStartPosition() {
-        return new MoveTo(this, START_X, START_Y);
+    @Override
+    @NonNull
+    public String toString() {
+        return "IAS{" +
+                robot.arm +
+                ", " + robot.linearSlide +
+                ", " + robot.wrist +
+                ", " + robot.claw +
+                "}";
     }
 
     /**
@@ -582,6 +473,107 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Gets an action to touch the low ascent bar. The robot must be in the correct position prior
+     * to calling this method.
+     *
+     * @return an action to touch the low ascent bar
+     */
+    public ActionEx actionTouchAscentBarLow() {
+        return new MoveToAscentLevelOne(this);
+    }
+
+    /**
+     * Gets an action to move the scoring subsystem to the start position.
+     *
+     * @return an action to move the scoring subsystem to the start position.
+     */
+    public ActionEx actionMoveToStartPosition() {
+        return new MoveToStartPosition(this);
+    }
+
+    /**
+     * Gets an action to move the intake and scoring system so it is prepared to score on the
+     * high chamber.
+     *
+     * @return an action to move the intake and scoring system so it is prepared to score on the
+     *         high chamber
+     */
+    public ActionEx actionMoveToScoreSpecimenHighChamber() {
+        return new MoveToChamberHighScoringPosition(this);
+    }
+
+    /**
+     * Gets an action to score a sample in the high chamber.
+     *
+     * @return an action to score a sample in the high chamber
+     */
+    public ActionEx actionScoreSpecimenHighChamber() {
+        return new SequentialAction(
+                new MoveToChamberHighLoweredPosition(this),
+                actionOpenClawWithWait()
+        );
+    }
+
+    /**
+     * Gets an action to score a sample in the high basket.
+     *
+     * @return an action to score a sample in the high basket
+     */
+    public ActionEx actionScoreSampleHighBasket() {
+        return new SequentialAction(
+                new MoveToBasketHighRetractedPosition(this),
+                new MoveToBasketHighRaisedPosition(this),
+                new MoveToBasketHighScoringPosition(this),
+                actionOpenClawWithWait(),
+                new MoveToBasketHighRaisedPosition(this),
+                new MoveToBasketHighRetractedPosition(this),
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
+     * Gets an action to pick up a sample from a spike mark.
+     *
+     * @return an action to pick up a sample from a spike mark
+     */
+    public ActionEx actionIntakeSampleFromSpikeMark() {
+        return new SequentialAction(
+                new MoveToIntakeCloseAboveSamplePosition(this),
+                new MoveToIntakeCloseLoweredPosition(this),
+                actionCloseClawWithWait(),
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
+     * Gets an action to pick up a specimen off the wall.
+     *
+     * @return an action to pick up a specimen off the wall
+     */
+    public ActionEx actionIntakeSpecimenFromWall() {
+        return new SequentialAction(
+                new MoveToIntakeSpecimenOffWallPosition(this),
+                actionCloseClawWithWait(),
+                new MoveToIntakeSpecimenRaisedPosition(this),
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
+     * Gets an action to drop off a sample. This is typically used to drop off a sample in the
+     * observation zone.
+     *
+     * @return an action to drop off a sample
+     */
+    public ActionEx actionDropOffSample() {
+        return new SequentialAction(
+                new MoveToDropOffSamplePosition(this),
+                actionOpenClawWithWait(),
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
      * Gets an action to move the arm and linear slide so the intake and scoring subsystem are at
      * the desired position.
      *
@@ -594,22 +586,46 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Gets an action that retracts the linear slide while maintaining the current angle of the arm.
-     * @return an action that retracts the linear slide while maintaining the current angle of the arm
+     * Base class for actions that move the intake and scoring subsystem to pre-defined positions.
      */
-    public ActionEx actionRetractLinearSlide() {
-        return new RetractLinearSlide(this);
+    public static abstract class MoveToActionBase extends ActionExBase {
+        protected final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
+        protected boolean initialized = false;
+
+        public MoveToActionBase(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
+        }
+
+        /**
+         * Moves the intake and scoring subsystem to the target position.
+         *
+         * @param telemetryPacket the telemetry used to output data to the user.
+         * @return <code>true</code> if the intake and scoring subsystem are still moving to the
+         *         target position; <code>false</code> if it is at the target position.
+         */
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized) {
+                initialize();
+                initialized = true;
+            }
+            intakeAndScoringSubsystem.execute();
+            return !intakeAndScoringSubsystem.isAtTarget();
+        }
+
+        /**
+         * Sets the position to which to move the intake and scoring subsystem.
+         */
+        public abstract void initialize();
     }
 
     /**
      * An action to move the intake and scoring subsystem's arm and linear slide to the desired
      * position.
      */
-    public static class MoveTo extends ActionExBase {
-        private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
+    public static class MoveTo extends MoveToActionBase {
         private final double x;
         private final double y;
-        private boolean initialized = false;
 
         /**
          * Instantiates an action to move the intake and scoring subsystem to the desired position.
@@ -619,54 +635,368 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
          * @param y                         the height the arm needs to reach along the <code>Y</code> axis
          */
         public MoveTo(IntakeAndScoringSubsystem intakeAndScoringSubsystem, double x, double y) {
-            this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
+            super(intakeAndScoringSubsystem);
             this.x = x;
             this.y = y;
         }
 
         /**
-         * Moves the intake and scoring subsystem to the desired position.
-         *
-         * @param telemetryPacket the telemetry used to output data to the user.
-         * @return <code>true</code> if the intake and scoring subsystem are still moving to the
-         *         target position; <code>false</code> if it is at the target position.
-         */
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (!initialized) {
-                initialize();
-            }
-            intakeAndScoringSubsystem.execute();
-            return !intakeAndScoringSubsystem.isAtTarget();
-        }
-
-        /**
          * Sets the position to which to move the intake and scoring subsystem.
          */
-        private void initialize() {
+        public void initialize() {
             intakeAndScoringSubsystem.moveToPosition(x, y);
-            initialized = true;
         }
     }
 
     /**
-     * An action that retracts the linear slide while maintaining the current angle of the arm.
+     * An action to move the intake and scoring subsystem's arm to the start position.
      */
-    public static class RetractLinearSlide extends ActionExBase {
-        private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
-        private boolean initialized = false;
-
+    public static class MoveToStartPosition extends MoveToActionBase {
         /**
-         * Instantiates an action that retracts the linear slide while maintaining the current angle of the arm.
+         * Instantiates an action to move the intake and scoring subsystem's arm to the start position.
          *
          * @param intakeAndScoringSubsystem the intake and scoring subsystem
          */
-        public RetractLinearSlide(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
-            this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
+        public MoveToStartPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToStartPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to the neutral position.
+     */
+    public static class MoveToNeutralPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to the neutral position.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToNeutralPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToNeutralPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to intake a sample relatively
+     * close to the robot.
+     */
+    public static class MoveToIntakeCloseAboveSamplePosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to intake a sample
+         * relatively close to the robot.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeCloseAboveSamplePosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+        }
+    }
+
+    /**
+     * An action to lower the intake and scoring subsystem's arm to intake a sample relatively
+     * close to the robot.
+     */
+    public static class MoveToIntakeCloseLoweredPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to lower the intake and scoring subsystem's arm to intake a sample
+         * relatively close to the robot.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeCloseLoweredPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to intake a sample relatively far
+     * from the robot.
+     */
+    public static class MoveToIntakeFarAboveSamplePosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to intake a sample
+         * relatively far from the robot.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeFarAboveSamplePosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
+        }
+    }
+
+    /**
+     * An action to lower the intake and scoring subsystem's arm to intake a sample relatively
+     * far from the robot.
+     */
+    public static class MoveToIntakeFarLoweredPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to lower the intake and scoring subsystem's arm to intake a sample
+         * relatively far from the robot.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeFarLoweredPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to intake a specimen from the wall.
+     */
+    public static class MoveToIntakeSpecimenOffWallPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to intake a specimen
+         * from the wall.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeSpecimenOffWallPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+        }
+    }
+
+    /**
+     * An action to raise the intake and scoring subsystem's arm after picking up a specimen from
+     * the wall.
+     */
+    public static class MoveToIntakeSpecimenRaisedPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to raise the intake and scoring subsystem's arm after picking up a
+         * specimen from the wall.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToIntakeSpecimenRaisedPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToIntakeSpecimenRaisedPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to drop off a sample.
+     */
+    public static class MoveToDropOffSamplePosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to drop off a sample.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToDropOffSamplePosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToDropOffSamplePosition();
+        }
+    }
+
+    /**
+     * An action to raise the intake and scoring subsystem's arm to prepare to score in the high basket.
+     */
+    public static class MoveToBasketHighRaisedPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
+         * in the high basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketHighRaisedPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to score in the high basket.
+     */
+    public static class MoveToBasketHighScoringPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to score in the
+         * high basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketHighScoringPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketHighScoringPosition();
+        }
+    }
+
+    /**
+     * An action to retract the intake and scoring subsystem's arm to after scoring in the high basket.
+     */
+    public static class MoveToBasketHighRetractedPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to retract the intake and scoring subsystem's arm to after scoring
+         * in the high basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketHighRetractedPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
+        }
+    }
+
+    /**
+     * An action to raise the intake and scoring subsystem's arm to prepare to score in the low basket.
+     */
+    public static class MoveToBasketLowRaisedPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
+         * in the low basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketLowRaisedPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to score in the low basket.
+     */
+    public static class MoveToBasketLowScoringPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to score in the
+         * low basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketLowScoringPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketLowScoringPosition();
+        }
+    }
+
+    /**
+     * An action to retract the intake and scoring subsystem's arm to after scoring in the low basket.
+     */
+    public static class MoveToBasketLowRetractedPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to retract the intake and scoring subsystem's arm to after scoring
+         * in the low basket.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToBasketLowRetractedPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToBasketLowRetractedPosition();
+        }
+    }
+
+    /**
+     * An action to raise the intake and scoring subsystem's arm to prepare to score on the high chamber.
+     */
+    public static class MoveToChamberHighScoringPosition extends MoveToActionBase {
+        /**
+         * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
+         * on the high chamber.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToChamberHighScoringPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+        }
+    }
+
+    /**
+     * An action to lower the intake and scoring subsystem's arm to clip a specimen on the high chamber.
+     */
+    @Config
+    public static class MoveToChamberHighLoweredPosition extends MoveToActionBase {
+        private boolean initialized = false;
+        private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
+        /**
+         * Instantiates an action to lower the intake and scoring subsystem's arm to clip a specimen
+         * on the high chamber.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+
+        public MoveToChamberHighLoweredPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToChamberHighLoweredPosition();
+            timer.reset();
         }
 
         /**
-         * Retracts the linear slide while maintaining the current angle of the arm.
+         * Moves the intake and scoring subsystem to the target position.
          *
          * @param telemetryPacket the telemetry used to output data to the user.
          * @return <code>true</code> if the intake and scoring subsystem are still moving to the
@@ -676,17 +1006,33 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             if (!initialized) {
                 initialize();
+                initialized = true;
             }
             intakeAndScoringSubsystem.execute();
-            return !intakeAndScoringSubsystem.isAtTarget();
+
+            double elapsedTime = timer.time();
+            return elapsedTime < ARM_LOWER_TIME;
+        }
+    }
+
+    /**
+     * An action to raise the intake and scoring subsystem's arm to touch the low ascent bar, achieving
+     * a Level 1 ascent.
+     */
+    public static class MoveToAscentLevelOne extends MoveToActionBase {
+        /**
+         * Instantiates an action to raise the intake and scoring subsystem's arm to touch the
+         * low ascent bar, achieving a Level 1 ascent.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public MoveToAscentLevelOne(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
         }
 
-        /**
-         * Sets the position to which to move the intake and scoring subsystem.
-         */
-        private void initialize() {
-            intakeAndScoringSubsystem.retractLinearSlide();
-            initialized = true;
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.moveToAscentLevelOne();
         }
     }
 }

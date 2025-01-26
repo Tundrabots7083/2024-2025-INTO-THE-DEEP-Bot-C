@@ -6,10 +6,10 @@ import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 
 /**
  * A localizer that uses the SparkFun OTOS to determine the field pose and velocity.

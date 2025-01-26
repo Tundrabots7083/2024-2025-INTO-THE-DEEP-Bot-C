@@ -49,21 +49,21 @@ public class Webcam extends SubsystemBase {
     public static final int RESOLUTION_1920x1080 = 5;
 
     // Dimensions of the robot
-    public static double BOT_LENGTH = 17.0; // 1/2 == 8.5
-    public static double BOT_WIDTH = 11.375; // 1/2 == 5.6875
+    public static double BOT_LENGTH = 14.25;
+    public static double BOT_WIDTH = 14.25;
 
     // Camera position
-    public static double LEFT_CAMERA_X = -5.875;
-    public static double LEFT_CAMERA_Y = 7.625; // measured at 5.625
-    public static double LEFT_CAMERA_Z = 5.75;
+    public static double LEFT_CAMERA_X = -7.125;
+    public static double LEFT_CAMERA_Y = 5.125;
+    public static double LEFT_CAMERA_Z = 6.25;
     public static double LEFT_CAMERA_YAW = 90.0;
-    public static double RIGHT_CAMERA_X = 5.875;
-    public static double RIGHT_CAMERA_Y = 5.5625; // measured at 4.5625
-    public static double RIGHT_CAMERA_Z = 5.75;
+    public static double RIGHT_CAMERA_X = 7.125;
+    public static double RIGHT_CAMERA_Y = 5.125;
+    public static double RIGHT_CAMERA_Z = 6.125;
     public static double RIGHT_CAMERA_YAW = -90.0;
 
     // Resolution to use for the webcams. This is an index into the SUPPORTED_CAMERA_RESOLUTIONS list.
-    public static int RESOLUTION_SELECTION = RESOLUTION_800x600;
+    public static int RESOLUTION_SELECTION = RESOLUTION_640x480;
 
     // Position and orientation for the webcams on this robot
     public static Position LEFT_CAMERA_POSITION = new Position(DistanceUnit.INCH,

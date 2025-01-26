@@ -94,19 +94,19 @@ public class RedBasket {
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
                 // Pick up the sample from Spike Mark 1 and score in the high basket
                 .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_X, YELLOW_SPIKE_MARK_Y), Math.toRadians(ORIENTATION_SPIKE_MARK_1))
-                .stopAndAdd(ias.actionIntakeSample())
+                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
                 .strafeToSplineHeading(new Vector2d(BASKET_HIGH_X, BASKET_HIGH_Y), Math.toRadians(ORIENTATION_BASKET))
-                .stopAndAdd(ias.actionScoreSpecimenHighBasket())
+                .stopAndAdd(ias.actionScoreSampleHighBasket())
                 // Pick up the sample from Spike Mark 2 and score in the high basket
                 .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_X, YELLOW_SPIKE_MARK_Y), Math.toRadians(ORIENTATION_SPIKE_MARK_2))
-                .stopAndAdd(ias.actionIntakeSample())
+                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
                 .strafeToSplineHeading(new Vector2d(BASKET_HIGH_X, BASKET_HIGH_Y), Math.toRadians(ORIENTATION_BASKET))
-                .stopAndAdd(ias.actionScoreSpecimenHighBasket())
+                .stopAndAdd(ias.actionScoreSampleHighBasket())
                 // Pick up the sample from Spike Mark 2 and score in the high basket
                 .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_X, YELLOW_SPIKE_MARK_Y), Math.toRadians(ORIENTATION_SPIKE_MARK_3))
-                .stopAndAdd(ias.actionIntakeSample())
+                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
                 .strafeToSplineHeading(new Vector2d(BASKET_HIGH_X, BASKET_HIGH_Y), Math.toRadians(ORIENTATION_BASKET))
-                .stopAndAdd(ias.actionScoreSpecimenHighBasket())
+                .stopAndAdd(ias.actionScoreSampleHighBasket())
                 // Park the robot
                 .strafeToSplineHeading(new Vector2d(PARK_APPROACH_X, PARK_Y), Math.toRadians(ORIENTATION_TOWARD_ASCENT_BARS))
                 .strafeTo(new Vector2d(PARK_X, PARK_Y))

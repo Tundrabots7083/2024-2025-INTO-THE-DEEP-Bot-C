@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.AutoMecanumDrive;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedChamber;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
@@ -37,9 +37,9 @@ public class RedChamberOpMode extends OpMode {
 
         robot = Robot.init(hardwareMap, telemetry);
         subsystems = Arrays.asList(robot.mecanumDrive, robot.arm, robot.linearSlide, robot.claw, robot.wrist);
-//        robot.localizer.setPose2d(new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_HEADING));
+        robot.localizer.setPose2d(new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_HEADING));
 
-        trajectoryBuilder = new RedChamber(new AutoMecanumDrive(hardwareMap, new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_HEADING)));
+        trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_HEADING)));
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -47,16 +47,16 @@ public class RedChamberOpMode extends OpMode {
 
     @Override
     public void init_loop() {
-//        robot.localizer.update();
+        robot.localizer.update();
     }
 
     @Override
     public void start() {
-//        trajectoryBuilder = new RedChamber(new AutoMecanumDrive(hardwareMap, robot.localizer.getPose2d()));
-//        trajectory = trajectoryBuilder.getTrajectory();
-//        canvas = new Canvas();
-//        trajectory.preview(canvas);
-//        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
+        trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose2d()));
+        trajectory = trajectoryBuilder.getTrajectory();
+        canvas = new Canvas();
+        trajectory.preview(canvas);
+        robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class RedChamberOpMode extends OpMode {
         for (Subsystem subsystem : subsystems) {
             subsystem.execute();
         }
-//        robot.localizer.update();
+        robot.localizer.update();
 
         // Run the trajectory action. We aren't using Actions.runBlocking so that we can make sure
         // our subsystems continue to be given a chance to execute.

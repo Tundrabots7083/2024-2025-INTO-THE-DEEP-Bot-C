@@ -16,13 +16,17 @@ import com.acmerobotics.roadrunner.ftc.LateralPushTest;
 import com.acmerobotics.roadrunner.ftc.LateralRampLogger;
 import com.acmerobotics.roadrunner.ftc.ManualFeedforwardTuner;
 import com.acmerobotics.roadrunner.ftc.MecanumMotorDirectionDebugger;
+import com.acmerobotics.roadrunner.ftc.OtosEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.TankDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.TwoDeadWheelLocalizer;
@@ -32,8 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class TuningOpModes {
-    // TODO: change this to TankDrive.class if you're using tank
-    public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
+    public static final Class<?> DRIVE_CLASS = SparkFunOTOSDrive.class;
 
     public static final String GROUP = "quickstart";
     public static final boolean DISABLED = false;
@@ -53,7 +56,43 @@ public final class TuningOpModes {
         if (DISABLED) return;
 
         DriveViewFactory dvf;
-        if (DRIVE_CLASS.equals(MecanumDrive.class)) {
+        if (DRIVE_CLASS.equals(SparkFunOTOSDrive.class)) {
+            dvf = hardwareMap -> {
+                Robot.init(hardwareMap, FtcDashboard.getInstance().getTelemetry());
+                SparkFunOTOSDrive od = new SparkFunOTOSDrive(hardwareMap, new Pose2d(0, 0, 0));
+
+                List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
+                List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
+                parEncs.add(new OtosEncoder(od.otos,false,true, od.mecanumDrive.leftRear));
+                perpEncs.add(new OtosEncoder(od.otos,true,true, od.mecanumDrive.leftRear));
+
+                return new DriveView(
+                        DriveType.MECANUM,
+                        Params.inPerTick,
+                        Params.maxWheelVel,
+                        Params.minProfileAccel,
+                        Params.maxProfileAccel,
+                        hardwareMap.getAll(LynxModule.class),
+                        Arrays.asList(
+                                od.mecanumDrive.leftFront,
+                                od.mecanumDrive.leftRear
+                        ),
+                        Arrays.asList(
+                                od.mecanumDrive.rightFront,
+                                od.mecanumDrive.rightRear
+                        ),
+                        leftEncs,
+                        rightEncs,
+                        parEncs,
+                        perpEncs,
+                        od.lazyImu,
+                        od.voltageSensor,
+                        () -> new MotorFeedforward(Params.kS,
+                                Params.kV / Params.inPerTick,
+                                Params.kA / Params.inPerTick)
+                );
+            };
+        } else if (DRIVE_CLASS.equals(MecanumDrive.class)) {
             dvf = hardwareMap -> {
                 MecanumDrive md = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 

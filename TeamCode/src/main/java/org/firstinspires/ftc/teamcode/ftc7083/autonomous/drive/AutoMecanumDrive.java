@@ -28,7 +28,9 @@ import com.acmerobotics.roadrunner.TrajectoryBuilderParams;
 import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
+import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.LynxFirmware;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -87,13 +89,15 @@ public class AutoMecanumDrive {
 
     public final VoltageSensor voltageSensor;
 
-//    public final Localizer localizer;
+    public final Localizer localizer;
     protected final LinkedList<Pose2d> poseHistory = new LinkedList<>();
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private final DownsampledWriter targetPoseWriter = new DownsampledWriter("TARGET_POSE", 50_000_000);
     private final DownsampledWriter driveCommandWriter = new DownsampledWriter("DRIVE_COMMAND", 50_000_000);
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
     public Pose2d pose;
+
+    public final LazyImu lazyImu;
 
     public AutoMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         this.pose = pose;
@@ -103,8 +107,11 @@ public class AutoMecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-//        localizer = Robot.getInstance().localizer;
-//        localizer.setPose2d(pose);
+        localizer = Robot.getInstance().localizer;
+        localizer.setPose2d(pose);
+
+        lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+                Params.logoFacingDirection, Params.usbFacingDirection));
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {
@@ -125,19 +132,18 @@ public class AutoMecanumDrive {
     }
 
     public PoseVelocity2d updatePoseEstimate() {
-//        Localizer localizer = Robot.getInstance().localizer;
+        Localizer localizer = Robot.getInstance().localizer;
 
-//        pose = localizer.getPose2d();
+        pose = localizer.getPose2d();
         // RR standard
-//        poseHistory.add(pose);
-//        while (poseHistory.size() > POSE_HISTORY_SIZE) {
-//            poseHistory.removeFirst();
-//        }
-//
-//        estimatedPoseWriter.write(new PoseMessage(pose));
+        poseHistory.add(pose);
+        while (poseHistory.size() > POSE_HISTORY_SIZE) {
+            poseHistory.removeFirst();
+        }
 
-//        return localizer.getVelocity();
-        return null;
+        estimatedPoseWriter.write(new PoseMessage(pose));
+
+        return localizer.getVelocity();
     }
 
     private void drawPoseHistory(Canvas c) {

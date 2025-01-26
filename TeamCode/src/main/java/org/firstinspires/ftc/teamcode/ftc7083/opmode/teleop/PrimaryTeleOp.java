@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -49,7 +50,7 @@ public class PrimaryTeleOp extends OpMode {
 
     @Override
     public void start() {
-        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
+        robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
 
     @Override
@@ -74,6 +75,12 @@ public class PrimaryTeleOp extends OpMode {
 
         // Update the location of the robot on the field using April Tag localization
         //robot.localizer.update();
+
+        // OTOS telemetry
+        SparkFunOTOS.Pose2D position = robot.otos.getPosition();
+        telemetry.addData("[OTOS] x", position.x);
+        telemetry.addData("[OTOS] y", position.y);
+        telemetry.addData("[OTOS] h", position.h);
 
         // Print out the loop time, in milliseconds, to two decimal places
         telemetry.addData("Loop Time", FTCMath.round(timer.time(), 2));

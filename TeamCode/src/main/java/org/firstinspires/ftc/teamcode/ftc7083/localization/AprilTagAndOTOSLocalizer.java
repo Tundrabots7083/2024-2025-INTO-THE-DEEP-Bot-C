@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.ftc7083.localization;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 
 import java.util.List;

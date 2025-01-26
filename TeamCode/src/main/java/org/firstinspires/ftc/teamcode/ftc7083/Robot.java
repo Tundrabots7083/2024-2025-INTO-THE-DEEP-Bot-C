@@ -2,14 +2,21 @@ package org.firstinspires.ftc.teamcode.ftc7083;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunParams;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.SparkFunOTOS;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
+import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
@@ -102,7 +109,11 @@ import java.util.List;
  *     </li>
  * </ul>
  */
+@Config
 public class Robot {
+    public static boolean USE_WEBCAMS = false;
+    public static boolean USE_SPARKFUN_OTOS_CORRECTED = true;
+
     private static Robot robot = null;
 
     public final Telemetry telemetry;
@@ -110,20 +121,20 @@ public class Robot {
     // Subsystems and hardware
     public final MecanumDrive mecanumDrive;
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
-    //public final Webcam leftWebcam;
-    //public final Webcam rightWebcam;
+    public Webcam leftWebcam;
+    public Webcam rightWebcam;
     public final Arm arm;
     public final LinearSlide linearSlide;
     public final Wrist wrist;
     public final Claw claw;
-    public final Limelight limelight;
+    public Limelight limelight;
     public final SparkFunOTOS otos;
     public final ColorSensor colorSensor;
 
-    //public final List<Webcam> webcams;
+    public List<Webcam> webcams;
 
     // Road Runner localization
-    //public final Localizer localizer;
+    public final Localizer localizer;
 
     // All lynx module hubs
     public final List<LynxModule> allHubs;
@@ -147,7 +158,7 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        //int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
@@ -156,37 +167,39 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        //leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
-        //rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
-        limelight = new Limelight(hardwareMap, telemetry);
         colorSensor = new ColorSensor(hardwareMap, telemetry);
-        otos = hardwareMap.get(SparkFunOTOS.class, "otos");
+        if (USE_SPARKFUN_OTOS_CORRECTED) {
+            otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
+        } else {
+            otos = hardwareMap.get(SparkFunOTOS.class, "otos");
+        }
         calibrateOTOS();
 
-        //webcams = Arrays.asList(leftWebcam, rightWebcam);
-        //localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+        // Use a localizer with the OTOS and webcams, or just the OTOS
+        if (USE_WEBCAMS) {
+            limelight = new Limelight(hardwareMap, telemetry);
 
-       /* // Wait for all webcams to initialize
-        boolean webcamsInitialized = false;
-        while (!webcamsInitialized) {
-            webcamsInitialized = true;
-            for (Webcam webcam : webcams) {
-                if (!webcam.webcamInitialized()) {
-                    webcamsInitialized = false;
-                    break;
+            leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
+            rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
+            webcams = Arrays.asList(leftWebcam, rightWebcam);
+            localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+
+            //Wait for all webcams to initialize
+            boolean webcamsInitialized = false;
+            while (!webcamsInitialized) {
+                webcamsInitialized = true;
+                for (Webcam webcam : webcams) {
+                    if (!webcam.webcamInitialized()) {
+                        webcamsInitialized = false;
+                        break;
+                    }
                 }
             }
-        }*/
+        } else {
+            localizer = new SparkFunOTOSLocalizer(otos);
+        }
 
         this.telemetry.addLine("[Robot] initialized");
-    }
-
-    /**
-     * Calibrate the SparkFun OTOS.
-     */
-    public void calibrateOTOS() {
-        otos.resetTracking();
-        otos.calibrateImu();
     }
 
     /**
@@ -220,6 +233,78 @@ public class Robot {
      */
     public static Robot getInstance() {
         return robot;
+    }
+
+    /**
+     * Calibrate the SparkFun OTOS.
+     */
+    private void calibrateOTOS() {
+        telemetry.addLine("OTOS calibration beginning!");
+
+        // Reset the tracking algorithm - this resets the position to the origin,
+        // but can also be used to recover from some rare tracking errors
+        otos.resetTracking();
+
+        // The IMU on the OTOS includes a gyroscope and accelerometer, which could
+        // have an offset. Note that as of firmware version 1.0, the calibration
+        // will be lost after a power cycle; the OTOS performs a quick calibration
+        // when it powers up, but it is recommended to perform a more thorough
+        // calibration at the start of all your programs. Note that the sensor must
+        // be completely stationary and flat during calibration! When calling
+        // calibrateImu(), you can specify the number of samples to take and whether
+        // to wait until the calibration is complete. If no parameters are provided,
+        // it will take 255 samples and wait until done; each sample takes about
+        // 2.4ms, so about 612ms total
+
+        // RR localizer note: It is technically possible to change the number of samples to slightly reduce init times,
+        // however, I found that it caused pretty severe heading drift.
+        // Also, if you're careful to always wait more than 612ms in init, you could technically disable waitUntilDone;
+        // this would allow your OpMode code to run while the calibration occurs.
+        // However, that may cause other issues.
+        // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
+        otos.calibrateImu(SparkFunParams.NUM_IMU_CALIBRATION_SAMPLES, true);
+
+        // RR localizer note:
+        // don't change the units, it will stop Dashboard field view from working properly
+        // and might cause various other issues
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+
+        // Set the offset for the OTOS
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(SparkFunParams.MOUNTING_OFFSET_X,
+                                                             SparkFunParams.MOUNTING_OFFSET_Y,
+                                                             Math.toRadians(SparkFunParams.MOUNTING_HEADING_IN_DEGREES));
+        otos.setOffset(offset);
+
+        // Here we can set the linear and angular scalars, which can compensate for
+        // scaling issues with the sensor measurements. Note that as of firmware
+        // version 1.0, these values will be lost after a power cycle, so you will
+        // need to set them each time you power up the sensor. They can be any value
+        // from 0.872 to 1.127 in increments of 0.001 (0.1%). It is recommended to
+        // first set both scalars to 1.0, then calibrate the angular scalar, then
+        // the linear scalar. To calibrate the angular scalar, spin the robot by
+        // multiple rotations (eg. 10) to get a precise error, then set the scalar
+        // to the inverse of the error. Remember that the angle wraps from -180 to
+        // 180 degrees, so for example, if after 10 rotations counterclockwise
+        // (positive rotation), the sensor reports -15 degrees, the required scalar
+        // would be 3600/3585 = 1.004. To calibrate the linear scalar, move the
+        // robot a known distance and measure the error; do this multiple times at
+        // multiple speeds to get an average, then set the linear scalar to the
+        // inverse of the error. For example, if you move the robot 100 inches and
+        // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
+        otos.setLinearScalar(SparkFunParams.LINEAR_SCALAR);
+        otos.setAngularScalar(SparkFunParams.ANGULAR_SCALAR);
+
+        // After resetting the tracking, the OTOS will report that the robot is at
+        // the origin. If your robot does not start at the origin, or you have
+        // another source of location information (eg. vision odometry), you can set
+        // the OTOS location to match and it will continue to track from there.
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(Params.INITIAL_POS_X,
+                                                                      Params.INITIAL_POS_Y,
+                                                                      Math.toRadians(Params.INITIAL_POS_HEADING));
+        otos.setPosition(currentPosition);
+
+        telemetry.addLine("OTOS calibration complete!");
     }
 
     /**

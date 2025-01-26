@@ -37,6 +37,7 @@ public class WristClassTest extends OpMode {
         telemetry.addData("Retrieved rollDegrees", wrist.getRollDegrees());
         telemetry.addData("Retrieved pitchPosition", wrist.getPitchPosition());
         telemetry.addData("Retrieved rollPosition", wrist.getRollPosition());
+        telemetry.addData("At Target", wrist.isAtTarget());
         telemetry.update();
     }
 }

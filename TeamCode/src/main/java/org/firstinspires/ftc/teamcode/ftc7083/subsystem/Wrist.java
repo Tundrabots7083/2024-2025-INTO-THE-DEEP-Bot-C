@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -41,10 +42,20 @@ public class Wrist extends SubsystemBase {
     public static double START_POSITION_PITCH = 208.0;
     public static double START_POSITION_ROLL = 0.0;
 
+    // Time to move to the target position
+    public static long PITCH_SERVO_TIME = 250; // ms
+    public static long ROLL_SERVO_TIME = 250; // ms
+
     private final Telemetry telemetry;
+
+    private final ElapsedTime pitchServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private final ElapsedTime rollServoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     private final Servo pitchServo;
     private final Servo rollServo;
+
+    private double pitchServoAngle;
+    private double rollServoAngle;
 
     /**
      * Wrist initializes a new wrist as well as initializing all servos to be used.
@@ -127,7 +138,11 @@ public class Wrist extends SubsystemBase {
      */
     public void setPitchDegrees(double degrees) {
         double pitch = Range.clip(degrees, MIN_PITCH, MAX_PITCH) + PITCH_DEGREES_OFFSET;
-        pitchServo.setDegrees(pitch);
+        if (pitchServoAngle != pitch) {
+            pitchServo.setDegrees(pitch);
+            pitchServoAngle = pitch;
+            pitchServoTimer.reset();
+        }
     }
 
     /**
@@ -146,7 +161,11 @@ public class Wrist extends SubsystemBase {
      */
     public void setRollDegrees(double degrees) {
         double roll = Range.clip(degrees, MIN_ROLL, MAX_ROLL) + ROLL_DEGREES_OFFSET;
-        rollServo.setDegrees(roll);
+        if (rollServoAngle != roll) {
+            rollServo.setDegrees(roll);
+            rollServoAngle = roll;
+            rollServoTimer.reset();
+        }
     }
 
     /**
@@ -158,11 +177,41 @@ public class Wrist extends SubsystemBase {
         return rollServo.getDegrees() - ROLL_DEGREES_OFFSET;
     }
 
+    /**
+     * Checks if the wrist is at the target position.
+     */
+    public boolean isAtTarget() {
+        boolean atTarget = isPitchServoAtTarget() && isRollServoAtTarget();
+        telemetry.addData("[Wrist] atTarget", atTarget);
+        return atTarget;
+    }
+
+    /**
+     * Checks if the pitch servo is at the target position.
+     */
+    public boolean isPitchServoAtTarget() {
+        double elapsedTime = pitchServoTimer.time();
+        boolean atTarget = elapsedTime >= PITCH_SERVO_TIME;
+        telemetry.addData("[Wrist] pitch atTarget", atTarget);
+        return atTarget;
+    }
+
+    /**
+     * Checks if the roll servo is at the target position.
+     */
+    public boolean isRollServoAtTarget() {
+        double elapsedTime = rollServoTimer.time();
+        boolean atTarget = elapsedTime >= ROLL_SERVO_TIME;
+        telemetry.addData("[Wrist] roll atTarget", atTarget);
+        return atTarget;
+    }
+
     @NonNull
     public String toString() {
         return "Wrist{" +
-                "pitch=" + pitchServo.getDegrees() +
-                ", roll=" + rollServo.getDegrees() +
+                "pitch=" + pitchServoAngle +
+                ", roll=" + rollServoAngle +
+                ", atTarget=" + isAtTarget() +
                 "}";
     }
 }
