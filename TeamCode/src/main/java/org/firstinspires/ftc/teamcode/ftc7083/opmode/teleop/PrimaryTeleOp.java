@@ -73,7 +73,7 @@ public class PrimaryTeleOp extends OpMode {
         }
 
         // Update the location of the robot on the field using April Tag localization
-        robot.localizer.update();
+        //robot.localizer.update();
 
         // Print out the loop time, in milliseconds, to two decimal places
         telemetry.addData("Loop Time", FTCMath.round(timer.time(), 2));

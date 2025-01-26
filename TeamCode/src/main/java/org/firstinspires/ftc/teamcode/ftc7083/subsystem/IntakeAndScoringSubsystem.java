@@ -442,6 +442,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Rotates the wrist by the given angle.
+     */
+    public void setWristRoll(double rollAngle) {
+        robot.wrist.setRollDegrees(rollAngle);
+
+        telemetry.addData("rotateWrist", "start");
+    }
+    /**
      * Gets an action to score a specimen on the high chamber. The robot must be in the correct
      * scoring position prior to calling this method.
      *

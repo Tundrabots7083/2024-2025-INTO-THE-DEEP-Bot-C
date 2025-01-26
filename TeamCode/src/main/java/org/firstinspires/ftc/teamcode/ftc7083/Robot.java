@@ -110,8 +110,8 @@ public class Robot {
     // Subsystems and hardware
     public final MecanumDrive mecanumDrive;
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
-    public final Webcam leftWebcam;
-    public final Webcam rightWebcam;
+    //public final Webcam leftWebcam;
+    //public final Webcam rightWebcam;
     public final Arm arm;
     public final LinearSlide linearSlide;
     public final Wrist wrist;
@@ -120,10 +120,10 @@ public class Robot {
     public final SparkFunOTOS otos;
     public final ColorSensor colorSensor;
 
-    public final List<Webcam> webcams;
+    //public final List<Webcam> webcams;
 
     // Road Runner localization
-    public final Localizer localizer;
+    //public final Localizer localizer;
 
     // All lynx module hubs
     public final List<LynxModule> allHubs;
@@ -147,7 +147,7 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+        //int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
@@ -156,17 +156,17 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
-        rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
+        //leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
+        //rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
         limelight = new Limelight(hardwareMap, telemetry);
         colorSensor = new ColorSensor(hardwareMap, telemetry);
         otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         calibrateOTOS();
 
-        webcams = Arrays.asList(leftWebcam, rightWebcam);
-        localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
+        //webcams = Arrays.asList(leftWebcam, rightWebcam);
+        //localizer = new AprilTagAndOTOSLocalizer(webcams, otos);
 
-        // Wait for all webcams to initialize
+       /* // Wait for all webcams to initialize
         boolean webcamsInitialized = false;
         while (!webcamsInitialized) {
             webcamsInitialized = true;
@@ -176,7 +176,7 @@ public class Robot {
                     break;
                 }
             }
-        }
+        }*/
 
         this.telemetry.addLine("[Robot] initialized");
     }

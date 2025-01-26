@@ -20,6 +20,7 @@ public class GlobalShutterSeparatedTest extends LinearOpMode {
             telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 
             GlobalShutterCamera globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+            SampleProcessor sampleProcessor = new SampleProcessor();
 
 
             // WARNING:  To be able to view the stream preview on the Driver Station, this code runs in INIT mode.
@@ -27,11 +28,15 @@ public class GlobalShutterSeparatedTest extends LinearOpMode {
             {
                 telemetry.addData("preview on/off", "... Camera Stream\n");
 
-                SampleProcessor sampleProcessor = new SampleProcessor();
-                double angle = sampleProcessor.execute(globalShutterCamera.getDetections());
 
-                telemetry.addData("Angle", angle);
-                telemetry.update();
+                    Double yellowAngle = sampleProcessor.execute(globalShutterCamera.getYellowDetections());
+                    // double blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
+                    // double redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
+
+                    telemetry.addData("Yellow Angle", yellowAngle);
+                    // telemetry.addData("Blue Angle", blueAngle);
+                    // telemetry.addData("Red Angle", redAngle);
+                    telemetry.update();
                 sleep(50);
             }
         }
