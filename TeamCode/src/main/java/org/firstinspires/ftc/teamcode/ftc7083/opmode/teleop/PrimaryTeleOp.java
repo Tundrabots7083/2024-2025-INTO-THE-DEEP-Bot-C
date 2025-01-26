@@ -74,7 +74,7 @@ public class PrimaryTeleOp extends OpMode {
         }
 
         // Update the location of the robot on the field using April Tag localization
-        robot.localizer.update();
+        //robot.localizer.update();
 
         // OTOS telemetry
         SparkFunOTOS.Pose2D position = robot.otos.getPosition();

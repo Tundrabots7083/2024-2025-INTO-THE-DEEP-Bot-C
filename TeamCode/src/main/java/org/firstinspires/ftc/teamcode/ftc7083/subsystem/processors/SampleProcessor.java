@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.ftc7083.subsystem.processors;
 
-import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.opencv.core.Point;
 import org.opencv.core.RotatedRect;
 
@@ -12,15 +11,15 @@ import java.util.TreeMap;
 
 public class SampleProcessor {
 
-    public double execute(List<ColorBlobLocatorProcessor.Blob> blobs) {
+    public Double execute(List<ColorBlobLocatorProcessorEx.Blob> blobs) {
 
-        ColorBlobLocatorProcessor.Util.filterByArea(20000, 600000, blobs);  // filter out very small blobs.
-        ColorBlobLocatorProcessor.Util.filterByAspectRatio(2.0,2.66,blobs);
+        ColorBlobLocatorProcessorEx.Util.filterByArea(20000, 600000, blobs);  // filter out very small blobs.
+        ColorBlobLocatorProcessorEx.Util.filterByAspectRatio(2.0,2.66,blobs);
 
-        double angle = 0.0;
+        Double angle = null;
 
         // Display the size (area) and center location for each Blob.
-        for(ColorBlobLocatorProcessor.Blob b : blobs) {
+        for(ColorBlobLocatorProcessorEx.Blob b : blobs) {
             RotatedRect boxFit = b.getBoxFit();
 
             Point[] corners = new Point[4];
@@ -28,10 +27,15 @@ public class SampleProcessor {
 
             angle = calculateOrientation(corners);
         }
+
         return angle;
     }
 
-    public double calculateOrientation(Point[] corners) {
+    public Double calculateOrientation(Point[] corners) {
+
+        if(corners.length == 0){
+            return null;
+        }
 
         int n = corners.length;
 
