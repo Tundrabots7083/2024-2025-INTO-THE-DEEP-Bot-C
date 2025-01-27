@@ -127,7 +127,7 @@ public class Robot {
     public final LinearSlide linearSlide;
     public final Wrist wrist;
     public final Claw claw;
-    public final Limelight limelight;
+    public Limelight limelight;
     public final SparkFunOTOS otos;
     public final ColorSensor colorSensor;
 
@@ -167,7 +167,6 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        limelight = new Limelight(hardwareMap, telemetry);
         colorSensor = new ColorSensor(hardwareMap, telemetry);
         if (USE_SPARKFUN_OTOS_CORRECTED) {
             otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
@@ -178,6 +177,8 @@ public class Robot {
 
         // Use a localizer with the OTOS and webcams, or just the OTOS
         if (USE_WEBCAMS) {
+            limelight = new Limelight(hardwareMap, telemetry);
+
             leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
             rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
             webcams = Arrays.asList(leftWebcam, rightWebcam);
