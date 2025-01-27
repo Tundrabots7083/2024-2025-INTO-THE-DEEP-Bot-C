@@ -35,10 +35,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 2.0;
 
     // Intake constants
-    public static double DEPOSIT_SAMPLE_ABOVE_X = ARM_LENGTH + 12.0;
-    public static double DEPOSIT_SAMPLE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
-    public static double DEPOSIT_SAMPLE_LOWERED_X = DEPOSIT_SAMPLE_ABOVE_X;
-    public static double DEPOSIT_SAMPLE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
     public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.0;
     public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 15.0;
@@ -51,6 +47,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;
     public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;
+    public static double DEPOSIT_SAMPLE_X = INTAKE_CLOSE_ABOVE_X;
+    public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;
     public static double NEUTRAL_X = ARM_LENGTH;
     public static double NEUTRAL_Y = ARM_HEIGHT;
     public static double RETRACT_X = ARM_LENGTH;
@@ -226,7 +224,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the subsystem to a position where it may drop off a sample in the observation zone.
      */
     public void moveToDropOffSamplePosition() {
-        moveToPosition(INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y);
+        moveToPosition(DEPOSIT_SAMPLE_X, DEPOSIT_SAMPLE_Y);
         robot.wrist.setToIntakeSample();
         telemetry.addData("[IAS] position", "intake drop-off above");
     }
