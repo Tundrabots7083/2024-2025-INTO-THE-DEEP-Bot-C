@@ -232,7 +232,10 @@ public class AutoMecanumDrive {
         double rightRearPower = wheelVels.rightBack.get(0) / maxPowerMag;
         double rightFrontPower = wheelVels.rightFront.get(0) / maxPowerMag;
 
-        mecanumDrive.setMotorPowers(leftFrontPower, leftRearPower, rightRearPower, rightFrontPower);
+        mecanumDrive.leftFront.setPower(leftFrontPower);
+        mecanumDrive.leftRear.setPower(leftRearPower);
+        mecanumDrive.rightRear.setPower(rightRearPower);
+        mecanumDrive.rightFront.setPower(rightFrontPower);
     }
 
     public final class FollowTrajectoryAction implements Action {
