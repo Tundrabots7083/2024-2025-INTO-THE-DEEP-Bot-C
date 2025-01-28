@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive;
 
-import static com.acmerobotics.roadrunner.ftc.OTOSKt.OTOSPoseToRRPose;
 import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
 
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
-import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -66,7 +63,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
             poseHistory.removeFirst();
         }
         estimatedPoseWriter.write(new PoseMessage(pose));
-        
+
         PoseVelocity2d vel = localizer.getVelocity();
 
         telemetry.addLine(String.format("[Auto] pose: x=%.2f, y=%.2f, h=%.2f", pose.position.x, pose.position.y, pose.heading.toDouble()));
