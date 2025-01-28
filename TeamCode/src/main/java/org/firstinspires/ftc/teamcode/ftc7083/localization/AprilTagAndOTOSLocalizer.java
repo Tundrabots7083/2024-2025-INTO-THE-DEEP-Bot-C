@@ -52,6 +52,7 @@ public class AprilTagAndOTOSLocalizer implements Localizer {
 
     @Override
     public Pose2d getPose() {
+        update();
         return pose;
     }
 

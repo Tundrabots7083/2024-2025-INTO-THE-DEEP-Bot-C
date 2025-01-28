@@ -64,7 +64,6 @@ public class RedChamberOpMode extends OpMode {
         for (Subsystem subsystem : subsystems) {
             subsystem.execute();
         }
-        robot.localizer.update();
 
         // Run the trajectory action. We aren't using Actions.runBlocking so that we can make sure
         // our subsystems continue to be given a chance to execute.
