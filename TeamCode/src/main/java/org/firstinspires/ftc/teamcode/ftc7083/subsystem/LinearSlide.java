@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  */
 @Config
 public class LinearSlide extends SubsystemBase {
-    public static double SPOOL_DIAMETER = 2.025; // in inches
+    public static double SPOOL_DIAMETER = 2.025; // in inches (measured on 01/27 as 1.482")
     public static double TICKS_PER_REV = 537.7;
     public double GEARING = 1.0; // No gears
 
