@@ -245,6 +245,18 @@ public class Robot {
         // but can also be used to recover from some rare tracking errors
         otos.resetTracking();
 
+        // RR localizer note:
+        // don't change the units, it will stop Dashboard field view from working properly
+        // and might cause various other issues
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.RADIANS);
+
+        // Set the offset for the OTOS
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(SparkFunParams.MOUNTING_OFFSET_X,
+                SparkFunParams.MOUNTING_OFFSET_Y,
+                Math.toRadians(SparkFunParams.MOUNTING_HEADING_IN_DEGREES));
+        otos.setOffset(offset);
+
         // The IMU on the OTOS includes a gyroscope and accelerometer, which could
         // have an offset. Note that as of firmware version 1.0, the calibration
         // will be lost after a power cycle; the OTOS performs a quick calibration
@@ -263,18 +275,6 @@ public class Robot {
         // However, that may cause other issues.
         // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
         otos.calibrateImu(SparkFunParams.NUM_IMU_CALIBRATION_SAMPLES, true);
-
-        // RR localizer note:
-        // don't change the units, it will stop Dashboard field view from working properly
-        // and might cause various other issues
-        otos.setLinearUnit(DistanceUnit.INCH);
-        otos.setAngularUnit(AngleUnit.RADIANS);
-
-        // Set the offset for the OTOS
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(SparkFunParams.MOUNTING_OFFSET_X,
-                                                             SparkFunParams.MOUNTING_OFFSET_Y,
-                                                             Math.toRadians(SparkFunParams.MOUNTING_HEADING_IN_DEGREES));
-        otos.setOffset(offset);
 
         // Here we can set the linear and angular scalars, which can compensate for
         // scaling issues with the sensor measurements. Note that as of firmware

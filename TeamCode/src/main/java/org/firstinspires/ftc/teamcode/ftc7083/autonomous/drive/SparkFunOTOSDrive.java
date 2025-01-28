@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 
 /**
@@ -42,7 +43,9 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
     @SuppressLint("DefaultLocale")
     @Override
     public PoseVelocity2d updatePoseEstimate() {
-        Telemetry telemetry = Robot.getInstance().telemetry;
+        Robot robot = Robot.getInstance();
+        Telemetry telemetry = robot.telemetry;
+        Localizer localizer = robot.localizer;
 
         if (lastOtosPose != pose) {
             // RR localizer note:
@@ -52,21 +55,9 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
             // I don't like this solution at all, but it preserves compatibility.
             // The only alternative is to add getter and setters, but that breaks compat.
             // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
-            otos.setPosition(RRPoseToOTOSPose(pose));
+            localizer.setPose2d(pose);
         }
-        // RR localizer note:
-        // The values are passed by reference, so we create variables first,
-        // then pass them into the function, then read from them.
-
-        // Reading acceleration worsens loop times by 1ms,
-        // but not reading it would need a custom driver and would break compatibility.
-        // The same is true for speed: we could calculate speed ourselves from pose and time,
-        // but it would be hard, less accurate, and would only save 1ms of loop time.
-        SparkFunOTOS.Pose2D otosPose = new SparkFunOTOS.Pose2D();
-        SparkFunOTOS.Pose2D otosVel = new SparkFunOTOS.Pose2D();
-        SparkFunOTOS.Pose2D otosAcc = new SparkFunOTOS.Pose2D();
-        otos.getPosVelAcc(otosPose, otosVel, otosAcc);
-        pose = OTOSPoseToRRPose(otosPose);
+        pose = localizer.getPose2d();
         lastOtosPose = pose;
 
         // RR standard
@@ -74,12 +65,9 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
         while (poseHistory.size() > POSE_HISTORY_SIZE) {
             poseHistory.removeFirst();
         }
-
         estimatedPoseWriter.write(new PoseMessage(pose));
-
-        // RR localizer note:
-        // OTOS velocity units happen to be identical to Roadrunners, so we don't need any conversion!
-        PoseVelocity2d vel = new PoseVelocity2d(new Vector2d(otosVel.x, otosVel.y), otosVel.h);
+        
+        PoseVelocity2d vel = localizer.getVelocity();
 
         telemetry.addLine(String.format("[Auto] pose: x=%.2f, y=%.2f, h=%.2f", pose.position.x, pose.position.y, pose.heading.toDouble()));
         telemetry.addLine(String.format("[Auto] vel: x=%.2f, y=%.2f, ang=%.2f", vel.linearVel.x, vel.linearVel.y,  vel.angVel));

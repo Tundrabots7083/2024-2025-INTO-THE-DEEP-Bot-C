@@ -61,12 +61,6 @@ public class RedChamberOpMode extends OpMode {
 
     @Override
     public void loop() {
-        // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
-        // as the bulk read caches are being handled manually.
-        for (LynxModule hub : robot.allHubs) {
-            hub.clearBulkCache();
-        }
-
         // Update all the hardware subsystems and the localizer
         for (Subsystem subsystem : subsystems) {
             subsystem.execute();
