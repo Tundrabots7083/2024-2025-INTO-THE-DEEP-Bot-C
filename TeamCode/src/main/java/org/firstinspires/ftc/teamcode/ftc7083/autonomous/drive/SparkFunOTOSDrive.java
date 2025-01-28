@@ -24,13 +24,14 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private Pose2d lastOtosPose = pose;
-    private final Robot robot;
+    private final Telemetry telemetry;
     private final Localizer localizer;
 
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
 
-        robot = Robot.getInstance();
+        Robot robot = Robot.getInstance();
+        telemetry = robot.telemetry;
         localizer = robot.localizer;
         localizer.setPose(pose);
     }
@@ -38,8 +39,6 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
     @SuppressLint("DefaultLocale")
     @Override
     public PoseVelocity2d updatePoseEstimate() {
-        Telemetry telemetry = robot.telemetry;
-
         if (lastOtosPose != pose) {
             // RR localizer note:
             // Something else is modifying our pose (likely for relocalization),
