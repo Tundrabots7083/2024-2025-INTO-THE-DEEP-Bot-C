@@ -42,23 +42,23 @@ public class AprilTagAndOTOSLocalizer implements Localizer {
         aprilTagLocalizer.update();
         otosLocalizer.update();
 
-        pose = otosLocalizer.getPose2d();
+        pose = otosLocalizer.getPose();
         velocity = otosLocalizer.getVelocity();
 
         if (aprilTagLocalizer.aprilTagsDetected()) {
-            otosLocalizer.setPose2d(aprilTagLocalizer.getPose2d());
+            otosLocalizer.setPose(aprilTagLocalizer.getPose());
         }
     }
 
     @Override
-    public Pose2d getPose2d() {
+    public Pose2d getPose() {
         return pose;
     }
 
     @Override
-    public void setPose2d(Pose2d pose) {
-        aprilTagLocalizer.setPose2d(pose);
-        otosLocalizer.setPose2d(pose);
+    public void setPose(Pose2d pose) {
+        aprilTagLocalizer.setPose(pose);
+        otosLocalizer.setPose(pose);
     }
 
     @Override

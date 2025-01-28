@@ -39,12 +39,12 @@ public class SparkFunOTOSLocalizer implements Localizer {
     }
 
     @Override
-    public Pose2d getPose2d() {
+    public Pose2d getPose() {
         return pose;
     }
 
     @Override
-    public void setPose2d(Pose2d pose) {
+    public void setPose(Pose2d pose) {
         otos.setPosition(RRPoseToOTOSPose(pose));
         Telemetry telemetry = Robot.getInstance().telemetry;
         telemetry.addData("[OTOS] re-localize", pose);

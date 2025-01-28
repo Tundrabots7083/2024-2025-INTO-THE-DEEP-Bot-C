@@ -19,7 +19,7 @@ public interface Localizer {
      *
      * @return the current location of the robot.
      */
-    Pose2d getPose2d();
+    Pose2d getPose();
 
     /**
      * Sets the current pose for the localizer. This is used when something outside of the
@@ -28,7 +28,7 @@ public interface Localizer {
      *
      * @param pose the current pose for the robot
      */
-    void setPose2d(Pose2d pose);
+    void setPose(Pose2d pose);
 
     /**
      * Gets the current velocity of the robot along the X and Y axis as well as the rotational

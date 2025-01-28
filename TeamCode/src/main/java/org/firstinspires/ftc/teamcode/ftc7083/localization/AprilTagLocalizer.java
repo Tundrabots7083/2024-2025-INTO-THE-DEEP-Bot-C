@@ -62,13 +62,13 @@ public class AprilTagLocalizer implements Localizer {
     }
 
     @Override
-    public Pose2d getPose2d() {
+    public Pose2d getPose() {
         return currentPose;
     }
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void setPose2d(Pose2d pose) {
+    public void setPose(Pose2d pose) {
         Telemetry telemetry = Robot.getInstance().telemetry;
         lastPose = currentPose;
         currentPose = pose;

@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive;
 
-import static com.acmerobotics.roadrunner.ftc.OTOSKt.RRPoseToOTOSPose;
-
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.ftc.DownsampledWriter;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -32,7 +29,7 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
         super(hardwareMap, pose);
 
         Robot robot = Robot.getInstance();
-        robot.localizer.setPose2d(pose);
+        robot.localizer.setPose(pose);
     }
 
     @SuppressLint("DefaultLocale")
@@ -50,9 +47,9 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
             // I don't like this solution at all, but it preserves compatibility.
             // The only alternative is to add getter and setters, but that breaks compat.
             // Potential alternate solution: timestamp the pose set and backtrack it based on speed?
-            localizer.setPose2d(pose);
+            localizer.setPose(pose);
         }
-        pose = localizer.getPose2d();
+        pose = localizer.getPose();
         lastOtosPose = pose;
 
         // RR standard
