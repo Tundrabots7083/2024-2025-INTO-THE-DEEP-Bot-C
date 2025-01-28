@@ -27,14 +27,12 @@ public class SparkFunOTOSDrive extends AutoMecanumDrive {
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private Pose2d lastOtosPose = pose;
-    public final SparkFunOTOS otos;
 
     public SparkFunOTOSDrive(HardwareMap hardwareMap, Pose2d pose) {
         super(hardwareMap, pose);
 
         Robot robot = Robot.getInstance();
-        otos = robot.otos;
-        otos.setPosition(RRPoseToOTOSPose(pose));
+        robot.localizer.setPose2d(pose);
     }
 
     @SuppressLint("DefaultLocale")
