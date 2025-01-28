@@ -37,7 +37,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // Intake constants
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
     public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.0;
-    public static double INTAKE_FAR_LOWERED_X = ARM_LENGTH + 20.0;
+    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;
     public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
@@ -70,14 +70,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // (x, y) distances in inches from the center of rotation of
     // the arm that the scoring subsystem needs to reach to score in
     // different places.
-    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 12.0;
-    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 17.0;
+    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 5.0;
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;
     public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT + 1.5;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT;
     public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
     public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
@@ -85,7 +85,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
     public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 6.25;
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
