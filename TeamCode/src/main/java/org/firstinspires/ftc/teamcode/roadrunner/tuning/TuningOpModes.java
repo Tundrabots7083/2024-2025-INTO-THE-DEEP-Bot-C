@@ -58,13 +58,13 @@ public final class TuningOpModes {
         DriveViewFactory dvf;
         if (DRIVE_CLASS.equals(SparkFunOTOSDrive.class)) {
             dvf = hardwareMap -> {
-                Robot.init(hardwareMap, FtcDashboard.getInstance().getTelemetry());
+                Robot robot = Robot.init(hardwareMap, FtcDashboard.getInstance().getTelemetry());
                 SparkFunOTOSDrive od = new SparkFunOTOSDrive(hardwareMap, new Pose2d(0, 0, 0));
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                parEncs.add(new OtosEncoder(od.otos,false,true, od.mecanumDrive.leftRear));
-                perpEncs.add(new OtosEncoder(od.otos,true,true, od.mecanumDrive.leftRear));
+                parEncs.add(new OtosEncoder(robot.otos,false,true, od.mecanumDrive.leftRear));
+                perpEncs.add(new OtosEncoder(robot.otos,true,true, od.mecanumDrive.leftRear));
 
                 return new DriveView(
                         DriveType.MECANUM,
