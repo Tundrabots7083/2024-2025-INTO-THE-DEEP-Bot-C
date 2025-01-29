@@ -608,7 +608,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
                 initialized = true;
             }
             intakeAndScoringSubsystem.execute();
-            return !intakeAndScoringSubsystem.isAtTarget();
+            return !isAtTarget();
+        }
+
+        /**
+         * The intake and control system has reached it's target.
+         *
+         * @return <code>true</code> if the intake and scoring subsystem has reached it's target;
+         *         <code>false</code> if it is still moving to it's target
+         */
+        public boolean isAtTarget() {
+            return intakeAndScoringSubsystem.isAtTarget();
         }
 
         /**
@@ -973,7 +983,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     @Config
     public static class MoveToChamberHighLoweredPosition extends MoveToActionBase {
-        private boolean initialized = false;
         private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         /**
@@ -993,21 +1002,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
             timer.reset();
         }
 
-        /**
-         * Moves the intake and scoring subsystem to the target position.
-         *
-         * @param telemetryPacket the telemetry used to output data to the user.
-         * @return <code>true</code> if the intake and scoring subsystem are still moving to the
-         *         target position; <code>false</code> if it is at the target position.
-         */
         @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (!initialized) {
-                initialize();
-                initialized = true;
-            }
-            intakeAndScoringSubsystem.execute();
-
+        public boolean isAtTarget() {
             double elapsedTime = timer.time();
             return elapsedTime < ARM_LOWER_TIME;
         }
