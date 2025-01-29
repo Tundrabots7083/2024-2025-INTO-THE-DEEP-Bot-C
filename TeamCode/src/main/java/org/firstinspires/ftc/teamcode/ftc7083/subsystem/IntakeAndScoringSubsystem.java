@@ -991,7 +991,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
          *
          * @param intakeAndScoringSubsystem the intake and scoring subsystem
          */
-
         public MoveToChamberHighLoweredPosition(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
             super(intakeAndScoringSubsystem);
         }
