@@ -91,7 +91,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
 
-    // Time to lower arm when scoring on a chamber
+    // Time to raise or lower arm when scoring on a chamber
+    public static long ARM_RAISE_TIME = 500; // milliseconds
     public static long ARM_LOWER_TIME = 500; // milliseconds
 
     // Other scoring constants
@@ -962,6 +963,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * An action to raise the intake and scoring subsystem's arm to prepare to score on the high chamber.
      */
     public static class MoveToChamberHighScoringPosition extends MoveToActionBase {
+        private final ElapsedTime timer = new ElapsedTime();
+        
         /**
          * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
          * on the high chamber.
@@ -975,6 +978,13 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
+            timer.reset();
+        }
+
+        @Override
+        public boolean isAtTarget() {
+            double elapsedTime = timer.time();
+            return elapsedTime >= ARM_RAISE_TIME;
         }
     }
 
