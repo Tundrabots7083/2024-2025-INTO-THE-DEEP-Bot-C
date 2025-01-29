@@ -964,7 +964,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public static class MoveToChamberHighScoringPosition extends MoveToActionBase {
         private final ElapsedTime timer = new ElapsedTime();
-        
+
         /**
          * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
          * on the high chamber.
