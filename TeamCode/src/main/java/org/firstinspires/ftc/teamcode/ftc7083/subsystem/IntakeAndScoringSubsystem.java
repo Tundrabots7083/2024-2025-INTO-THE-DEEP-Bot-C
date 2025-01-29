@@ -1005,7 +1005,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public boolean isAtTarget() {
             double elapsedTime = timer.time();
-            return elapsedTime < ARM_LOWER_TIME;
+            return elapsedTime >= ARM_LOWER_TIME;
         }
     }
 
