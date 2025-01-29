@@ -963,8 +963,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * An action to raise the intake and scoring subsystem's arm to prepare to score on the high chamber.
      */
     public static class MoveToChamberHighScoringPosition extends MoveToActionBase {
-        private final ElapsedTime timer = new ElapsedTime();
-
         /**
          * Instantiates an action to raise the intake and scoring subsystem's arm to prepare to score
          * on the high chamber.
@@ -978,13 +976,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
-            timer.reset();
-        }
-
-        @Override
-        public boolean isAtTarget() {
-            double elapsedTime = timer.time();
-            return elapsedTime >= ARM_RAISE_TIME;
         }
     }
 
