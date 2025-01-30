@@ -111,7 +111,7 @@ import java.util.List;
  */
 @Config
 public class Robot {
-    public static boolean USE_WEBCAMS = false;
+    public static boolean USE_WEBCAMS = true;
     public static boolean USE_SPARKFUN_OTOS_CORRECTED = true;
 
     private static Robot robot = null;
