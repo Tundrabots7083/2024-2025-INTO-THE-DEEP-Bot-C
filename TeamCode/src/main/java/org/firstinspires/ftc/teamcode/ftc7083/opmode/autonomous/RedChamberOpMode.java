@@ -57,14 +57,14 @@ public class RedChamberOpMode extends OpMode {
     @Override
     public void loop() {
         Action autonomousActions = new ParallelAction(
-                trajectory,
                 (telemetryPacket) -> { // Update all subsystems
                     for (Subsystem subsystem : subsystems) {
                         subsystem.execute();
                     }
                     telemetry.update();
                     return false;
-                }
+                },
+                trajectory
         );
         Actions.runBlocking(autonomousActions);
     }
