@@ -30,7 +30,10 @@ public class LinearSlide extends SubsystemBase {
     public static double KD = 0.05;
     public static double KG = 0.3;
 
-    public static double TOLERABLE_ERROR = 0.5; // inches
+    // Constants for determining if the arm is at target
+    public static double TOLERABLE_ERROR = 0.75; // inches
+    public static int AT_TARGET_COUNT = 3;
+
     public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 40;
 
@@ -38,6 +41,7 @@ public class LinearSlide extends SubsystemBase {
     private final Telemetry telemetry;
     private final PIDController pidController;
     private double targetLength = 0;
+    private int atTargetCount = 0;
 
     /**
      * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
@@ -80,9 +84,6 @@ public class LinearSlide extends SubsystemBase {
      */
     public void setLength(double length) {
         double targetLength = Range.clip(length, MIN_EXTENSION_LENGTH, MAX_EXTENSION_LENGTH);
-        if (length != targetLength) {
-            telemetry.addData("[Slide] clipped", length);
-        }
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
             pidController.reset();
@@ -122,11 +123,6 @@ public class LinearSlide extends SubsystemBase {
     public void execute() {
         double power = pidController.calculate(targetLength, getCurrentLength());
         slideMotor.setPower(power);
-
-        telemetry.addData("[Slide] Current Inches", getCurrentLength());
-        telemetry.addData("[Slide] Target Inches", targetLength);
-        telemetry.addData("[Slide] Power", power);
-        telemetry.addData("[Slide] atTarget", isAtTarget());
     }
 
     /**
@@ -135,11 +131,15 @@ public class LinearSlide extends SubsystemBase {
     public boolean isAtTarget() {
         double error = Math.abs(targetLength - getCurrentLength());
 
-        telemetry.addData("[Slide] Error", error);
-        telemetry.addData("[Slide] Target", targetLength);
-        telemetry.addData("[Slide] Current", getCurrentLength());
-
-        return error <= TOLERABLE_ERROR;
+        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
+        // to handle cases of "bounce" in the slide when moving to the target angle.
+        boolean atTarget = error <= TOLERABLE_ERROR;
+        if (atTarget) {
+            atTargetCount++;
+        } else {
+            atTargetCount = 0;
+        }
+        return atTarget && atTargetCount >= AT_TARGET_COUNT;
     }
 
     /**
@@ -153,7 +153,6 @@ public class LinearSlide extends SubsystemBase {
         return "LinearSlide{" +
                 "target=" + targetLength +
                 ", current=" + getCurrentLength() +
-                ", atTarget=" + isAtTarget() +
                 "}";
     }
 }
