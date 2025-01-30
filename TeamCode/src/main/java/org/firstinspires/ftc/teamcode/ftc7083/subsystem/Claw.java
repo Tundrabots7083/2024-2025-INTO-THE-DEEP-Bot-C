@@ -26,7 +26,7 @@ public class Claw extends SubsystemBase {
     public static String CLAW_SERVO = "claw";
 
     // Time to wait for the claw to open or close, based on observed time
-    public static long CLAW_SERVO_TIME = 250; // milliseconds
+    public static long CLAW_SERVO_TIME = 400; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
     public static double CLOSE_DEGREE_OFFSET = 226;

@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
 
 /**
  * This class uses the Arm, LinearSlide, Wrist, and Claw subsystems to pick up, control,
@@ -95,11 +94,10 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
 
     // Time to raise or lower arm when scoring on a chamber
-    public static long ARM_RAISE_TIME = 500; // milliseconds
     public static long ARM_LOWER_TIME = 500; // milliseconds
 
     // Other scoring constants
-    public static double MOVE_ARM_AMOUNT = 3.0;
+    public static double LOWER_ARM_AMOUNT = 3.0;
 
     private final Telemetry telemetry;
     private final Robot robot;
@@ -124,9 +122,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         robot.linearSlide.execute();
         robot.wrist.execute();
         robot.claw.execute();
-
-        telemetry.addData("[IAS] target X", targetX);
-        telemetry.addData("[IAS] target Y", targetY);
     }
 
     /**
@@ -363,7 +358,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the arm, slide, wrist, and claw to downward.
      */
     public void lowerArm() {
-        double newY = targetY - MOVE_ARM_AMOUNT;
+        double newY = targetY - LOWER_ARM_AMOUNT;
         newY = Math.max(newY, 0.0);
         moveToPosition(targetX, newY);
         telemetry.addData("[IAS] position", "lower arm");
@@ -373,7 +368,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the arm, slide, wrist, and claw to upward.
      */
     public void raiseArm() {
-        double newY = targetY + MOVE_ARM_AMOUNT;
+        double newY = targetY + LOWER_ARM_AMOUNT;
         newY = Math.max(newY, 0.0);
         moveToPosition(targetX, newY);
         telemetry.addData("[IAS] position", "raise arm");
@@ -541,11 +536,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public ActionEx actionIntakeSampleFromSpikeMark() {
         return new SequentialAction(
                 new MoveToIntakeCloseAboveSamplePosition(this),
-                new WaitAction(INTAKE_WAIT_TIME),
                 new MoveToIntakeCloseLoweredPosition(this),
-                new WaitAction(INTAKE_WAIT_TIME),
                 actionCloseClawWithWait(),
-                new WaitAction(INTAKE_WAIT_TIME),
                 new MoveToNeutralPosition(this)
         );
     }
@@ -614,7 +606,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
                 initialize();
                 initialized = true;
             }
-            intakeAndScoringSubsystem.execute();
             return !isAtTarget();
         }
 
@@ -706,6 +697,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * close to the robot.
      */
     public static class MoveToIntakeCloseAboveSamplePosition extends MoveToActionBase {
+        private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
         /**
          * Instantiates an action to move the intake and scoring subsystem's arm to intake a sample
          * relatively close to the robot.
@@ -719,6 +712,13 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+            timer.reset();
+        }
+
+        @Override
+        public boolean isAtTarget() {
+            double elapsedTime = timer.time();
+            return intakeAndScoringSubsystem.isAtTarget() && elapsedTime >= INTAKE_WAIT_TIME;
         }
     }
 
@@ -727,6 +727,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * close to the robot.
      */
     public static class MoveToIntakeCloseLoweredPosition extends MoveToActionBase {
+        private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
         /**
          * Instantiates an action to lower the intake and scoring subsystem's arm to intake a sample
          * relatively close to the robot.
@@ -740,6 +742,13 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public void initialize() {
             intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+            timer.reset();
+        }
+
+        @Override
+        public boolean isAtTarget() {
+            double elapsedTime = timer.time();
+            return intakeAndScoringSubsystem.isAtTarget() && elapsedTime >= INTAKE_WAIT_TIME;
         }
     }
 

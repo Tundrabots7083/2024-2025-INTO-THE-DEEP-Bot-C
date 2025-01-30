@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.autonomous;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasket;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
@@ -26,8 +26,6 @@ public class RedBasketOpMode extends OpMode {
     private RedBasket trajectoryBuilder;
     private Action trajectory;
     private List<Subsystem> subsystems;
-    private boolean actionsRunning = true;
-    private Canvas canvas;
 
     @Override
     public void init() {
@@ -35,7 +33,7 @@ public class RedBasketOpMode extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         robot = Robot.init(hardwareMap, telemetry);
-        subsystems = Arrays.asList(robot.mecanumDrive, robot.arm, robot.linearSlide, robot.claw, robot.wrist);
+        subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(new Pose2d(RedBasket.INITIAL_POSE_X, RedBasket.INITIAL_POSE_Y, RedBasket.INITIAL_HEADING));
 
         trajectoryBuilder = new RedBasket(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedBasket.INITIAL_POSE_X, RedBasket.INITIAL_POSE_Y, RedBasket.INITIAL_HEADING)));
@@ -53,27 +51,21 @@ public class RedBasketOpMode extends OpMode {
     public void start() {
         trajectoryBuilder = new RedBasket(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         trajectory = trajectoryBuilder.getTrajectory();
-        canvas = new Canvas();
-        trajectory.preview(canvas);
         robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
 
     @Override
     public void loop() {
-        // Update all the hardware subsystems and the localizer
-        for (Subsystem subsystem : subsystems) {
-            subsystem.execute();
-        }
-
-        // Run the trajectory action. We aren't using Actions.runBlocking so that we can make sure
-        // our subsystems continue to be given a chance to execute.
-        if (actionsRunning) {
-            TelemetryPacket tp = new TelemetryPacket();
-            tp.fieldOverlay().getOperations().addAll(canvas.getOperations());
-            actionsRunning = trajectory.run(tp);
-            FtcDashboard.getInstance().sendTelemetryPacket(tp);
-        }
-
-        telemetry.update();
+        Action autonomousActions = new ParallelAction(
+                trajectory,
+                (telemetryPacket) -> { // Update all subsystems
+                    for (Subsystem subsystem : subsystems) {
+                        subsystem.execute();
+                    }
+                    telemetry.update();
+                    return false;
+                }
+        );
+        Actions.runBlocking(autonomousActions);
     }
 }

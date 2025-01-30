@@ -23,17 +23,20 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
  */
 @Config
 public class Arm extends SubsystemBase {
+    // PID tuning values
     public static double KP = 0.08;
     public static double KI = 0.0;
     public static double KD = 0.005;
     public static double KG = 0.05;
 
-    public static double GEARING = 2.45;
+    // Constants for determining if the arm is at target
+    public static double TOLERABLE_ERROR = 1.0; // In degrees
+    public static int AT_TARGET_COUNT = 3;
 
+    public static double GEARING = 2.45;
     public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
-    public static double TOLERABLE_ERROR = 1.0; // In degrees
     public static double MIN_ANGLE = -36.0;
     public static double MAX_ANGLE = 100.0;
 
@@ -41,6 +44,7 @@ public class Arm extends SubsystemBase {
     private final Telemetry telemetry;
     private final PIDController pidController;
     private double targetAngle = START_ANGLE;
+    private int atTargetCount = 0;
 
     /**
      * Makes an arm that can raise and lower.
@@ -124,11 +128,6 @@ public class Arm extends SubsystemBase {
         double currentAngle = getCurrentAngle();
         double power = pidController.calculate(targetAngle, currentAngle);
         shoulderMotor.setPower(power);
-
-        telemetry.addData("[Arm] Target Deg", targetAngle);
-        telemetry.addData("[Arm] Current Deg", currentAngle);
-        telemetry.addData("[Arm] Power", power);
-        telemetry.addData("[Arm] atTarget", isAtTarget());
     }
 
     /**
@@ -140,11 +139,15 @@ public class Arm extends SubsystemBase {
         double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
         double error = Math.abs(targetAngle - degrees);
 
-        telemetry.addData("[Arm] Error", error);
-        telemetry.addData("[Arm] Target", targetAngle);
-        telemetry.addData("[Arm] Current", degrees);
-
-        return error <= TOLERABLE_ERROR;
+        // Make sure the arm is at it's target for a number of consecutive loops. This is designed
+        // to handle cases of "bounce" in the arm when moving to the target angle.
+        boolean atTarget = error <= TOLERABLE_ERROR;
+        if (atTarget) {
+            atTargetCount++;
+        } else {
+            atTargetCount = 0;
+        }
+        return atTarget && atTargetCount >= AT_TARGET_COUNT;
     }
 
     /**
@@ -158,7 +161,6 @@ public class Arm extends SubsystemBase {
         return "Arm{" +
                 "target=" + targetAngle +
                 ", current=" + getCurrentAngle() +
-                ", atTarget=" + isAtTarget() +
                 "}";
     }
 
@@ -204,7 +206,6 @@ public class Arm extends SubsystemBase {
                 initialize();
             }
 
-            arm.execute();
             return !arm.isAtTarget();
         }
 
