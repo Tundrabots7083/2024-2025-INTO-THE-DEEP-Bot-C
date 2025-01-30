@@ -62,7 +62,7 @@ public class RedChamberOpMode extends OpMode {
                         subsystem.execute();
                     }
                     telemetry.update();
-                    return false;
+                    return true;
                 },
                 trajectory
         );

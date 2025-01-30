@@ -62,7 +62,7 @@ public class RedBasketOpMode extends OpMode {
                         subsystem.execute();
                     }
                     telemetry.update();
-                    return false;
+                    return true;
                 },
                 trajectory
         );
