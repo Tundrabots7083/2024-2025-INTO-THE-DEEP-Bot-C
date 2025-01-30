@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
 
 /**
  * This class uses the Arm, LinearSlide, Wrist, and Claw subsystems to pick up, control,
@@ -123,9 +122,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         robot.linearSlide.execute();
         robot.wrist.execute();
         robot.claw.execute();
-
-        telemetry.addData("[IAS] target X", targetX);
-        telemetry.addData("[IAS] target Y", targetY);
     }
 
     /**
