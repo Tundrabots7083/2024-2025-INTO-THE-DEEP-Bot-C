@@ -2,18 +2,19 @@ package org.firstinspires.ftc.teamcode.ftc7083.opmode.test;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ftc7083.behaviortree.BehaviorTree.IntakeSampleBehaviorTree;
-import org.firstinspires.ftc.teamcode.ftc7083.behaviortree.BehaviorTreeComponents.general.Status;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeBlueSampleBehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
+
+import java.util.List;
 
 @Autonomous (name = "Intake Sample BT", group = "tests")
-@Disabled
 public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
 
-    IntakeSampleBehaviorTree behaviorTree = null;
+    IntakeBlueSampleBehaviorTree behaviorTree = null;
 
     int loopCount = 0;
 
@@ -22,6 +23,8 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
+        initialize();
 
         waitForStart();
 
@@ -46,7 +49,16 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
     }
 
     private void initialize(){
-        this.behaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
+        this.behaviorTree = new IntakeBlueSampleBehaviorTree(hardwareMap,telemetry);
+
+        // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
+        // as the bulk read caches are being handled manually.
+        List<LynxModule> allHubs;
+
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.clearBulkCache();
+        }
     }
 
 }

@@ -104,6 +104,41 @@ public class MecanumDrive extends SubsystemBase {
     }
 
     /**
+     * drive sets the powers to the wheel motors to result in the robot moving
+     * in the direction provided on input.
+     *
+     * @param x    how much to move right or, if a negative value, left.
+     * @param y    how much to move forward or, if a negative value, backward.
+     * @param turn how much to rotate the robot.
+     */
+    public void driveWithoutAdjustment(double x, double y, double turn) {
+        x *= STRAFING_ADJUSTMENT; // Adjust for imperfect strafing
+
+        double theta = Math.atan2(y, x);
+        double power = Math.hypot(x, y);
+
+        double sin = Math.sin(theta - Math.PI / 4);
+        double cos = Math.cos(theta - Math.PI / 4);
+        double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+        double leftFrontPower = power * cos / max - turn;
+        double rightFrontPower = power * sin / max + turn;
+        double leftRearPower = power * sin / max - turn;
+        double rightRearPower = power * cos / max + turn;
+
+        // Normalize motor powers to ensure none exceeds 1.0
+        double maxMotorPower = power + Math.abs(turn);
+        if (maxMotorPower > 1) {
+            leftFrontPower /= maxMotorPower;
+            rightFrontPower /= maxMotorPower;
+            leftRearPower /= maxMotorPower;
+            rightRearPower /= maxMotorPower;
+        }
+
+        setMotorPowers(leftFrontPower, leftRearPower, rightRearPower, rightFrontPower);
+    }
+
+    /**
      * Adjust the value to reduce sensitivity of the joystick when pushed only a small distance
      *
      * @param value the value based from the controller

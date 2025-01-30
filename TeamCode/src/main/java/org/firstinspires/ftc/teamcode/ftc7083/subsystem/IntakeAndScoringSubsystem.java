@@ -188,6 +188,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Set the wrist roll servo position in degrees.
+     * @param targetAngle
+     */
+    public void setWristRoll(double targetAngle) {
+        robot.wrist.setRollDegrees(targetAngle);
+    }
+
+    /**
      * Moves the subsystem to the starting position, with the claw closed.
      */
     public void moveToStartPosition() {

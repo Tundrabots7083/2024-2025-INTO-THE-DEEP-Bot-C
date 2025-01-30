@@ -10,14 +10,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 @Config
 public class Limelight extends SubsystemBase {
 
-    public static double LL_ANGLE_WITH_VERTICAL = 20.7;
-    public static double LL_HEIGHT = 15.5;
+    public static double LL_ANGLE_WITH_VERTICAL = 15.2;
+    public static double LL_HEIGHT = 15.3;
 
     private final Limelight3A limelight;
     private final Telemetry telemetry;
@@ -29,12 +26,10 @@ public class Limelight extends SubsystemBase {
     private final int BLUE_SAMPLE_COLOR_PIPELINE = 2;
     private final int APRIL_TAG_PIPELINE = 3;
     public static int MAX_COLOR_PIPELINE = 2;
-    private static int NUM_SAMPLES_TO_AVERAGE = 3;
+    private final double LIMELIGHT_LATERAL_OFFSET = 4.65;
     private static final double SAMPLE_HEIGHT_INCHES = 1.1;
-    private static final double WALL_HEIGHT_INCHES = 6.5;
-    private static double LL_DISTANCE_FROM_ARM_AXEL = 2;
-
-    private final Queue<Double> TySamples = new ArrayDeque<>();
+    private static final double WALL_HEIGHT_INCHES = 10;
+    private static double LL_DISTANCE_FROM_BACK_OF_SLIDE = -3.5;
 
 
     /**
@@ -47,21 +42,6 @@ public class Limelight extends SubsystemBase {
         this.limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         this.telemetry = telemetry;
         configureLimelight();
-    }
-
-    @Override
-    public void execute() {
-
-        if (getTy() != null) {
-            double Ty = (double)getTy();
-            TySamples.add(Ty);
-
-            telemetry.addData("[Limelight]","Added a Ty");
-            telemetry.update();
-            if (TySamples.size() > NUM_SAMPLES_TO_AVERAGE) {
-                TySamples.remove();
-            }
-        }
     }
 
     /**
@@ -90,7 +70,7 @@ public class Limelight extends SubsystemBase {
      *
      * @return the Tx angle
      */
-    public Object getTx() {
+    public Double getTx() {
         getStatus();
         getResult();
 
@@ -98,7 +78,12 @@ public class Limelight extends SubsystemBase {
             telemetry.addData("[Limelight]","Found a Tx");
             telemetry.update();
 
-            return result.getTx();
+            double distance = getDistance(TargetPosition.SUBMERSIBLE);
+            double detectedAngle = result.getTx() * (Math.PI/180);
+            double horizontalDetectionDisplacement = distance * Math.tan(detectedAngle);
+            double actualHorizontalDisplacement = LIMELIGHT_LATERAL_OFFSET - horizontalDetectionDisplacement;
+            double adjustedAngle = Math.tan(actualHorizontalDisplacement/distance);
+            return adjustedAngle * (180/Math.PI); //convert back to degrees
         } else {
             return null;
         }
@@ -109,7 +94,7 @@ public class Limelight extends SubsystemBase {
      *
      * @return the Ty angle
      */
-    private Object getTy() {
+    private Double getTy() {
         getStatus();
         getResult();
 
@@ -126,11 +111,9 @@ public class Limelight extends SubsystemBase {
      *
      * @return the distance to the target
      */
-    public Object getDistance(TargetPosition position) {
+    public Double getDistance(TargetPosition position) {
         double xDistance;
-        double retryCount = 0;
-        double filteredTy;
-        final double MAX_RETRIES = 20;
+        Double Ty = getTy();
         double goalHeightInches;
 
 
@@ -141,22 +124,15 @@ public class Limelight extends SubsystemBase {
         }
 
 
-        while (TySamples.size() < NUM_SAMPLES_TO_AVERAGE && retryCount < MAX_RETRIES) {
-            execute();
-            retryCount++;
-        }
+        if (Ty != null) {
+            double angleToGoalDegrees = 90 - LL_ANGLE_WITH_VERTICAL + Ty;
+            double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
 
-        if (!TySamples.stream().mapToDouble(a -> a).average().isPresent()) {
-            return null;
+            xDistance = (LL_HEIGHT - goalHeightInches) * Math.tan(angleToGoalRadians);
+            return xDistance - LL_DISTANCE_FROM_BACK_OF_SLIDE;
         } else {
-            filteredTy = TySamples.stream().mapToDouble(a -> a).average().getAsDouble();
+            return null;
         }
-
-        double angleToGoalDegrees = 90 - LL_ANGLE_WITH_VERTICAL + filteredTy;
-        double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
-
-        xDistance = (LL_HEIGHT - goalHeightInches) * Math.tan(angleToGoalRadians);
-        return xDistance + LL_DISTANCE_FROM_ARM_AXEL;
     }
 
 
@@ -165,7 +141,6 @@ public class Limelight extends SubsystemBase {
      */
     public void detectYellow() {
         limelight.pipelineSwitch(YELLOW_SAMPLE_COLOR_PIPELINE);
-        TySamples.clear();
     }
 
     /**
@@ -173,7 +148,6 @@ public class Limelight extends SubsystemBase {
      */
     public void detectRed() {
         limelight.pipelineSwitch(RED_SAMPLE_COLOR_PIPELINE);
-        TySamples.clear();
     }
 
     /**
@@ -181,7 +155,6 @@ public class Limelight extends SubsystemBase {
      */
     public void detectBlue() {
         limelight.pipelineSwitch(BLUE_SAMPLE_COLOR_PIPELINE);
-        TySamples.clear();
     }
 
     /**
@@ -189,7 +162,6 @@ public class Limelight extends SubsystemBase {
      */
     public void detectAprilTags() {
         limelight.pipelineSwitch(APRIL_TAG_PIPELINE);
-        TySamples.clear();
     }
 
     @NonNull
