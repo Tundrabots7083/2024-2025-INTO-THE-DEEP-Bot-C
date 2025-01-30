@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
 
 /**
  * This class uses the Arm, LinearSlide, Wrist, and Claw subsystems to pick up, control,
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
  */
 @Config
 public class IntakeAndScoringSubsystem extends SubsystemBase {
+    // Wait time for picking up samples
+    public static int INTAKE_WAIT_TIME = 500;
 
     // Robot measurements
     // Length of the arm and the wrist with zero extension in inches.
@@ -538,8 +541,11 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public ActionEx actionIntakeSampleFromSpikeMark() {
         return new SequentialAction(
                 new MoveToIntakeCloseAboveSamplePosition(this),
+                new WaitAction(INTAKE_WAIT_TIME),
                 new MoveToIntakeCloseLoweredPosition(this),
+                new WaitAction(INTAKE_WAIT_TIME),
                 actionCloseClawWithWait(),
+                new WaitAction(INTAKE_WAIT_TIME),
                 new MoveToNeutralPosition(this)
         );
     }

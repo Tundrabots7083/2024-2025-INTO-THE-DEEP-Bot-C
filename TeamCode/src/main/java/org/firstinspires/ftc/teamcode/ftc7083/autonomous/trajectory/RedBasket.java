@@ -39,7 +39,7 @@ public class RedBasket {
     public static double YELLOW_SPIKE_MARK_1_Y = -52.5;
 
     // Position for scoring in the high basket
-    public static double BASKET_HIGH_X = -56;
+    public static double BASKET_HIGH_X = -56.5;
     public static double BASKET_HIGH_Y = -62;;
 
     // Park in the observation zone
