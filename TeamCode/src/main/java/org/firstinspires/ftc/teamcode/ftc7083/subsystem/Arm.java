@@ -129,6 +129,15 @@ public class Arm extends SubsystemBase {
         double currentAngle = getCurrentAngle();
         double power = pidController.calculate(targetAngle, currentAngle);
         shoulderMotor.setPower(power);
+
+        // Make sure the arm is at it's target for a number of consecutive loops. This is designed
+        // to handle cases of "bounce" in the arm when moving to the target angle.
+        double error = Math.abs(targetAngle - currentAngle);
+        if (error <= TOLERABLE_ERROR) {
+            atTargetCount++;
+        } else {
+            atTargetCount = 0;
+        }
     }
 
     /**
@@ -140,14 +149,7 @@ public class Arm extends SubsystemBase {
         double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
         double error = Math.abs(targetAngle - degrees);
 
-        // Make sure the arm is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the arm when moving to the target angle.
         boolean atTarget = error <= TOLERABLE_ERROR;
-        if (atTarget) {
-            atTargetCount++;
-        } else {
-            atTargetCount = 0;
-        }
         return atTarget && atTargetCount >= AT_TARGET_COUNT;
     }
 

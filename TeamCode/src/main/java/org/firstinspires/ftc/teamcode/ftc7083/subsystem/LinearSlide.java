@@ -122,8 +122,18 @@ public class LinearSlide extends SubsystemBase {
      * sets the power for the pid controller
      */
     public void execute() {
-        double power = pidController.calculate(targetLength, getCurrentLength());
+        double currentLength = getCurrentLength();
+        double power = pidController.calculate(targetLength, currentLength);
         slideMotor.setPower(power);
+
+        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
+        // to handle cases of "bounce" in the slide when moving to the target angle.
+        double error = Math.abs(targetLength - currentLength);
+        if (error <= TOLERABLE_ERROR) {
+            atTargetCount++;
+        } else {
+            atTargetCount = 0;
+        }
     }
 
     /**
@@ -132,14 +142,7 @@ public class LinearSlide extends SubsystemBase {
     public boolean isAtTarget() {
         double error = Math.abs(targetLength - getCurrentLength());
 
-        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target angle.
         boolean atTarget = error <= TOLERABLE_ERROR;
-        if (atTarget) {
-            atTargetCount++;
-        } else {
-            atTargetCount = 0;
-        }
         return atTarget && atTargetCount >= AT_TARGET_COUNT;
     }
 
