@@ -17,7 +17,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
 public class RedChamber {
     public static double DEBUG_ROTATE_180_DEGREES = Math.toRadians(180);
     // Orientations for the robot, in degrees
-    public static double ORIENTATION_CHAMBER = 90;
+    public static double ORIENTATION_CHAMBER = 95;
+    public static double ORIENTATION_PARK_OBSERVATION = 120;
     public static double ORIENTATION_TOWARD_WALL = -90;
     public static double ORIENTATION_SPIKE_MARK_1 = 60;
     public static double ORIENTATION_SPIKE_MARK_2 = -90;
@@ -29,8 +30,8 @@ public class RedChamber {
     public static double INITIAL_HEADING = 90.0;
 
     // Position for scoring on the high chamber
-    public static double CHAMBER_HIGH_X = 0;
-    public static double CHAMBER_HIGH_Y = -38;
+    public static double CHAMBER_HIGH_X = 7.5;
+    public static double CHAMBER_HIGH_Y = -41;
     public static double HIGH_CHAMBER_DRIVE_FORWARD = 6.5;
 
     // Positions for the spike marks
@@ -42,8 +43,8 @@ public class RedChamber {
     public static double OBSERVATION_ZONE_Y = -50;
 
     // Park in the observation zone
-    public static double PARK_X = 50;
-    public static double PARK_Y = -60;
+    public static double PARK_X = 55;
+    public static double PARK_Y = -43;
 
     private final TrajectoryActionBuilder actionBuilder;
 
@@ -88,9 +89,9 @@ public class RedChamber {
         IntakeAndScoringSubsystem ias = Robot.getInstance().intakeAndScoringSubsystem;
         return actionBuilder
                 // Move to the chamber and score the specimen
-                .strafeTo(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y))
+                .strafeToSplineHeading(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y), Math.toRadians(ORIENTATION_CHAMBER))
                 .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
-                .lineToYConstantHeading(CHAMBER_HIGH_Y + HIGH_CHAMBER_DRIVE_FORWARD)
+                .lineToY(CHAMBER_HIGH_Y + HIGH_CHAMBER_DRIVE_FORWARD)
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 //                // Move the the spike marks and move the sample from Spike Mark 1 to the observation zone
 //                .strafeTo(new Vector2d(RED_SPIKE_MARK_X, RED_SPIKE_MARK_Y))
@@ -124,8 +125,9 @@ public class RedChamber {
 //                .strafeToSplineHeading(new Vector2d(CHAMBER_HIGH_X, CHAMBER_HIGH_Y), Math.toRadians(ORIENTATION_CHAMBER))
 //                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 //                // Park the robot
+                .strafeToSplineHeading(new Vector2d(PARK_X, PARK_Y), Math.toRadians(ORIENTATION_PARK_OBSERVATION))
 //                .strafeTo(new Vector2d(PARK_X, PARK_Y))
-//                .stopAndAdd(ias.actionMoveToStartPosition())
+                .stopAndAdd(ias.actionMoveToStartPosition())
                 .build();
     }
 }

@@ -32,7 +32,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // Arm Movement Constants
     public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.5;
-    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 2.0;
+    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;
 
     // Intake constants
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;

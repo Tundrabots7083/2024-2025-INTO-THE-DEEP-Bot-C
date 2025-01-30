@@ -30,7 +30,7 @@ public class LinearSlide extends SubsystemBase {
     public static double KD = 0.05;
     public static double KG = 0.3;
 
-    public static double TOLERABLE_ERROR = 1.0; // inches
+    public static double TOLERABLE_ERROR = 0.5; // inches
     public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 40;
 

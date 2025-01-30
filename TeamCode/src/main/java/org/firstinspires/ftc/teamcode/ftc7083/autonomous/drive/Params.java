@@ -23,7 +23,7 @@ public class Params {
 
     // drive model parameters
     public static double inPerTick = 1;
-    public static double lateralInPerTick = 0.584624582564213;
+    public static double lateralInPerTick = 0.75;
     public static double trackWidthTicks = 10.8295883010551;
 
     // feedforward parameters (in tick units)
@@ -43,7 +43,7 @@ public class Params {
     // path controller gains
     public static double axialGain = 0.0;
     public static double lateralGain = 0.0;
-    public static double headingGain = 0.25; // shared with turn
+    public static double headingGain = 0.075; // shared with turn
 
     public static double axialVelGain = 0.0;
     public static double lateralVelGain = 0.0;
