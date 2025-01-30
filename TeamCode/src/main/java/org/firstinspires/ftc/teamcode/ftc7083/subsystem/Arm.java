@@ -118,6 +118,7 @@ public class Arm extends SubsystemBase {
         if (this.targetAngle != targetAngle) {
             this.targetAngle = targetAngle;
             pidController.reset();
+            atTargetCount = 0;
         }
     }
 

@@ -87,6 +87,7 @@ public class LinearSlide extends SubsystemBase {
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
             pidController.reset();
+            atTargetCount = 0;
         }
     }
 
