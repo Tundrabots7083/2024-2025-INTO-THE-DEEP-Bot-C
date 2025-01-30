@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeRedSamples;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
@@ -69,6 +72,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private State state = State.NEUTRAL_POSITION;
     private boolean clawOpen = false;
 
+    WristOrientationBehaviorTreeRedSamples WristOrientationBehaviorTreeRedSamples = null;
+
     /**
      * Instantiate a scoring subsystem controller, which uses gamepad controls to control the
      * scoring subsystem.
@@ -76,9 +81,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      * @param intakeAndScoringSubsystem the scoring subsystem being controlled
      * @param telemetry                 the telemetry used to provide user output on the driver station and FTC dashboard
      */
-    public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry) {
+    public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry, HardwareMap hardwareMap) {
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
+        this.WristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeRedSamples(hardwareMap,telemetry);
     }
 
     /**
@@ -219,6 +225,15 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
+                /*case INTAKE_FAR_ABOVE_SAMPLE:
+                    Status result = this.WristOrientationBehaviorTreeRedSamples.tick();
+                    while(result == Status.RUNNING) {
+                        this.WristOrientationBehaviorTreeRedSamples.tick();
+                    }
+                    if (result == Status.FAILURE) {
+                        gamepad1.rumble(50);
+                    }
+                    break;*/
                 case INTAKE_FAR_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
                     state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;

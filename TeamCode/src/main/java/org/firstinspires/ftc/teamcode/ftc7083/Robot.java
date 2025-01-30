@@ -129,7 +129,7 @@ public class Robot {
     public final Claw claw;
     public Limelight limelight;
     public final SparkFunOTOS otos;
-    public final ColorSensor colorSensor;
+    //public final ColorSensor colorSensor;
 
     public List<Webcam> webcams;
 
@@ -158,7 +158,6 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
@@ -167,16 +166,20 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        colorSensor = new ColorSensor(hardwareMap, telemetry);
+        //colorSensor = new ColorSensor(hardwareMap, telemetry);
         if (USE_SPARKFUN_OTOS_CORRECTED) {
             otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
         } else {
             otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         }
+        telemetry.addLine("Up to OTOS");
+        telemetry.update();
         calibrateOTOS();
 
         // Use a localizer with the OTOS and webcams, or just the OTOS
         if (USE_WEBCAMS) {
+            int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+
             limelight = new Limelight(hardwareMap, telemetry);
 
             leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
