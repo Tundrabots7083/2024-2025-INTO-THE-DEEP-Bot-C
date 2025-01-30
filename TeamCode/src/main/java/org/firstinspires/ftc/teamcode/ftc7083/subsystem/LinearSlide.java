@@ -140,10 +140,7 @@ public class LinearSlide extends SubsystemBase {
      * checks if the length is within the tolerable error and if it is then the motor will stop
      */
     public boolean isAtTarget() {
-        double error = Math.abs(targetLength - getCurrentLength());
-
-        boolean atTarget = error <= TOLERABLE_ERROR;
-        return atTarget && atTargetCount >= AT_TARGET_COUNT;
+        return atTargetCount >= AT_TARGET_COUNT;
     }
 
     /**

@@ -146,11 +146,7 @@ public class Arm extends SubsystemBase {
      * @return <code>true</code> if the arm is at the target angle; <code>false</code> otherwise.
      */
     public boolean isAtTarget() {
-        double degrees = shoulderMotor.getCurrentDegrees() + START_ANGLE;
-        double error = Math.abs(targetAngle - degrees);
-
-        boolean atTarget = error <= TOLERABLE_ERROR;
-        return atTarget && atTargetCount >= AT_TARGET_COUNT;
+        return atTargetCount >= AT_TARGET_COUNT;
     }
 
     /**
