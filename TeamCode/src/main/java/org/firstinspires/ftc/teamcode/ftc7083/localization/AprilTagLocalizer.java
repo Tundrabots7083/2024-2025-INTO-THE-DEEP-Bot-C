@@ -188,15 +188,17 @@ public class AprilTagLocalizer implements Localizer {
             // Get the average AprilTag detection values using a moving average filter
             Pose2D newPose = new Pose2D(totalX / numDetections, totalY / numDetections, totalHeading / numDetections);
             poseFilter.filter(newPose);
-            Pose2D mean = poseFilter.getMean();
+            if (poseFilter.hasMean()) {
+                Pose2D mean = poseFilter.getMean();
 
-            Pose2d pose = new Pose2d(
-                    new Vector2d(mean.x, mean.y)
-                    , new Rotation2d(mean.h, 0.0)
-            );
-            lastPose = currentPose;
-            currentPose = pose;
-            telemetry.addLine(String.format("\nPose X=%6.1f Y=%6.1f H=%6.1f", pose.position.x, pose.position.y, pose.heading.toDouble()));
+                Pose2d pose = new Pose2d(
+                        new Vector2d(mean.x, mean.y)
+                        , new Rotation2d(mean.h, 0.0)
+                );
+                lastPose = currentPose;
+                currentPose = pose;
+                telemetry.addLine(String.format("\nPose X=%6.1f Y=%6.1f H=%6.1f", pose.position.x, pose.position.y, pose.heading.toDouble()));
+            }
         } else {
             poseFilter.removeMeasurement();
         }
