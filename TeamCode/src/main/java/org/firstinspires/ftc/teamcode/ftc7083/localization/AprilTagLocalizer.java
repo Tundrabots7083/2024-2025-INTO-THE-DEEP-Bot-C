@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ftc7083.localization;
 
 import android.annotation.SuppressLint;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
@@ -13,8 +14,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.filter.Pose2DMovingAverageFilter;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS.Pose2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +28,22 @@ import java.util.List;
  * the distance and orientation of the robot using values returned by the FTC SDK April Tag
  * vision processor.
  */
+@Config
 public class AprilTagLocalizer implements Localizer {
+    // MovingAverageFilter constants
+    public static final int MIN_NUM_SAMPLES = 20;
+    public static final int WINDOW_SIZE = 10;
+
+    // Maximum distance when detecting an April Tag
+    public static double MAX_APRIL_TAG_DISTANCE = 72; // 6 feet, in inches
+
     private final ElapsedTime timer = new ElapsedTime();
     private final List<Webcam> webcams;
     private Pose2d lastPose = null;
     private Pose2d currentPose = null;
     private double elapsedTime = 0.0;
     private boolean aprilTagsDetected = false;
+    private Pose2DMovingAverageFilter poseFilter = new Pose2DMovingAverageFilter(MIN_NUM_SAMPLES, WINDOW_SIZE);
 
     /**
      * Instantiates a new April Tag localizer. The localizer uses the webcams on the robot to
@@ -138,25 +150,30 @@ public class AprilTagLocalizer implements Localizer {
             ArrayList<AprilTagDetection> detections = webcam.getDetections();
             for (AprilTagDetection detection : detections) {
                 if (detection.metadata != null) {
-                    Position position = detection.robotPose.getPosition();
-                    totalX += position.x;
-                    totalY += position.y;
+                    double distanceToAprilTag = detection.ftcPose != null ? detection.ftcPose.range : Double.MAX_VALUE;
+                    if (distanceToAprilTag <= MAX_APRIL_TAG_DISTANCE) {
+                        Position position = detection.robotPose.getPosition();
+                        totalX += position.x;
+                        totalY += position.y;
 
-                    YawPitchRollAngles orientation = detection.robotPose.getOrientation();
-                    totalHeading += orientation.getYaw();
+                        YawPitchRollAngles orientation = detection.robotPose.getOrientation();
+                        totalHeading += orientation.getYaw();
 
-                    numDetections++;
+                        numDetections++;
 
-                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format("X=%6.1f Y=%6.1f Z=%6.1f  (inch)",
-                            detection.robotPose.getPosition().x,
-                            detection.robotPose.getPosition().y,
-                            detection.robotPose.getPosition().z));
-                    telemetry.addLine(String.format("P=%6.1f R=%6.1f Y=%6.1f  (deg)",
-                            detection.robotPose.getOrientation().getPitch(AngleUnit.DEGREES),
-                            detection.robotPose.getOrientation().getRoll(AngleUnit.DEGREES),
-                            detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES)));
-
+                        telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                        telemetry.addLine(String.format("X=%6.1f Y=%6.1f Z=%6.1f  (inch)",
+                                detection.robotPose.getPosition().x,
+                                detection.robotPose.getPosition().y,
+                                detection.robotPose.getPosition().z));
+                        telemetry.addLine(String.format("P=%6.1f R=%6.1f Y=%6.1f  (deg)",
+                                detection.robotPose.getOrientation().getPitch(AngleUnit.DEGREES),
+                                detection.robotPose.getOrientation().getRoll(AngleUnit.DEGREES),
+                                detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES)));
+                    } else {
+                        telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                        telemetry.addLine(String.format("AprilTag too far, distance=%6.1f", distanceToAprilTag));
+                    }
                 } else {
                     telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                     telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
@@ -168,13 +185,20 @@ public class AprilTagLocalizer implements Localizer {
 
         // Take the average of all April tag detections and save as the current pose for the robot
         if (aprilTagsDetected) {
+            // Get the average AprilTag detection values using a moving average filter
+            Pose2D newPose = new Pose2D(totalX / numDetections, totalY / numDetections, totalHeading / numDetections);
+            poseFilter.filter(newPose);
+            Pose2D mean = poseFilter.getMean();
+
             Pose2d pose = new Pose2d(
-                    new Vector2d(totalX / numDetections, totalY / numDetections)
-                    , new Rotation2d(totalHeading / numDetections, 0.0)
+                    new Vector2d(mean.x, mean.y)
+                    , new Rotation2d(mean.h, 0.0)
             );
             lastPose = currentPose;
             currentPose = pose;
             telemetry.addLine(String.format("\nPose X=%6.1f Y=%6.1f H=%6.1f", pose.position.x, pose.position.y, pose.heading.toDouble()));
+        } else {
+            poseFilter.removeMeasurement();
         }
     }
 }
