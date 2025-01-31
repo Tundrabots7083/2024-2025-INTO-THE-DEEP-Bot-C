@@ -43,7 +43,7 @@ public class AprilTagLocalizer implements Localizer {
     private Pose2d currentPose = null;
     private double elapsedTime = 0.0;
     private boolean aprilTagsDetected = false;
-    private Pose2DMovingAverageFilter poseFilter = new Pose2DMovingAverageFilter(MIN_NUM_SAMPLES, WINDOW_SIZE);
+    private final Pose2DMovingAverageFilter poseFilter = new Pose2DMovingAverageFilter(MIN_NUM_SAMPLES, WINDOW_SIZE);
 
     /**
      * Instantiates a new April Tag localizer. The localizer uses the webcams on the robot to
