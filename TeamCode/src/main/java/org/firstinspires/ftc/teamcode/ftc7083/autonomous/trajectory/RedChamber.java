@@ -122,11 +122,10 @@ public class RedChamber {
                 .lineToY(SPIKE_MARK_3_Y)
                 .lineToX(SPIKE_MARK_3_X)
                 .lineToY(SPIKE_MARK_3_OBSERVATION_ZONE_Y)
-                // Move to the observation zone to pickup specimen 1 from the wall and score on the chamber
+                // Move to the observation zone to pickup specimen 1 from the wall and pickup the specimen
+                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
                 .strafeToSplineHeading(new Vector2d(INTAKE_SPECIMEN_X, INTAKE_SPECIMEN_Y), Math.toRadians(SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSpecimenFromWall())
-                .strafeToSplineHeading(new Vector2d(CHAMBER_PRELOAD_X, CHAMBER_PRELOAD_Y), Math.toRadians(CHAMBER_PRELOAD_ORIENTATION))
-                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
                 // Move to the chamber and score the specimen
                 .strafeToSplineHeading(new Vector2d(CHAMBER_SPECIMEN_1_X, CHAMBER_SPECIMEN_1_Y), Math.toRadians(CHAMBER_SPECIMEN_1_ORIENTATION))
                 .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())

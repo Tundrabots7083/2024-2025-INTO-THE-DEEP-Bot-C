@@ -53,8 +53,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;
     public static double NEUTRAL_X = ARM_LENGTH;
     public static double NEUTRAL_Y = ARM_HEIGHT;
-    public static double RETRACT_X = ARM_LENGTH;
-    public static double RETRACT_Y = 5.0;
     public static double START_X = ARM_LENGTH - 4.5;
     public static double START_Y = 0.5;
 
@@ -543,13 +541,27 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Gets an action to pick up a specimen off the wall.
+     * Gets an action to ove the intake and scoring system so that it can pick up a specimen off
+     * the wall.
+     *
+     * @return an action to ove the intake and scoring system so that it can pick up a specimen off
+     *         the wall
+     */
+    public ActionEx actionMoveToIntakeSpecimenOffWallPosition() {
+        return new SequentialAction(
+                new MoveToIntakeSpecimenOffWallPosition(this)
+        );
+    }
+
+    /**
+     * Gets an action to pick up a specimen off the wall. The intake and scoring subsystem must be
+     * at the correct position for pickup, which can be accomplished by calling
+     * {@link #actionMoveToIntakeSpecimenOffWallPosition()} first.
      *
      * @return an action to pick up a specimen off the wall
      */
     public ActionEx actionIntakeSpecimenFromWall() {
         return new SequentialAction(
-                new MoveToIntakeSpecimenOffWallPosition(this),
                 actionCloseClawWithWait(),
                 new MoveToIntakeSpecimenRaisedPosition(this),
                 new MoveToNeutralPosition(this)
