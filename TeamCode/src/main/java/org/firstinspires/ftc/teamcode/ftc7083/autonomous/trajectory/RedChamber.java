@@ -30,8 +30,8 @@ public class RedChamber {
     public static double INITIAL_HEADING = 90.0;
 
     // Position for scoring on the high chamber
-    public static double CHAMBER_HIGH_X = 7.5;
-    public static double CHAMBER_HIGH_Y = -41;
+    public static double CHAMBER_HIGH_X = 6.5;
+    public static double CHAMBER_HIGH_Y = -43;
     public static double HIGH_CHAMBER_DRIVE_FORWARD = 6.5;
 
     // Positions for the spike marks
