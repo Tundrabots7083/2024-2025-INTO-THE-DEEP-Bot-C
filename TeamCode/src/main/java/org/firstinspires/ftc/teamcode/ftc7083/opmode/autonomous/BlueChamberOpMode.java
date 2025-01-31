@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
  */
-@Autonomous(name = "Blue Chamber", group = "Active", preselectTeleOp = "Primary TeleOp")
+@Autonomous(name = "Blue Chamber", group = "blue", preselectTeleOp = "Primary TeleOp")
 public class BlueChamberOpMode extends OpMode {
     private Robot robot;
     private BlueChamber trajectoryBuilder;
