@@ -5,13 +5,13 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeRedSamples;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 
 @Autonomous(name = "Wrist Orientation BT", group = "Test")
 public class WristOrientationTest extends LinearOpMode {
 
-    WristOrientationBehaviorTreeRedSamples behaviorTree = null;
+    WristOrientationBehaviorTreeSamples behaviorTree = null;
 
     int loopCount = 0;
 
@@ -46,6 +46,6 @@ public class WristOrientationTest extends LinearOpMode {
     }
 
     private void initialize(){
-        this.behaviorTree = new WristOrientationBehaviorTreeRedSamples(hardwareMap,telemetry);
+        this.behaviorTree = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
     }
 }

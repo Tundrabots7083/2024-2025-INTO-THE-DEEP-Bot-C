@@ -2,5 +2,6 @@ package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponen
 
 public enum AllianceColor {
     RED,
+    YELLOW,
     BLUE;
 }

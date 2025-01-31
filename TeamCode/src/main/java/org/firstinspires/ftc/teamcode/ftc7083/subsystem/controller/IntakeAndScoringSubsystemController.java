@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeRedSampleBehaviorTree;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeRedSamples;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
@@ -73,8 +73,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private State state = State.NEUTRAL_POSITION;
     private boolean clawOpen = false;
 
-    WristOrientationBehaviorTreeRedSamples wristOrientationBehaviorTreeRedSamples;
-    IntakeRedSampleBehaviorTree intakeRedSampleBehaviorTree;
+    WristOrientationBehaviorTreeSamples wristOrientationBehaviorTreeRedSamples;
+    IntakeSampleBehaviorTree intakeRedSampleBehaviorTree;
 
     /**
      * Instantiate a scoring subsystem controller, which uses gamepad controls to control the
@@ -86,8 +86,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry, HardwareMap hardwareMap) {
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
-        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeRedSamples(hardwareMap,telemetry);
-        this.intakeRedSampleBehaviorTree = new IntakeRedSampleBehaviorTree(hardwareMap, telemetry);
+        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
+        this.intakeRedSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap, telemetry);
     }
 
     /**

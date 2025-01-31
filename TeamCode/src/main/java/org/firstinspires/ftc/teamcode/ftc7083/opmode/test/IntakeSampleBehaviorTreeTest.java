@@ -6,7 +6,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeBlueSampleBehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 @Autonomous (name = "Intake Sample BT", group = "tests")
 public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
 
-    IntakeBlueSampleBehaviorTree behaviorTree = null;
+    IntakeSampleBehaviorTree behaviorTree = null;
 
     int loopCount = 0;
 
@@ -49,7 +49,7 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
     }
 
     private void initialize(){
-        this.behaviorTree = new IntakeBlueSampleBehaviorTree(hardwareMap,telemetry);
+        this.behaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
 
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
