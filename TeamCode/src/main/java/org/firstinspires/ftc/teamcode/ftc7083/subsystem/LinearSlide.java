@@ -25,12 +25,12 @@ public class LinearSlide extends SubsystemBase {
 
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
 
-    public static double KP = 0.3;
-    public static double KI = 0.4;
-    public static double KD = 0.05;
-    public static double KG = 0.3;
+    public static double KP = 0.4;
+    public static double KI = 0.8;
+    public static double KD = 0.04;
+    public static double KG = 0;
 
-    public static double TOLERABLE_ERROR = 0.25; // inches
+    public static double TOLERABLE_ERROR = 0.5; // inches
     public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 40;
 

@@ -15,11 +15,11 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
         MecanumDrive mecanumDrive;
         Telemetry telemetry;
 
-        public static double KPDrive = 0.015;
-        public static double KIDrive = 0.08;
+        public static double KPDrive = 0.018;
+        public static double KIDrive = 0.09;
         public static double KDDrive = 0.0;
-        public static double KPTurn = 0.015;
-        public static double KITurn = 0.08;
+        public static double KPTurn = 0.016;
+        public static double KITurn = 0.09;
         public static double KDTurn = 0.0;
         public static double TOLERABLE_ERROR = 0.5; // inches
         public static double MAXIMUM_INTAKE_DISTANCE = 30; //inches

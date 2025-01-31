@@ -26,10 +26,10 @@ public class Limelight extends SubsystemBase {
     private final int BLUE_SAMPLE_COLOR_PIPELINE = 2;
     private final int APRIL_TAG_PIPELINE = 3;
     public static int MAX_COLOR_PIPELINE = 2;
-    private final double LIMELIGHT_LATERAL_OFFSET = 4.65;
+    private final double LIMELIGHT_LATERAL_OFFSET = 4.5;
     private static final double SAMPLE_HEIGHT_INCHES = 1.1;
     private static final double WALL_HEIGHT_INCHES = 10;
-    private static double LL_DISTANCE_FROM_BACK_OF_SLIDE = -3.5;
+    private static double LL_DISTANCE_FROM_BACK_OF_SLIDE = -2; // had -1.6 previously (too close) had -2.5 (too far)
 
 
     /**
@@ -78,10 +78,10 @@ public class Limelight extends SubsystemBase {
             telemetry.addData("[Limelight]","Found a Tx");
             telemetry.update();
 
-            double distance = getDistance(TargetPosition.SUBMERSIBLE);
+            double distance = getDistance(TargetPosition.SUBMERSIBLE) - LL_DISTANCE_FROM_BACK_OF_SLIDE;
             double detectedAngle = result.getTx() * (Math.PI/180);
             double horizontalDetectionDisplacement = distance * Math.tan(detectedAngle);
-            double actualHorizontalDisplacement = LIMELIGHT_LATERAL_OFFSET - horizontalDetectionDisplacement;
+            double actualHorizontalDisplacement = LIMELIGHT_LATERAL_OFFSET + horizontalDetectionDisplacement;
             double adjustedAngle = Math.tan(actualHorizontalDisplacement/distance);
             return adjustedAngle * (180/Math.PI); //convert back to degrees
         } else {

@@ -30,7 +30,7 @@ public class DetectSampleOrientation implements ActionFunction {
 
         telemetry.addData("[DetectSampleOrientation]", " perform count: %d", count);
         telemetry.update();
-        //count++;
+        count++;
 
         SampleProcessor sampleProcessor = new SampleProcessor();
          Double yellowAngle = sampleProcessor.execute(globalShutterCamera.getYellowDetections());

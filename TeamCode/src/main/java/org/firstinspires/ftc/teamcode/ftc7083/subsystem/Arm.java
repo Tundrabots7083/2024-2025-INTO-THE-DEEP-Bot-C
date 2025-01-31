@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase {
     public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
-    public static double TOLERABLE_ERROR = 1.0; // In degrees
+    public static double TOLERABLE_ERROR = 1.7; // In degrees
     public static double MIN_ANGLE = -36.0;
     public static double MAX_ANGLE = 100.0;
 
