@@ -117,6 +117,8 @@ public class Robot {
 
     private static Robot robot = null;
 
+    public static SampleIntakeColor INTAKE_COLOR = SampleIntakeColor.YELLOW;
+
     public final Telemetry telemetry;
 
     // Subsystems and hardware
@@ -346,5 +348,12 @@ public class Robot {
          * Autonomous OpMode
          */
         AUTO
+    }
+
+    // Enum to specify color for intake
+    public enum SampleIntakeColor {
+        RED,
+        BLUE,
+        YELLOW
     }
 }
