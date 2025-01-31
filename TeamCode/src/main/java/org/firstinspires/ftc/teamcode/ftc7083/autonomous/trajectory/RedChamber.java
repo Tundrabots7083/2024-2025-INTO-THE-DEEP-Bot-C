@@ -108,29 +108,29 @@ public class RedChamber {
                 .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
                 .lineToY(CHAMBER_PRELOAD_SCORE_Y)
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
-                // Move from in front of the chamber to the side where the spike marks are located
-                .strafeToSplineHeading(new Vector2d(SPIKE_MARK_1_SIDE_OF_CHAMBER_X, SPIKE_MARK_1_SIDE_OF_CHAMBER_Y), Math.toRadians(SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION))
-                // Move the the spike marks and strafe the sample on spike mark 1 to the observation zone
-                .lineToY(SPIKE_MARK_1_Y)
-                .lineToX(SPIKE_MARK_1_X)
-                .lineToY(SPIKE_MARK_1_OBSERVATION_ZONE_Y)
-                // Move the the spike marks and strafe the sample on spike mark 2 to the observation zone
-                .lineToY(SPIKE_MARK_2_Y)
-                .lineToX(SPIKE_MARK_2_X)
-                .lineToY(SPIKE_MARK_2_OBSERVATION_ZONE_Y)
-                // Move the the spike marks and strafe the sample on spike mark 2 to the observation zone
-                .lineToY(SPIKE_MARK_3_Y)
-                .lineToX(SPIKE_MARK_3_X)
-                .lineToY(SPIKE_MARK_3_OBSERVATION_ZONE_Y)
-                // Move to the observation zone to pickup specimen 1 from the wall and pickup the specimen
-                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
-                .strafeToSplineHeading(new Vector2d(INTAKE_SPECIMEN_X, INTAKE_SPECIMEN_Y), Math.toRadians(SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION))
-                .stopAndAdd(ias.actionIntakeSpecimenFromWall())
-                // Move to the chamber and score the specimen
-                .strafeToSplineHeading(new Vector2d(CHAMBER_SPECIMEN_1_X, CHAMBER_SPECIMEN_1_Y), Math.toRadians(CHAMBER_SPECIMEN_1_ORIENTATION))
-                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
-                .lineToY(CHAMBER_SPECIMEN_1_SCORE_Y)
-                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
+//                // Move from in front of the chamber to the side where the spike marks are located
+//                .strafeToSplineHeading(new Vector2d(SPIKE_MARK_1_SIDE_OF_CHAMBER_X, SPIKE_MARK_1_SIDE_OF_CHAMBER_Y), Math.toRadians(SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION))
+//                // Move the the spike marks and strafe the sample on spike mark 1 to the observation zone
+//                .lineToY(SPIKE_MARK_1_Y)
+//                .lineToX(SPIKE_MARK_1_X)
+//                .lineToY(SPIKE_MARK_1_OBSERVATION_ZONE_Y)
+//                // Move the the spike marks and strafe the sample on spike mark 2 to the observation zone
+//                .lineToY(SPIKE_MARK_2_Y)
+//                .lineToX(SPIKE_MARK_2_X)
+//                .lineToY(SPIKE_MARK_2_OBSERVATION_ZONE_Y)
+//                // Move the the spike marks and strafe the sample on spike mark 2 to the observation zone
+//                .lineToY(SPIKE_MARK_3_Y)
+//                .lineToX(SPIKE_MARK_3_X)
+//                .lineToY(SPIKE_MARK_3_OBSERVATION_ZONE_Y)
+//                // Move to the observation zone to pickup specimen 1 from the wall and pickup the specimen
+//                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
+//                .strafeToSplineHeading(new Vector2d(INTAKE_SPECIMEN_X, INTAKE_SPECIMEN_Y), Math.toRadians(SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION))
+//                .stopAndAdd(ias.actionIntakeSpecimenFromWall())
+//                // Move to the chamber and score the specimen
+//                .strafeToSplineHeading(new Vector2d(CHAMBER_SPECIMEN_1_X, CHAMBER_SPECIMEN_1_Y), Math.toRadians(CHAMBER_SPECIMEN_1_ORIENTATION))
+//                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
+//                .lineToY(CHAMBER_SPECIMEN_1_SCORE_Y)
+//                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
                 // Park the robot
                 .strafeToSplineHeading(new Vector2d(PARK_X, PARK_Y), Math.toRadians(PARK_ORIENTATION))
                 .stopAndAdd(ias.actionMoveToStartPosition())
