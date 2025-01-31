@@ -34,9 +34,9 @@ public class RedBasketSampleOpMode extends OpMode {
 
         robot = Robot.init(hardwareMap, telemetry);
         subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
-        robot.localizer.setPose(new Pose2d(RedBasketSample.INITIAL_POSE_X, RedBasketSample.INITIAL_POSE_Y, RedBasketSample.INITIAL_HEADING));
+        robot.localizer.setPose(new Pose2d(RedBasketSample.INITIAL_POSE_X, RedBasketSample.INITIAL_POSE_Y, RedBasketSample.INITIAL_ORIENTATION));
 
-        trajectoryBuilder = new RedBasketSample(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedBasketSample.INITIAL_POSE_X, RedBasketSample.INITIAL_POSE_Y, RedBasketSample.INITIAL_HEADING)));
+        trajectoryBuilder = new RedBasketSample(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedBasketSample.INITIAL_POSE_X, RedBasketSample.INITIAL_POSE_Y, RedBasketSample.INITIAL_ORIENTATION)));
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();

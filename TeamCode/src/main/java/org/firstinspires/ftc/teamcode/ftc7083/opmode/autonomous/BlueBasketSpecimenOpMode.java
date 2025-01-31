@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedChamber;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueBasketSpecimen;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 import java.util.Arrays;
@@ -20,10 +20,10 @@ import java.util.List;
 /**
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
  */
-@Autonomous(name = "Red Chamber", group = "Active", preselectTeleOp = "Primary TeleOp")
-public class RedChamberOpMode extends OpMode {
+@Autonomous(name = "Blue Basket Specimen", group = "Active", preselectTeleOp = "Primary TeleOp")
+public class BlueBasketSpecimenOpMode extends OpMode {
     private Robot robot;
-    private RedChamber trajectoryBuilder;
+    private BlueBasketSpecimen trajectoryBuilder;
     private Action trajectory;
     private List<Subsystem> subsystems;
 
@@ -34,9 +34,9 @@ public class RedChamberOpMode extends OpMode {
 
         robot = Robot.init(hardwareMap, telemetry);
         subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
-        robot.localizer.setPose(new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_POSE_ORIENTATION));
+        robot.localizer.setPose(new Pose2d(BlueBasketSpecimen.INITIAL_POSE_X, BlueBasketSpecimen.INITIAL_POSE_Y, BlueBasketSpecimen.INITIAL_ORIENTATION));
 
-        trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedChamber.INITIAL_POSE_X, RedChamber.INITIAL_POSE_Y, RedChamber.INITIAL_POSE_ORIENTATION)));
+        trajectoryBuilder = new BlueBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, new Pose2d(BlueBasketSpecimen.INITIAL_POSE_X, BlueBasketSpecimen.INITIAL_POSE_Y, BlueBasketSpecimen.INITIAL_ORIENTATION)));
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -49,7 +49,7 @@ public class RedChamberOpMode extends OpMode {
 
     @Override
     public void start() {
-        trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
+        trajectoryBuilder = new BlueBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         trajectory = trajectoryBuilder.getTrajectory();
         robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
