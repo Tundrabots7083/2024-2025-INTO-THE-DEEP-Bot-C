@@ -131,9 +131,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public boolean isAtTarget() {
         return robot.arm.isAtTarget()
-                && robot.linearSlide.isAtTarget()
-                && robot.wrist.isAtTarget()
-                && robot.claw.isAtTarget();
+                && robot.linearSlide.isAtTarget();
+                //&& robot.wrist.isAtTarget()
+                //&& robot.claw.isAtTarget();
     }
 
     /**

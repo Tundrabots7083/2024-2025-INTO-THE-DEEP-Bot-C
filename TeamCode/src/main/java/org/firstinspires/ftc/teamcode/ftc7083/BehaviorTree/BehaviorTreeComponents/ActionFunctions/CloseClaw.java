@@ -15,7 +15,7 @@ public class CloseClaw implements ActionFunction {
 
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
-    protected TelemetryPacket tp = new TelemetryPacket();
+    private TelemetryPacket tp = new TelemetryPacket();
 
     public CloseClaw (Telemetry telemetry,Robot robot) {
         this.robot = robot;
@@ -29,7 +29,9 @@ public class CloseClaw implements ActionFunction {
             return lastStatus;
         }
 
-        if (!robot.intakeAndScoringSubsystem.actionCloseClawWithWait().run(tp)) {
+        robot.intakeAndScoringSubsystem.actionCloseClaw().run(tp);
+
+        if (runCount > 40) {
             status = Status.SUCCESS;
         }
 

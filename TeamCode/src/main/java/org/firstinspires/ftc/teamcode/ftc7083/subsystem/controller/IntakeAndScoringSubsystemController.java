@@ -225,16 +225,20 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
-                /*case INTAKE_FAR_ABOVE_SAMPLE:
+                case INTAKE_FAR_ABOVE_SAMPLE:
                     Status result = this.WristOrientationBehaviorTreeRedSamples.tick();
                     while(result == Status.RUNNING) {
                         this.WristOrientationBehaviorTreeRedSamples.tick();
                     }
                     if (result == Status.FAILURE) {
+                        state = State.INTAKE_AUTO_GRAB_FAILED;
                         gamepad1.rumble(50);
+                    } else {
+                        state = State.INTAKE_AUTO_GRAB_CLOSED;
                     }
-                    break;*/
-                case INTAKE_FAR_ABOVE_SAMPLE:
+
+                    break;
+                case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
                     state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
                     break;
@@ -387,6 +391,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         INTAKE_FAR_ABOVE_SAMPLE,
         INTAKE_FAR_LOWERED_TO_SAMPLE,
         INTAKE_FAR_CLAW_CLOSED,
+        INTAKE_AUTO_GRAB_CLOSED,
+        INTAKE_AUTO_GRAB_FAILED,
         LOW_BASKET_RETRACTED,
         LOW_BASKET_SCORING,
         INTAKE_SPECIMEN_OFF_WALL,

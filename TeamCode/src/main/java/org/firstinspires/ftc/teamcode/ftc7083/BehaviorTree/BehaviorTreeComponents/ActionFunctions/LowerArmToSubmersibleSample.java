@@ -36,7 +36,7 @@ public class LowerArmToSubmersibleSample implements ActionFunction {
             return status;
         }
 
-        intakeAndScoringSubsystem.moveToPosition(xDistance,0.5);
+        intakeAndScoringSubsystem.moveToPosition(xDistance,1.3);
         intakeAndScoringSubsystem.execute();
 
         if(intakeAndScoringSubsystem.isAtTarget()) {

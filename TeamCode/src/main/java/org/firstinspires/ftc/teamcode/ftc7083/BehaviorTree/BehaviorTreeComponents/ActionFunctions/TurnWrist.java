@@ -39,7 +39,7 @@ public class TurnWrist implements ActionFunction  {
                 telemetry.update();
             }
 
-        if(runCount > 250) {
+        if(runCount > 50) {
             status = Status.SUCCESS;
         }
 

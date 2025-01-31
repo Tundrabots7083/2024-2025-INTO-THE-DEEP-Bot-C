@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponent
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.NavigateAndOrientToSample;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.OpenClaw;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.RaiseArmToNeutralPosition;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ResetWrist;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.TurnWrist;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.WristIntakePosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Action;
@@ -85,8 +86,16 @@ public class IntakeBlueSampleBehaviorTree {
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new WristIntakePosition(telemetry,wrist),telemetry),
                         new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
-                        new Action(new DetectSampleOrientation(telemetry, globalShutterCamera, AllianceColor.BLUE),telemetry),
-                        new Action(new TurnWrist(telemetry,wrist),telemetry),
+                        new Selector(
+                                Arrays.asList(
+                                        new Sequence(
+                                                Arrays.asList(
+                                                        new Action(new DetectSampleOrientation(telemetry, globalShutterCamera, AllianceColor.BLUE),telemetry),
+                                                        new Action(new TurnWrist(telemetry,wrist),telemetry)
+                                                ),telemetry
+                                        ),
+                                        new Action(new ResetWrist(telemetry,wrist),telemetry)
+                                ),telemetry),
                         new Action(new LowerArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new CloseClaw(telemetry,robot),telemetry),
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)

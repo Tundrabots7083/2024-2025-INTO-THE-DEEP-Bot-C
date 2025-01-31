@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponent
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BlackBoardSingleton;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 public class OpenClaw implements ActionFunction {
 
@@ -16,7 +15,9 @@ public class OpenClaw implements ActionFunction {
 
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
-    protected TelemetryPacket tp = new TelemetryPacket();
+    private TelemetryPacket tp = new TelemetryPacket();
+    private boolean running = true;
+
 
     public OpenClaw(Telemetry telemetry, Robot robot) {
         this.robot = robot;
@@ -26,12 +27,17 @@ public class OpenClaw implements ActionFunction {
     public Status perform(BlackBoardSingleton blackBoard) {
         Status status = Status.RUNNING;
 
+        if(runCount == 0) {
+            running = robot.claw.actionOpenClaw().run(tp);
+        }
+
+
         if(lastStatus == Status.SUCCESS){
             return lastStatus;
         }
 
 
-        if (!robot.claw.actionOpenClawWithWait().run(tp)) {
+        if (!running) {
             status = Status.SUCCESS;
         }
 

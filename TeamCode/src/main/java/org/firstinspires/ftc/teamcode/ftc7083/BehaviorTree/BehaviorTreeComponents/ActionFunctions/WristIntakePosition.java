@@ -28,7 +28,7 @@ public class WristIntakePosition implements ActionFunction  {
 
         wrist.setToIntakeSample();
 
-        if(runCount > 150) {
+        if(runCount > 40) {
             status = Status.SUCCESS;
         }
 
