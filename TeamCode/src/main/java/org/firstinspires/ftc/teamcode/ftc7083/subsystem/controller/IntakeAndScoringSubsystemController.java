@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeRedSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeRedSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
@@ -72,7 +73,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private State state = State.NEUTRAL_POSITION;
     private boolean clawOpen = false;
 
-    WristOrientationBehaviorTreeRedSamples WristOrientationBehaviorTreeRedSamples = null;
+    WristOrientationBehaviorTreeRedSamples wristOrientationBehaviorTreeRedSamples;
+    IntakeRedSampleBehaviorTree intakeRedSampleBehaviorTree;
 
     /**
      * Instantiate a scoring subsystem controller, which uses gamepad controls to control the
@@ -84,7 +86,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry, HardwareMap hardwareMap) {
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
-        this.WristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeRedSamples(hardwareMap,telemetry);
+        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeRedSamples(hardwareMap,telemetry);
+        this.intakeRedSampleBehaviorTree = new IntakeRedSampleBehaviorTree(hardwareMap, telemetry);
     }
 
     /**
@@ -226,9 +229,12 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
-                    Status result = this.WristOrientationBehaviorTreeRedSamples.tick();
+                    Status result = Status.RUNNING;
+                    if(gamepad1.touchpad){
+                        result = Status.FAILURE;
+                    }
                     while(result == Status.RUNNING) {
-                        this.WristOrientationBehaviorTreeRedSamples.tick();
+                       result = this.wristOrientationBehaviorTreeRedSamples.tick();
                     }
                     if (result == Status.FAILURE) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
@@ -236,7 +242,6 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     } else {
                         state = State.INTAKE_AUTO_GRAB_CLOSED;
                     }
-
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
@@ -245,6 +250,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case INTAKE_FAR_LOWERED_TO_SAMPLE:
                     intakeAndScoringSubsystem.closeClaw();
                     state = State.INTAKE_FAR_CLAW_CLOSED;
+                    break;
+                case INTAKE_AUTO_GRAB_CLOSED:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
                     break;
                 case INTAKE_FAR_CLAW_CLOSED:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
@@ -270,12 +279,31 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
+                    Status result = Status.RUNNING;
+                    if(gamepad1.touchpad){
+                        result = Status.FAILURE;
+                    }
+                    while(result == Status.RUNNING) {
+                        result = this.wristOrientationBehaviorTreeRedSamples.tick();
+                    }
+                    if (result == Status.FAILURE) {
+                        state = State.INTAKE_AUTO_GRAB_FAILED;
+                        gamepad1.rumble(50);
+                    } else {
+                        state = State.INTAKE_AUTO_GRAB_CLOSED;
+                    }
+                    break;
+                case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
                     state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     break;
                 case INTAKE_CLOSE_LOWERED_TO_SAMPLE:
                     intakeAndScoringSubsystem.closeClaw();
                     state = State.INTAKE_CLOSE_CLAW_CLOSED;
+                    break;
+                case INTAKE_AUTO_GRAB_CLOSED:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
                     break;
                 case INTAKE_CLOSE_CLAW_CLOSED:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
@@ -343,6 +371,31 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                     state = State.HIGH_BASKET_POST_SCORING;
+                    break;
+                default:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
+            }
+        } else if (gamepad1.start && ! previousGamepad1.start){
+            switch (state) {
+                case NEUTRAL_POSITION:
+                    Status result = Status.RUNNING;
+                    if(gamepad1.touchpad){
+                        result = Status.FAILURE;
+                    }
+                    while(result == Status.RUNNING) {
+                        result = this.intakeRedSampleBehaviorTree.tick();
+                    }
+                    if (result == Status.FAILURE) {
+                        state = State.INTAKE_AUTO_GRAB_FAILED;
+                        gamepad1.rumble(50);
+                    } else {
+                        state = State.NEUTRAL_POSITION;
+                    }
+                    break;
+                case INTAKE_AUTO_GRAB_FAILED:
+                    intakeAndScoringSubsystem.moveToNeutralPosition();
+                    state = State.NEUTRAL_POSITION;
                     break;
                 default:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
