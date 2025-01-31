@@ -140,7 +140,9 @@ public class LinearSlide extends SubsystemBase {
      * checks if the length is within the tolerable error and if it is then the motor will stop
      */
     public boolean isAtTarget() {
-        return atTargetCount >= AT_TARGET_COUNT;
+        boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        telemetry.addData("[Slide] atTarget", atTarget);
+        return atTarget;
     }
 
     /**

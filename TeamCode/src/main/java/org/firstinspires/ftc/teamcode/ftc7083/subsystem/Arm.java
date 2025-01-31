@@ -146,7 +146,9 @@ public class Arm extends SubsystemBase {
      * @return <code>true</code> if the arm is at the target angle; <code>false</code> otherwise.
      */
     public boolean isAtTarget() {
-        return atTargetCount >= AT_TARGET_COUNT;
+        boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        telemetry.addData("[Arm] atTarget", atTarget);
+        return atTarget;
     }
 
     /**

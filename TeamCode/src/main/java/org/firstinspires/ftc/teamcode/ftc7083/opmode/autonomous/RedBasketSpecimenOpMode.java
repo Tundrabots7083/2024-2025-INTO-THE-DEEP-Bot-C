@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasket;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasketSpecimen;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 import java.util.Arrays;
@@ -20,10 +20,10 @@ import java.util.List;
 /**
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
  */
-@Autonomous(name = "Red Basket", group = "Active", preselectTeleOp = "Primary TeleOp")
-public class RedBasketOpMode extends OpMode {
+@Autonomous(name = "Red Basket Specimen", group = "Active", preselectTeleOp = "Primary TeleOp")
+public class RedBasketSpecimenOpMode extends OpMode {
     private Robot robot;
-    private RedBasket trajectoryBuilder;
+    private RedBasketSpecimen trajectoryBuilder;
     private Action trajectory;
     private List<Subsystem> subsystems;
 
@@ -34,9 +34,9 @@ public class RedBasketOpMode extends OpMode {
 
         robot = Robot.init(hardwareMap, telemetry);
         subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
-        robot.localizer.setPose(new Pose2d(RedBasket.INITIAL_POSE_X, RedBasket.INITIAL_POSE_Y, RedBasket.INITIAL_HEADING));
+        robot.localizer.setPose(new Pose2d(RedBasketSpecimen.INITIAL_POSE_X, RedBasketSpecimen.INITIAL_POSE_Y, RedBasketSpecimen.INITIAL_HEADING));
 
-        trajectoryBuilder = new RedBasket(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedBasket.INITIAL_POSE_X, RedBasket.INITIAL_POSE_Y, RedBasket.INITIAL_HEADING)));
+        trajectoryBuilder = new RedBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, new Pose2d(RedBasketSpecimen.INITIAL_POSE_X, RedBasketSpecimen.INITIAL_POSE_Y, RedBasketSpecimen.INITIAL_HEADING)));
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -49,7 +49,7 @@ public class RedBasketOpMode extends OpMode {
 
     @Override
     public void start() {
-        trajectoryBuilder = new RedBasket(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
+        trajectoryBuilder = new RedBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         trajectory = trajectoryBuilder.getTrajectory();
         robot.intakeAndScoringSubsystem.moveToStartPosition();
     }
