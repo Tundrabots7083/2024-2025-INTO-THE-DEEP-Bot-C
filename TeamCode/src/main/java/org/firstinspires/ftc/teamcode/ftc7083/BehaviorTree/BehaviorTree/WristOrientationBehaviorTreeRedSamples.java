@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.AllianceColor;
-import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.CloseClaw;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectSampleOrientation;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.LowerArmToSubmersibleSample;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.RaiseArmToNeutralPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.TurnWrist;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Action;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BehaviorTree;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponent
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Node;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Sequence;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
@@ -42,17 +45,20 @@ public class WristOrientationBehaviorTreeRedSamples {
 
     private void Init() {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
-        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
-       this.wrist = new Wrist(hardwareMap, telemetry);
+        this.blackBoard.reset();
 
-
-        this.intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap,telemetry);
-       // robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
+        this.globalShutterCamera = robot.globalShutterCamera;
+        this.wrist = robot.wrist;
 
         this.root = new Sequence(
                 Arrays.asList(
-                        new Action(new DetectSampleOrientation(telemetry, globalShutterCamera, AllianceColor.RED),telemetry),
-                        new Action(new TurnWrist(telemetry,wrist),telemetry)
+                        new Action(new DetectSampleOrientation(telemetry, globalShutterCamera, AllianceColor.BLUE),telemetry),
+                        new Action(new TurnWrist(telemetry,wrist),telemetry),
+                        new Action(new LowerArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
+                        new Action(new CloseClaw(telemetry,robot),telemetry),
+                        new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)
                 ),telemetry);
 
         this.tree = new BehaviorTree(root, blackBoard);

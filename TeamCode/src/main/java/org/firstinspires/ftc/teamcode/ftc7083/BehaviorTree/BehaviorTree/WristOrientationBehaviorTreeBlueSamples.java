@@ -45,12 +45,12 @@ public class WristOrientationBehaviorTreeBlueSamples {
 
     private void Init() {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
-        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
-       this.wrist = new Wrist(hardwareMap, telemetry);
+        this.blackBoard.reset();
 
-
-        this.intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap,telemetry);
-       // robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
+        this.globalShutterCamera = robot.globalShutterCamera;
+        this.wrist = robot.wrist;
 
         this.root = new Sequence(
                 Arrays.asList(

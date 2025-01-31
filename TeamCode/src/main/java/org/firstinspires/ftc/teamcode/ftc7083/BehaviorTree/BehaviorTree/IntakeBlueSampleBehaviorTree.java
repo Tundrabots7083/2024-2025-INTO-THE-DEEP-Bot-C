@@ -60,14 +60,12 @@ public class IntakeBlueSampleBehaviorTree {
     private void Init() {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
         this.blackBoard.reset();
-        this.limelight = new Limelight(hardwareMap,telemetry);
-        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
 
-        telemetry.addLine("Before Robot");
-        telemetry.update();
         robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
         this.wrist = robot.wrist;
+        this.globalShutterCamera = robot.globalShutterCamera;
+        this.limelight = robot.limelight;
         telemetry.addLine("Got Past Robot");
         telemetry.update();
 

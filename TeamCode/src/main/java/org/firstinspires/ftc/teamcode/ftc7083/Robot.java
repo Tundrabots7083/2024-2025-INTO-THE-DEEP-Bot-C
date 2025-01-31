@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
@@ -129,6 +130,7 @@ public class Robot {
     public final Claw claw;
     public Limelight limelight;
     public final SparkFunOTOS otos;
+    public GlobalShutterCamera globalShutterCamera;
     //public final ColorSensor colorSensor;
 
     public List<Webcam> webcams;
@@ -166,7 +168,10 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
+        globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+        limelight = new Limelight(hardwareMap, telemetry);
         //colorSensor = new ColorSensor(hardwareMap, telemetry);
+
         if (USE_SPARKFUN_OTOS_CORRECTED) {
             otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
         } else {
@@ -180,7 +185,6 @@ public class Robot {
         if (USE_WEBCAMS) {
             int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
-            limelight = new Limelight(hardwareMap, telemetry);
 
             leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
             rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
