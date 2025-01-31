@@ -39,8 +39,8 @@ public class AprilTagLocalizer implements Localizer {
 
     private final ElapsedTime timer = new ElapsedTime();
     private final List<Webcam> webcams;
-    private Pose2d lastPose = null;
-    private Pose2d currentPose = null;
+    private Pose2d lastPose;
+    private Pose2d currentPose;
     private double elapsedTime = 0.0;
     private boolean aprilTagsDetected = false;
     private final Pose2DMovingAverageFilter poseFilter = new Pose2DMovingAverageFilter(MIN_NUM_SAMPLES, WINDOW_SIZE);
