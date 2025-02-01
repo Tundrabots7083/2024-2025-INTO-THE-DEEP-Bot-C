@@ -16,50 +16,50 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
 @Config
 public class BlueChamber {
     // Initial pose for the robot
-    public static double INITIAL_POSE_X = -RedChamber.INITIAL_POSE_X;
-    public static double INITIAL_POSE_Y = -RedChamber.INITIAL_POSE_Y;
-    public static double INITIAL_POSE_ORIENTATION = -RedChamber.INITIAL_POSE_ORIENTATION;
+    public static double INITIAL_POSE_X = 22.5;
+    public static double INITIAL_POSE_Y = -60.0;
+    public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring on the high chamber
-    public static double CHAMBER_PRELOAD_X = -RedChamber.CHAMBER_PRELOAD_X;
-    public static double CHAMBER_PRELOAD_Y = -RedChamber.CHAMBER_PRELOAD_Y;
-    public static double CHAMBER_PRELOAD_ORIENTATION = -RedChamber.CHAMBER_PRELOAD_ORIENTATION;
-    public static double CHAMBER_PRELOAD_SCORE_Y = -RedChamber.CHAMBER_PRELOAD_SCORE_Y;
+    public static double CHAMBER_PRELOAD_X = 5.5;
+    public static double CHAMBER_PRELOAD_Y = -42;
+    public static double CHAMBER_PRELOAD_ORIENTATION = 95;
+    public static double CHAMBER_PRELOAD_SCORE_Y = -42; // CHAMBER_PRELOAD_Y + 5.5;
 
     // Positions for being between the chamber and the spike marks
-    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = -RedChamber.SPIKE_MARK_1_SIDE_OF_CHAMBER_X;
-    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_Y = -RedChamber.SPIKE_MARK_1_SIDE_OF_CHAMBER_Y;
-    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION = -RedChamber.SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION;
+    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
+    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_Y = -44.5;
+    public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_ORIENTATION = 95;
 
     // Positions for spike mark 1
-    public static double SPIKE_MARK_1_Y = -RedChamber.SPIKE_MARK_1_Y;
-    public static double SPIKE_MARK_1_X = -RedChamber.SPIKE_MARK_1_X;
-    public static double SPIKE_MARK_1_OBSERVATION_ZONE_Y = -RedChamber.SPIKE_MARK_1_OBSERVATION_ZONE_Y;
+    public static double SPIKE_MARK_1_Y = SPIKE_MARK_1_SIDE_OF_CHAMBER_Y + 10.0;
+    public static double SPIKE_MARK_1_X = SPIKE_MARK_1_SIDE_OF_CHAMBER_X + 5.0;
+    public static double SPIKE_MARK_1_OBSERVATION_ZONE_Y = SPIKE_MARK_1_Y - 20.0;
 
     // Positions for spike mark 2
-    public static double SPIKE_MARK_2_Y = -RedChamber.SPIKE_MARK_2_Y;
-    public static double SPIKE_MARK_2_X = -RedChamber.SPIKE_MARK_2_X;
-    public static double SPIKE_MARK_2_OBSERVATION_ZONE_Y = -RedChamber.SPIKE_MARK_2_OBSERVATION_ZONE_Y;
+    public static double SPIKE_MARK_2_Y = SPIKE_MARK_1_Y;
+    public static double SPIKE_MARK_2_X = SPIKE_MARK_1_X + 5.0;
+    public static double SPIKE_MARK_2_OBSERVATION_ZONE_Y = SPIKE_MARK_1_OBSERVATION_ZONE_Y;
 
     // Positions for spike mark 3
-    public static double SPIKE_MARK_3_Y = -RedChamber.SPIKE_MARK_3_Y;
-    public static double SPIKE_MARK_3_X = -RedChamber.SPIKE_MARK_3_X;
-    public static double SPIKE_MARK_3_OBSERVATION_ZONE_Y = -RedChamber.SPIKE_MARK_3_OBSERVATION_ZONE_Y;
+    public static double SPIKE_MARK_3_Y = SPIKE_MARK_1_Y;
+    public static double SPIKE_MARK_3_X = SPIKE_MARK_1_X + 5.0;
+    public static double SPIKE_MARK_3_OBSERVATION_ZONE_Y = SPIKE_MARK_1_OBSERVATION_ZONE_Y;
 
     // Pickup specimen from wall
-    public static double INTAKE_SPECIMEN_X = -RedChamber.INTAKE_SPECIMEN_X;
-    public static double INTAKE_SPECIMEN_Y = -RedChamber.INTAKE_SPECIMEN_Y;
+    public static double INTAKE_SPECIMEN_X = 47;
+    public static double INTAKE_SPECIMEN_Y = -50;
 
     // Position for scoring on the high chamber
-    public static double CHAMBER_SPECIMEN_1_X = -RedChamber.CHAMBER_SPECIMEN_1_X;
-    public static double CHAMBER_SPECIMEN_1_Y = -RedChamber.CHAMBER_SPECIMEN_1_Y;
-    public static double CHAMBER_SPECIMEN_1_ORIENTATION = -RedChamber.CHAMBER_SPECIMEN_1_ORIENTATION;
-    public static double CHAMBER_SPECIMEN_1_SCORE_Y = -RedChamber.CHAMBER_SPECIMEN_1_SCORE_Y;
+    public static double CHAMBER_SPECIMEN_1_X = CHAMBER_PRELOAD_X;
+    public static double CHAMBER_SPECIMEN_1_Y = CHAMBER_PRELOAD_Y;
+    public static double CHAMBER_SPECIMEN_1_ORIENTATION = CHAMBER_PRELOAD_ORIENTATION;
+    public static double CHAMBER_SPECIMEN_1_SCORE_Y = CHAMBER_SPECIMEN_1_Y + 6.5;
 
     // Park in the observation zone
-    public static double PARK_X = -RedChamber.PARK_X;
-    public static double PARK_Y = -RedChamber.PARK_Y;
-    public static double PARK_ORIENTATION = -RedChamber.PARK_ORIENTATION;
+    public static double PARK_X = 55;
+    public static double PARK_Y = -54;
+    public static double PARK_ORIENTATION = 120;
 
     private final TrajectoryActionBuilder actionBuilder;
 
