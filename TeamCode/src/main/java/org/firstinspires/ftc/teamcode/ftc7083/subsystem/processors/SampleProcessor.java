@@ -13,7 +13,7 @@ public class SampleProcessor {
 
     public Double execute(List<ColorBlobLocatorProcessorEx.Blob> blobs) {
 
-        ColorBlobLocatorProcessorEx.Util.filterByArea(20000, 600000, blobs);  // filter out very small blobs.
+        ColorBlobLocatorProcessorEx.Util.filterByArea(20000, 2300000, blobs);  // filter out very small blobs.
         ColorBlobLocatorProcessorEx.Util.filterByAspectRatio(2.0,2.66,blobs);
 
         Double angle = null;

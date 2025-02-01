@@ -61,7 +61,7 @@ public class IntakeSampleBehaviorTree {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
         this.blackBoard.reset();
 
-        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        robot = Robot.getInstance();
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
         this.wrist = robot.wrist;
         this.globalShutterCamera = robot.globalShutterCamera;
@@ -105,15 +105,15 @@ public class IntakeSampleBehaviorTree {
     public Status tick() {
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
-        List<LynxModule> allHubs;
+        /*List<LynxModule> allHubs;
 
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs) {
             hub.clearBulkCache();
-        }
+        }*/
         // Run the behavior tree
         Status result = tree.tick();
-        intakeAndScoringSubsystem.execute();
+        //intakeAndScoringSubsystem.execute();
         telemetry.addData("IntakeSample", "Run - Behavior tree result: %s",result);
         telemetry.update();
 

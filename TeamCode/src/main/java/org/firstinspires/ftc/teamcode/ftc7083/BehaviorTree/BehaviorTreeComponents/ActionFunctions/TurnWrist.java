@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.ActionFunction;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BlackBoardSingleton;
@@ -10,6 +12,7 @@ public class TurnWrist implements ActionFunction  {
    // IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     Wrist wrist;
     Telemetry telemetry;
+    ElapsedTime time = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
@@ -22,6 +25,7 @@ public class TurnWrist implements ActionFunction  {
     public TurnWrist (Telemetry telemetry,Wrist wrist) {
         this.wrist =wrist;
         this.telemetry = telemetry;
+        this.time.reset();
     }
 
     public Status perform(BlackBoardSingleton blackBoard) {
@@ -39,7 +43,7 @@ public class TurnWrist implements ActionFunction  {
                 telemetry.update();
             }
 
-        if(runCount > 50) {
+        if(time.time() >= 100) {
             status = Status.SUCCESS;
         }
 

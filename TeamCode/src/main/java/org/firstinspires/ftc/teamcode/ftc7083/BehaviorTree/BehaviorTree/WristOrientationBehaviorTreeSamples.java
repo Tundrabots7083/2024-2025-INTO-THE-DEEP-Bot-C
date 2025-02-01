@@ -47,7 +47,7 @@ public class WristOrientationBehaviorTreeSamples {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
         this.blackBoard.reset();
 
-        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        robot = Robot.getInstance();
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
         this.globalShutterCamera = robot.globalShutterCamera;
         this.wrist = robot.wrist;
@@ -55,10 +55,10 @@ public class WristOrientationBehaviorTreeSamples {
         this.root = new Sequence(
                 Arrays.asList(
                         new Action(new DetectSampleOrientation(telemetry, globalShutterCamera),telemetry),
-                        new Action(new TurnWrist(telemetry,wrist),telemetry),
-                        new Action(new LowerArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
+                        new Action(new TurnWrist(telemetry,wrist),telemetry)//,
+                        /*new Action(new LowerArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new CloseClaw(telemetry,robot),telemetry),
-                        new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)
+                        new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)*/
                 ),telemetry);
 
         this.tree = new BehaviorTree(root, blackBoard);
@@ -67,15 +67,15 @@ public class WristOrientationBehaviorTreeSamples {
     public Status tick() {
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
-        List<LynxModule> allHubs;
+        /*List<LynxModule> allHubs;
 
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs) {
             hub.clearBulkCache();
-        }
+        }*/
         // Run the behavior tree
         Status result = tree.tick();
-       // intakeAndScoringSubsystem.execute();
+        //intakeAndScoringSubsystem.execute();
         telemetry.addData("Wrist Orientation", "Run - Behavior tree result: %s",result);
         telemetry.update();
 

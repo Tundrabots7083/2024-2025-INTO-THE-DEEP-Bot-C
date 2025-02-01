@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
@@ -73,8 +74,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private State state = State.NEUTRAL_POSITION;
     private boolean clawOpen = false;
 
+    private HardwareMap hardwareMap;
+
     WristOrientationBehaviorTreeSamples wristOrientationBehaviorTreeRedSamples;
-    //IntakeRedSpecimenBehaviorTree intakeRedSpecimenBehaviorTree;
     IntakeSampleBehaviorTree intakeSampleBehaviorTree;
 
     /**
@@ -85,11 +87,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      * @param telemetry                 the telemetry used to provide user output on the driver station and FTC dashboard
      */
     public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry, HardwareMap hardwareMap) {
+        this.hardwareMap = hardwareMap;
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
-        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
         //this.intakeRedSpecimenBehaviorTree = new IntakeRedSpecimenBehaviorTree(hardwareMap, telemetry);
-        this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
     }
 
     /**
@@ -232,9 +233,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
                     Status result = Status.RUNNING;
-                    if(gamepad1.touchpad){
-                        result = Status.FAILURE;
-                    }
+                    this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
                     while(result == Status.RUNNING) {
                        result = this.wristOrientationBehaviorTreeRedSamples.tick();
                     }
@@ -242,20 +241,20 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                         state = State.INTAKE_AUTO_GRAB_FAILED;
                         gamepad1.rumble(1000);
                     } else {
-                        state = State.INTAKE_AUTO_GRAB_CLOSED;
+                        state = State.INTAKE_AUTO_ORIENTED;
                     }
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
                     state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
                     break;
+                case INTAKE_AUTO_ORIENTED:
+                    intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+                    state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
+                    break;
                 case INTAKE_FAR_LOWERED_TO_SAMPLE:
                     intakeAndScoringSubsystem.closeClaw();
                     state = State.INTAKE_FAR_CLAW_CLOSED;
-                    break;
-                case INTAKE_AUTO_GRAB_CLOSED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
                     break;
                 case INTAKE_FAR_CLAW_CLOSED:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
@@ -282,9 +281,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
                     Status result = Status.RUNNING;
-                    if(gamepad1.touchpad){
-                        result = Status.FAILURE;
-                    }
+                    this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
                     while(result == Status.RUNNING) {
                         result = this.wristOrientationBehaviorTreeRedSamples.tick();
                     }
@@ -292,7 +289,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                         state = State.INTAKE_AUTO_GRAB_FAILED;
                         gamepad1.rumble(1000);
                     } else {
-                        state = State.INTAKE_AUTO_GRAB_CLOSED;
+                        state = State.INTAKE_AUTO_ORIENTED;
                     }
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
@@ -303,9 +300,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.closeClaw();
                     state = State.INTAKE_CLOSE_CLAW_CLOSED;
                     break;
-                case INTAKE_AUTO_GRAB_CLOSED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                case INTAKE_AUTO_ORIENTED:
+                    intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                    state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     break;
                 case INTAKE_CLOSE_CLAW_CLOSED:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
@@ -378,10 +375,11 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        } else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
+        } /*else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
             switch (state) {
                 case NEUTRAL_POSITION:
                     Status result = Status.RUNNING;
+                    this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
                     while(result == Status.RUNNING) {
                         result = this.intakeSampleBehaviorTree.tick();
                     }
@@ -400,7 +398,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        }
+        }*/
 
         // Open and close the claw; used for acquiring samples/specimens and scoring
         // or depositing them
@@ -443,7 +441,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         INTAKE_FAR_ABOVE_SAMPLE,
         INTAKE_FAR_LOWERED_TO_SAMPLE,
         INTAKE_FAR_CLAW_CLOSED,
-        INTAKE_AUTO_GRAB_CLOSED,
+        INTAKE_AUTO_ORIENTED,
         INTAKE_AUTO_GRAB_FAILED,
         LOW_BASKET_RETRACTED,
         LOW_BASKET_SCORING,

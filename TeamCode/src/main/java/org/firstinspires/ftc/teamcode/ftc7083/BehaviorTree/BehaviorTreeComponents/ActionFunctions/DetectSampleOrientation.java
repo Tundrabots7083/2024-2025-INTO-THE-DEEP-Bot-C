@@ -11,13 +11,14 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.processors.SampleProcess
 public class DetectSampleOrientation implements ActionFunction {
     GlobalShutterCamera globalShutterCamera;
     private Telemetry telemetry;
-    private int count=0;
+    private int count;
     protected Status lastStatus = Status.FAILURE;
     private SampleProcessor sampleProcessor = new SampleProcessor();;
 
     public DetectSampleOrientation(Telemetry telemetry, GlobalShutterCamera globalShutterCamera) {
         this.globalShutterCamera = globalShutterCamera;
         this.telemetry = telemetry;
+        this.count = 0;
 
     }
 
@@ -80,7 +81,7 @@ public class DetectSampleOrientation implements ActionFunction {
             telemetry.addData("[DetectSampleOrientation]", "Didn't detect anything");
             telemetry.update();
 
-            if (count >= 50) {
+            if (count >= 75) {
                 status = Status.FAILURE;
             } else {
                 status = Status.RUNNING;
