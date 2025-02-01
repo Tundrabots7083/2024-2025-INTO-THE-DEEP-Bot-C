@@ -482,6 +482,15 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      *
      * @return an action to move the scoring subsystem to the start position.
      */
+    public ActionEx actionRetractLinearSlide() {
+        return new RetractLinearSlide(this);
+    }
+
+    /**
+     * Gets an action to move the scoring subsystem to the start position.
+     *
+     * @return an action to move the scoring subsystem to the start position.
+     */
     public ActionEx actionMoveToStartPosition() {
         return new MoveToStartPosition(this);
     }
@@ -663,6 +672,26 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
          */
         public void initialize() {
             intakeAndScoringSubsystem.moveToPosition(x, y);
+        }
+    }
+
+    /**
+     * An action to move the intake and scoring subsystem's arm to the start position.
+     */
+    public static class RetractLinearSlide extends MoveToActionBase {
+        /**
+         * Instantiates an action to move the intake and scoring subsystem's arm to the start position.
+         *
+         * @param intakeAndScoringSubsystem the intake and scoring subsystem
+         */
+        public RetractLinearSlide(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
+            super(intakeAndScoringSubsystem);
+        }
+
+        @Override
+        public void initialize() {
+            intakeAndScoringSubsystem.targetX = IntakeAndScoringSubsystem.ARM_LENGTH;
+            intakeAndScoringSubsystem.setSlideLength();
         }
     }
 

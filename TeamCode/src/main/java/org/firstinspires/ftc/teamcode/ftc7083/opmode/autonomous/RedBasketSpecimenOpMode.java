@@ -10,7 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
+import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasketSpecimen;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
@@ -24,6 +26,9 @@ import java.util.List;
 @Autonomous(name = "Red Basket Specimen", group = "red extended", preselectTeleOp = "Primary TeleOp")
 @Disabled
 public class RedBasketSpecimenOpMode extends OpMode {
+    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 27500;
+    public static int RETRACT_SLIDE_TIMEOUT = 1000;
+
     private Robot robot;
     private RedBasketSpecimen trajectoryBuilder;
     private Action trajectory;
@@ -58,7 +63,7 @@ public class RedBasketSpecimenOpMode extends OpMode {
 
     @Override
     public void loop() {
-        Action autonomousActions = new ParallelAction(
+        ActionEx autonomousActions = new ParallelAction(
                 (telemetryPacket) -> { // Update all subsystems
                     for (Subsystem subsystem : subsystems) {
                         subsystem.execute();
@@ -68,6 +73,11 @@ public class RedBasketSpecimenOpMode extends OpMode {
                 },
                 trajectory
         );
-        Actions.runBlocking(autonomousActions);
+        Action opmodeActions = new SequentialAction(
+                autonomousActions.withTimeout(AUTONOMOUS_ACTIONS_TIMEOUT),
+                robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
+                robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
+        );
+        Actions.runBlocking(opmodeActions);
     }
 }
