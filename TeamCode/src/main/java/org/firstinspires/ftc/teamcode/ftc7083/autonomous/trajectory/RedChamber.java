@@ -24,7 +24,7 @@ public class RedChamber {
     public static double CHAMBER_PRELOAD_X = 5.5;
     public static double CHAMBER_PRELOAD_Y = -42;
     public static double CHAMBER_PRELOAD_ORIENTATION = 95;
-    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 7.0;
+    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 4.0;
 
     // Positions for being between the chamber and the spike marks
     public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
