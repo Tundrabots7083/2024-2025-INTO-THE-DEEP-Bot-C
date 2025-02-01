@@ -690,9 +690,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            double x = intakeAndScoringSubsystem.targetX;
-            double y = ARM_HEIGHT;
-            intakeAndScoringSubsystem.moveToPosition(x, y);
+            intakeAndScoringSubsystem.targetX = IntakeAndScoringSubsystem.ARM_LENGTH;
+            intakeAndScoringSubsystem.setSlideLength();
         }
     }
 
