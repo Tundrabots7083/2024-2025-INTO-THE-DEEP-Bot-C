@@ -29,7 +29,7 @@ public class Claw extends SubsystemBase {
     public static long CLAW_SERVO_TIME = 400; // milliseconds
 
     // Make default open/close degrees settable by FTC dashboard
-    public static double CLOSE_DEGREE_OFFSET = 226;
+    public static double CLOSE_DEGREE_OFFSET = 175;
     public static double DEFAULT_CLOSE_DEGREES = 14;
     public static double DEFAULT_OPEN_DEGREES = 55;
 

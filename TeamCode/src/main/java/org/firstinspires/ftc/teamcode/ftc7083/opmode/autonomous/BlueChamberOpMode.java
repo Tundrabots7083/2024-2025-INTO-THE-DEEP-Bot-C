@@ -78,6 +78,6 @@ public class BlueChamberOpMode extends OpMode {
                 robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
                 robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
         );
-        Actions.runBlocking(opmodeActions);
+        Actions.runBlocking(autonomousActions);
     }
 }

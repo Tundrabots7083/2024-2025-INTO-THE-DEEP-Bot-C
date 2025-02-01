@@ -27,7 +27,7 @@ public class RedBasketSample {
 
     // Intake positions for spike mark 1
     public static double YELLOW_SPIKE_MARK_1_X = -57.5;
-    public static double YELLOW_SPIKE_MARK_1_Y = -52.5;
+    public static double YELLOW_SPIKE_MARK_1_Y = -50.5;
     public static double YELLOW_SPIKE_MARK_1_ORIENTATION = 108;
 
     // Position for scoring in the high basket
@@ -37,7 +37,7 @@ public class RedBasketSample {
 
     // Intake positions for spike mark 2
     public static double YELLOW_SPIKE_MARK_2_X = -67.5;
-    public static double YELLOW_SPIKE_MARK_2_Y = -55.5;
+    public static double YELLOW_SPIKE_MARK_2_Y = -53.5;
     public static double YELLOW_SPIKE_MARK_2_ORIENTATION = 110;
 
     // Position for scoring in the high basket

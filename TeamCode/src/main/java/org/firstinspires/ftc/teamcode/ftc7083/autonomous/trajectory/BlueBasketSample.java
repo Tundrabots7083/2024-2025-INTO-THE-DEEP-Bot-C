@@ -37,12 +37,12 @@ public class BlueBasketSample {
 
     // Intake positions for spike mark 2
     public static double YELLOW_SPIKE_MARK_2_X = -63.25;
-    public static double YELLOW_SPIKE_MARK_2_Y = -51.5;
+    public static double YELLOW_SPIKE_MARK_2_Y = -49.5;
     public static double YELLOW_SPIKE_MARK_2_ORIENTATION = 110;
 
     // Position for scoring in the high basket
     public static double BASKET_HIGH_SPECIMEN_2_X = -59.0;
-    public static double BASKET_HIGH_SPECIMEN_2_Y = -58.0;;
+    public static double BASKET_HIGH_SPECIMEN_2_Y = -55.0;;
     public static double BASKET_HIGH_SPECIMEN_2_ORIENTATION = 65;
 
     private final TrajectoryActionBuilder actionBuilder;
