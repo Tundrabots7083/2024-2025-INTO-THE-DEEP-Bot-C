@@ -33,12 +33,12 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double MAX_ARM_LENGTH = 43.5;
 
     // Arm Movement Constants
-    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.5;
+    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 4.5;
     public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;
 
     // Intake constants
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
-    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.0;
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.5;
     public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;
     public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
@@ -131,9 +131,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public boolean isAtTarget() {
         return robot.arm.isAtTarget()
-                && robot.linearSlide.isAtTarget()
-                && robot.wrist.isAtTarget()
-                && robot.claw.isAtTarget();
+                && robot.linearSlide.isAtTarget();
+                //&& robot.wrist.isAtTarget()
+                //&& robot.claw.isAtTarget();
     }
 
     /**
@@ -182,6 +182,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         double slideLength = Math.hypot(targetX, adjustedY) - ARM_LENGTH;
         telemetry.addData("[IAS] slide length", slideLength);
         robot.linearSlide.setLength(slideLength);
+    }
+
+    /**
+     * Set the wrist roll servo position in degrees.
+     * @param targetAngle
+     */
+    public void setWristRoll(double targetAngle) {
+        robot.wrist.setRollDegrees(targetAngle);
     }
 
     /**

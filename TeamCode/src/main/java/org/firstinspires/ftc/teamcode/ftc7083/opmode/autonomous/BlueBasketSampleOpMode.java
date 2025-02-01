@@ -37,7 +37,10 @@ public class BlueBasketSampleOpMode extends OpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
+
         robot = Robot.init(hardwareMap, telemetry);
+
         subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(new Pose2d(BlueBasketSample.INITIAL_POSE_X, BlueBasketSample.INITIAL_POSE_Y, BlueBasketSample.INITIAL_ORIENTATION));
 

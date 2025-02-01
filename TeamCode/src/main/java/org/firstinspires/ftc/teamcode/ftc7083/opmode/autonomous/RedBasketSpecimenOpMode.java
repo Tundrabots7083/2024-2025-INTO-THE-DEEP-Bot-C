@@ -39,6 +39,8 @@ public class RedBasketSpecimenOpMode extends OpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
+
         robot = Robot.init(hardwareMap, telemetry);
         subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(new Pose2d(RedBasketSpecimen.INITIAL_POSE_X, RedBasketSpecimen.INITIAL_POSE_Y, RedBasketSpecimen.INITIAL_ORIENTATION));

@@ -31,7 +31,7 @@ public class LimelightOrientTest  extends OpMode {
     @Override
     public void loop() {
 
-        double xDistance = (double) limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE) - 4.5;
+        double xDistance = limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE);
         //double drivePower = limelight.positionBot();
 
         telemetry.addData("Distance to Target:",xDistance);

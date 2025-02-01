@@ -86,7 +86,7 @@ public class Wrist extends SubsystemBase {
      */
     public void setToIntakeSample() {
         setPitchDegrees(INTAKE_SAMPLE_PITCH);
-        setRollDegrees(INTAKE_SAMPLE_ROLL);
+        //setRollDegrees(INTAKE_SAMPLE_ROLL);
     }
 
     /**

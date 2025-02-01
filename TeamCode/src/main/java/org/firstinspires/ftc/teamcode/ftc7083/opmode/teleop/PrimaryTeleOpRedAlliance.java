@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.IntakeAndScoringSubsystemController;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller.SubsystemController;
@@ -24,8 +23,8 @@ import java.util.Collection;
  * Main OpMode used by a driver for the OUT_OF_THE_BLUE game.
  */
 @Config
-@TeleOp(name = "Primary TeleOp", group = "Active")
-public class PrimaryTeleOp extends OpMode {
+@TeleOp(name = "[Red Alliance] Primary TeleOp", group = "Active")
+public class PrimaryTeleOpRedAlliance extends OpMode {
     public static boolean RAN_AUTONOMOUS = false;
     private final Gamepad currentGamepad1 = new Gamepad();
     private final Gamepad currentGamepad2 = new Gamepad();
@@ -39,7 +38,7 @@ public class PrimaryTeleOp extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         robot = Robot.init(hardwareMap, telemetry);
-        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.YELLOW;
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
 
         MecanumDriveController mecanumDriveController = new MecanumDriveController(robot.mecanumDrive, telemetry);
         IntakeAndScoringSubsystemController intakeAndScoringSubsystemController = new IntakeAndScoringSubsystemController(robot.intakeAndScoringSubsystem, telemetry, hardwareMap);

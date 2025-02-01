@@ -25,13 +25,13 @@ public class LinearSlide extends SubsystemBase {
 
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
 
-    public static double KP = 0.3;
+    public static double KP = 0.4;
     public static double KI = 0.4;
     public static double KD = 0.05;
     public static double KG = 0.3;
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 0.75; // inches
+    public static double TOLERABLE_ERROR = 1.5; // inches
     public static int AT_TARGET_COUNT = 5;
 
     public static double MIN_EXTENSION_LENGTH = 0.25;

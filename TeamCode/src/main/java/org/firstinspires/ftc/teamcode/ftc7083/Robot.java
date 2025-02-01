@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
@@ -116,6 +117,8 @@ public class Robot {
 
     private static Robot robot = null;
 
+    public static SampleIntakeColor INTAKE_COLOR = SampleIntakeColor.YELLOW;
+
     public final Telemetry telemetry;
 
     // Subsystems and hardware
@@ -129,7 +132,8 @@ public class Robot {
     public final Claw claw;
     public Limelight limelight;
     public final SparkFunOTOS otos;
-    public final ColorSensor colorSensor;
+    public GlobalShutterCamera globalShutterCamera;
+    //public final ColorSensor colorSensor;
 
     public List<Webcam> webcams;
 
@@ -158,7 +162,6 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
@@ -167,17 +170,23 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        colorSensor = new ColorSensor(hardwareMap, telemetry);
+        globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+        limelight = new Limelight(hardwareMap, telemetry);
+        //colorSensor = new ColorSensor(hardwareMap, telemetry);
+
         if (USE_SPARKFUN_OTOS_CORRECTED) {
             otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
         } else {
             otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         }
+        telemetry.addLine("Up to OTOS");
+        telemetry.update();
         calibrateOTOS();
 
         // Use a localizer with the OTOS and webcams, or just the OTOS
-        if (USE_WEBCAMS) {
-            limelight = new Limelight(hardwareMap, telemetry);
+        /*if (USE_WEBCAMS) {
+            int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+
 
             leftWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.LEFT, viewIds[0]);
             rightWebcam = new Webcam(hardwareMap, telemetry, Webcam.Location.RIGHT, viewIds[1]);
@@ -196,9 +205,10 @@ public class Robot {
                 }
             }
         } else {
-            localizer = new SparkFunOTOSLocalizer(otos);
-        }
 
+        }*/
+
+        localizer = new SparkFunOTOSLocalizer(otos);
         this.telemetry.addLine("[Robot] initialized");
     }
 
@@ -339,5 +349,12 @@ public class Robot {
          * Autonomous OpMode
          */
         AUTO
+    }
+
+    // Enum to specify color for intake
+    public enum SampleIntakeColor {
+        RED,
+        BLUE,
+        YELLOW
     }
 }

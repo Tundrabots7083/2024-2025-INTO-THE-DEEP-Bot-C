@@ -28,7 +28,7 @@ public class LimelightCalibrate  extends OpMode {
     @Override
     public void loop() {
 
-        double xDistance = (double) limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE) - 4.5;
+        Double xDistance = limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE);
 
         telemetry.addData("Distance to Target:",xDistance);
         telemetry.update();
