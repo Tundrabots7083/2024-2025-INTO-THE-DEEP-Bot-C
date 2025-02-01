@@ -21,10 +21,10 @@ public class RedChamber {
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring on the high chamber
-    public static double CHAMBER_PRELOAD_X = 6.5;
-    public static double CHAMBER_PRELOAD_Y = -43;
+    public static double CHAMBER_PRELOAD_X = 5.5;
+    public static double CHAMBER_PRELOAD_Y = -42;
     public static double CHAMBER_PRELOAD_ORIENTATION = 95;
-    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 6.5;
+    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 5.5;
 
     // Positions for being between the chamber and the spike marks
     public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
@@ -58,7 +58,7 @@ public class RedChamber {
 
     // Park in the observation zone
     public static double PARK_X = 55;
-    public static double PARK_Y = -43;
+    public static double PARK_Y = -54;
     public static double PARK_ORIENTATION = 120;
 
     private final TrajectoryActionBuilder actionBuilder;

@@ -44,7 +44,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;
-    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
+    public static double INTAKE_CLOSE_LOWERED_Y = 2.0; // INTAKE_HEIGHT_LOWERED - 0.5; (TODO: change)
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;
