@@ -13,6 +13,7 @@ public class DetectSampleOrientation implements ActionFunction {
     private Telemetry telemetry;
     private int count=0;
     protected Status lastStatus = Status.FAILURE;
+    private SampleProcessor sampleProcessor = new SampleProcessor();;
 
     public DetectSampleOrientation(Telemetry telemetry, GlobalShutterCamera globalShutterCamera) {
         this.globalShutterCamera = globalShutterCamera;
@@ -31,24 +32,49 @@ public class DetectSampleOrientation implements ActionFunction {
         telemetry.update();
         count++;
 
-        SampleProcessor sampleProcessor = new SampleProcessor();
+        Double blueAngle = null;
+        Double redAngle = null;
+
          Double yellowAngle = sampleProcessor.execute(globalShutterCamera.getYellowDetections());
          telemetry.addData("Yellow Angle", yellowAngle);
 
-         if(Robot.INTAKE_COLOR == Robot.SampleIntakeColor.BLUE) {
-             Double blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
-             telemetry.addData("Blue Angle", blueAngle);
-         } else {
-             Double redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
-             telemetry.addData("Red Angle", redAngle);
+         switch (Robot.INTAKE_COLOR) {
+             case BLUE:
+                 blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
+                 telemetry.addData("Blue Angle", blueAngle);
+                 break;
+             case RED:
+                 redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
+                 telemetry.addData("Red Angle", redAngle);
+                 break;
+             case YELLOW:
+                 blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
+                 telemetry.addData("Blue Angle", blueAngle);
+                 redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
+                 telemetry.addData("Red Angle", redAngle);
+                 break;
+             default:
+                 telemetry.addLine("[DetectSampleOrientation] No Sample Intake Color Set");
          }
+
+         telemetry.update();
 
         if (yellowAngle != null) {
             yellowAngle -= 90;
             blackBoard.setValue("SampleAngle", yellowAngle);
-            status = Status.SUCCESS;
-
-        } else {
+            lastStatus = Status.SUCCESS;
+            return lastStatus;
+        } else if (blueAngle != null) {
+            blueAngle -= 90;
+            blackBoard.setValue("SampleAngle", blueAngle);
+            lastStatus = Status.SUCCESS;
+            return lastStatus;
+        } else if (redAngle != null) {
+            redAngle -= 90;
+            blackBoard.setValue("SampleAngle", redAngle);
+            lastStatus = Status.SUCCESS;
+            return lastStatus;
+        }  else {
             blackBoard.setValue("SampleAngle", null);
 
             telemetry.addData("[DetectSampleOrientation]", "Didn't detect anything");

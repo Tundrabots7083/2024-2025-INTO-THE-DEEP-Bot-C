@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 
 @Autonomous(name = "Wrist Orientation BT", group = "Test")
 public class WristOrientationTest extends LinearOpMode {
@@ -47,5 +48,6 @@ public class WristOrientationTest extends LinearOpMode {
 
     private void initialize(){
         this.behaviorTree = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.YELLOW;
     }
 }

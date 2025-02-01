@@ -86,12 +86,13 @@ public class GlobalShutterCamera extends SubsystemBase {
                     .setCamera(webcam)
                     .setCameraResolution(RESOLUTION_1920x1200)
                     .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                    .addProcessors(yellowColorLocator/*, blueColorLocator, redColorLocator*/)
+                    .addProcessors(yellowColorLocator, blueColorLocator, redColorLocator)
+                    .setLiveViewContainerId(2)
                     .build();
 
             // Stopping the LiveView is recommended during competition to save CPU resources when
             // a LiveView is not required for debugging purposes.
-             visionPortal.stopLiveView();
+            visionPortal.stopLiveView();
         }
 
         /**

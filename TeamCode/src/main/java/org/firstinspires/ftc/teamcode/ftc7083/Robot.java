@@ -184,7 +184,7 @@ public class Robot {
         calibrateOTOS();
 
         // Use a localizer with the OTOS and webcams, or just the OTOS
-        if (USE_WEBCAMS) {
+        /*if (USE_WEBCAMS) {
             int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
 
@@ -205,9 +205,10 @@ public class Robot {
                 }
             }
         } else {
-            localizer = new SparkFunOTOSLocalizer(otos);
-        }
 
+        }*/
+
+        localizer = new SparkFunOTOSLocalizer(otos);
         this.telemetry.addLine("[Robot] initialized");
     }
 

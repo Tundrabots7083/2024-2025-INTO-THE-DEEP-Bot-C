@@ -74,7 +74,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private boolean clawOpen = false;
 
     WristOrientationBehaviorTreeSamples wristOrientationBehaviorTreeRedSamples;
-    IntakeSampleBehaviorTree intakeRedSampleBehaviorTree;
+    //IntakeRedSpecimenBehaviorTree intakeRedSpecimenBehaviorTree;
+    IntakeSampleBehaviorTree intakeSampleBehaviorTree;
 
     /**
      * Instantiate a scoring subsystem controller, which uses gamepad controls to control the
@@ -87,7 +88,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
         this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
-        this.intakeRedSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap, telemetry);
+        //this.intakeRedSpecimenBehaviorTree = new IntakeRedSpecimenBehaviorTree(hardwareMap, telemetry);
+        this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
     }
 
     /**
@@ -238,7 +240,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     }
                     if (result == Status.FAILURE) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(50);
+                        gamepad1.rumble(1000);
                     } else {
                         state = State.INTAKE_AUTO_GRAB_CLOSED;
                     }
@@ -288,7 +290,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     }
                     if (result == Status.FAILURE) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(50);
+                        gamepad1.rumble(1000);
                     } else {
                         state = State.INTAKE_AUTO_GRAB_CLOSED;
                     }
@@ -376,19 +378,16 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        } else if (gamepad1.start && ! previousGamepad1.start){
+        } else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
             switch (state) {
                 case NEUTRAL_POSITION:
                     Status result = Status.RUNNING;
-                    if(gamepad1.touchpad){
-                        result = Status.FAILURE;
-                    }
                     while(result == Status.RUNNING) {
-                        result = this.intakeRedSampleBehaviorTree.tick();
+                        result = this.intakeSampleBehaviorTree.tick();
                     }
                     if (result == Status.FAILURE) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(50);
+                        gamepad1.rumble(1000);
                     } else {
                         state = State.NEUTRAL_POSITION;
                     }
