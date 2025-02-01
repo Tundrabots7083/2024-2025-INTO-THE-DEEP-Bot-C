@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
@@ -21,6 +22,7 @@ import java.util.List;
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
  */
 @Autonomous(name = "Red Basket Specimen", group = "red extended", preselectTeleOp = "Primary TeleOp")
+@Disabled
 public class RedBasketSpecimenOpMode extends OpMode {
     private Robot robot;
     private RedBasketSpecimen trajectoryBuilder;
