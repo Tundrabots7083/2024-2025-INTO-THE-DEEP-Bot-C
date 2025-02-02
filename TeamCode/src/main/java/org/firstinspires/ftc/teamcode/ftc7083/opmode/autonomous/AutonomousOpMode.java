@@ -5,14 +5,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueBasketSample;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
