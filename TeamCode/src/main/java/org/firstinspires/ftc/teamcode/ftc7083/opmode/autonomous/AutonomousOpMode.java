@@ -54,9 +54,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
         waitForStart();
 
-        // Prepare the trajectories once the start button is pressed
-        Action trajectory = getTrajectory();
-
         // Handle the stop button being pressed immediately after the start button has been pressed
         if (isStopRequested()) return;
 
@@ -71,7 +68,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
                     telemetry.update();
                     return true;
                 },
-                trajectory
+                getTrajectory()
         );
         Action opmodeActions = new SequentialAction(
                 autonomousActions.withTimeout(AUTONOMOUS_ACTIONS_TIMEOUT),
