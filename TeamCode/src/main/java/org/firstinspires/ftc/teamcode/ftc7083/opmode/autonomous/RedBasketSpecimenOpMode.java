@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
  */
-@Autonomous(name = "Red Basket Specimen", group = "blue", preselectTeleOp = "Primary TeleOp")
+@Autonomous(name = "Red Basket Specimen", group = "red", preselectTeleOp = "Primary TeleOp")
 @Disabled
 public class RedBasketSpecimenOpMode extends LinearOpMode {
     public static int AUTONOMOUS_ACTIONS_TIMEOUT = 27500;
