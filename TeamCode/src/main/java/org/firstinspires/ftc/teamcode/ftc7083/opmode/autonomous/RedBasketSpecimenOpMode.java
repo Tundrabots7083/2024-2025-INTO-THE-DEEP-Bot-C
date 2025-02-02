@@ -55,12 +55,11 @@ public class RedBasketSpecimenOpMode extends LinearOpMode {
         // Prepare the trajectories once the start button is pressed
         RedBasketSpecimen trajectoryBuilder = new RedBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         Action trajectory = trajectoryBuilder.getTrajectory();
-        robot.intakeAndScoringSubsystem.moveToStartPosition();
-
-        start();
 
         // Handle the stop button being pressed immediately after the start button has been pressed
         if (isStopRequested()) return;
+
+        robot.intakeAndScoringSubsystem.moveToStartPosition();
 
         // Run the trajectory
         ActionEx autonomousActions = new ParallelAction(
