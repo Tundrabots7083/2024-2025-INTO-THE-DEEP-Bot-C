@@ -2,16 +2,20 @@ package org.firstinspires.ftc.teamcode.ftc7083.action;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Runs the set of actions sequentially. This action only completes when the last action finishes
  * running.
  */
 public class SequentialAction extends ActionExBase {
-    private final Action[] actions;
-    private int currentAction = 0;
+    private final List<Action> actions = new ArrayList<>();
 
     /**
      * Instantiates an action that runs the set of actions sequential.
@@ -19,7 +23,16 @@ public class SequentialAction extends ActionExBase {
      * @param actions the set of actions to run sequentially.
      */
     public SequentialAction(Action... actions) {
-        this.actions = actions;
+        this(Arrays.asList(actions));
+    }
+
+    /**
+     * Instantiates an action that runs the set of actions sequential.
+     *
+     * @param actions the set of actions to run sequentially.
+     */
+    public SequentialAction(List<Action> actions) {
+        this.actions.addAll(actions);
     }
 
     /**
@@ -32,15 +45,21 @@ public class SequentialAction extends ActionExBase {
      */
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        boolean isActionRunning = false;
-        while (currentAction < actions.length) {
-            isActionRunning = actions[currentAction].run(telemetryPacket);
-            if (isActionRunning) {
-                break;
-            }
-            currentAction++;
+        if (actions.isEmpty()) {
+            return false;
         }
+        if (actions.get(0).run(telemetryPacket)) {
+            return true;
+        } else {
+            actions.remove(0);
+            return run(telemetryPacket);
+        }
+    }
 
-        return isActionRunning;
+    @Override
+    public void preview(@NonNull Canvas fieldOverlay) {
+        for (Action a : actions) {
+            a.preview(fieldOverlay);
+        }
     }
 }

@@ -2,18 +2,20 @@ package org.firstinspires.ftc.teamcode.ftc7083.action;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Runs an array of actions in parallel. The action completes running only when all actions have
  * completed.
  */
 public class ParallelAction extends ActionExBase {
-    private final Action[] actions;
-    private final boolean[] actionsRunning;
+    private final List<Action> actions = new ArrayList<>();
 
     /**
      * Instantiates a ParallelAction that runs a set of actions in parallel.
@@ -21,9 +23,16 @@ public class ParallelAction extends ActionExBase {
      * @param actions the actions to run in parallel
      */
     public ParallelAction(Action... actions) {
-        this.actions = actions;
-        actionsRunning = new boolean[actions.length];
-        Arrays.fill(actionsRunning, true);
+        this(Arrays.asList(actions));
+    }
+
+    /**
+     * Instantiates a ParallelAction that runs a set of actions in parallel.
+     *
+     * @param actions the actions to run in parallel
+     */
+    public ParallelAction(List<Action> actions) {
+        this.actions.addAll(actions);
     }
 
     /**
@@ -35,16 +44,31 @@ public class ParallelAction extends ActionExBase {
      */
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        boolean isRunning = false;
-        for (int i = 0; i < actionsRunning.length; i++) {
-            if (actionsRunning[i]) {
-                actionsRunning[i]  = actions[i].run(telemetryPacket);
-                if (actionsRunning[i]) {
-                    isRunning = true;
-                }
+        if (actions.isEmpty()) {
+            return false;
+        }
+
+        // Run each action in the list in sequence
+        List<Boolean> actionsRunning = new ArrayList<>();
+        for (Action action : actions) {
+            actionsRunning.add(action.run(telemetryPacket));
+        }
+
+        // Remove any actions that have completed from the list. This moves from end to the front
+        // so the indices don't get messed up.
+        for (int i = actionsRunning.size() - 1; i >= 0; i--) {
+            if (!actionsRunning.get(i)) {
+                actions.remove(i);
             }
         }
 
-        return isRunning;
+        return !actions.isEmpty();
+    }
+
+    @Override
+    public void preview(@NonNull Canvas fieldOverlay) {
+        for (Action a : actions) {
+            a.preview(fieldOverlay);
+        }
     }
 }
