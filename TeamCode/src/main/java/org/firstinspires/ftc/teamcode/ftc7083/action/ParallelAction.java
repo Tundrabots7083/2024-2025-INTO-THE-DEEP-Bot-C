@@ -44,20 +44,16 @@ public class ParallelAction extends ActionExBase {
      */
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        if (actions.isEmpty()) {
-            return false;
-        }
-
         // Run each action in the list in sequence
-        List<Boolean> actionsRunning = new ArrayList<>();
+        List<Boolean> actionRunning = new ArrayList<>();
         for (Action action : actions) {
-            actionsRunning.add(action.run(telemetryPacket));
+            actionRunning.add(action.run(telemetryPacket));
         }
 
         // Remove any actions that have completed from the list. This moves from end to the front
         // so the indices don't get messed up.
-        for (int i = actionsRunning.size() - 1; i >= 0; i--) {
-            if (!actionsRunning.get(i)) {
+        for (int i = actionRunning.size() - 1; i >= 0; i--) {
+            if (!actionRunning.get(i)) {
                 actions.remove(i);
             }
         }

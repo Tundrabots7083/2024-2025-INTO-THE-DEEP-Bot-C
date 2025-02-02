@@ -48,6 +48,7 @@ public class SequentialAction extends ActionExBase {
         if (actions.isEmpty()) {
             return false;
         }
+
         if (actions.get(0).run(telemetryPacket)) {
             return true;
         } else {
