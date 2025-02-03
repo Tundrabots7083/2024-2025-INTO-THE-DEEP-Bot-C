@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasketSample;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasketSpecimen;
 
 /**
@@ -25,6 +24,6 @@ public class RedBasketSpecimenOpMode extends AutonomousOpMode {
 
     @Override
     public Pose2d getInitialPose() {
-        return new Pose2d(RedBasketSample.INITIAL_POSE_X, RedBasketSample.INITIAL_POSE_Y, RedBasketSample.INITIAL_POSE_ORIENTATION);
+        return new Pose2d(RedBasketSpecimen.INITIAL_POSE_X, RedBasketSpecimen.INITIAL_POSE_Y, RedBasketSpecimen.INITIAL_POSE_ORIENTATION);
     }
 }
