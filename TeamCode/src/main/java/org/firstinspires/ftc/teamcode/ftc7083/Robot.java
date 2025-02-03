@@ -167,7 +167,7 @@ public class Robot {
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         arm = new Arm(hardwareMap, telemetry);
-        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlideWithProfile.KG));
+        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
