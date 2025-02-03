@@ -41,7 +41,7 @@ public class MotionProfile {
      * @return elapsed time
      */
     public long getTimestamp() {
-        return (long)((System.currentTimeMillis() - this.startTime)); // leave as milliseconds
+        return (System.nanoTime() - this.startTime);
     }
 
     /**
