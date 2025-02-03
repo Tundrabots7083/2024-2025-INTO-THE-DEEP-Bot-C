@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * completed.
  */
 public class ParallelAction extends ActionExBase {
-    private final List<Action> actions = new LinkedList<>();
+    private final List<Action> actions = new ArrayList<>();
 
     /**
      * Instantiates a ParallelAction that runs a set of actions in parallel.
