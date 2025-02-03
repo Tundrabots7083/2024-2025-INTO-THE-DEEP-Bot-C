@@ -6,7 +6,8 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 
 /**
@@ -14,9 +15,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
  * compensate the pull of gravity on the linear slide, based on the angle of the arm.
  */
 @Config
-public class ArmFeedForwardWithProfile implements FeedForward {
-    public static double LINEAR_SLIDE_DIVISOR = 15.0;
-    private final ArmWithProfile arm;
+public class ArmFeedForward implements FeedForward {
+    public static double LINEAR_SLIDE_DIVISOR = 20.0;
+    private final Arm arm;
     private final double kG;
 
     /**
@@ -25,7 +26,7 @@ public class ArmFeedForwardWithProfile implements FeedForward {
      * @param arm the arm for the intake subsystem
      * @param kG  the gravity component to use in calculating the feed forward component
      */
-    public ArmFeedForwardWithProfile(ArmWithProfile arm, double kG) {
+    public ArmFeedForward(Arm arm, double kG) {
         this.arm = arm;
         this.kG = kG;
     }
