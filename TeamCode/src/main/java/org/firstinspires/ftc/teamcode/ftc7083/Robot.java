@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.LinearSlideFeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
@@ -127,7 +128,7 @@ public class Robot {
     public Webcam leftWebcam;
     public Webcam rightWebcam;
     public final Arm arm;
-    public final LinearSlide linearSlide;
+    public final LinearSlideWithProfile linearSlide;
     public final Wrist wrist;
     public final Claw claw;
     public Limelight limelight;
@@ -166,7 +167,7 @@ public class Robot {
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         arm = new Arm(hardwareMap, telemetry);
-        linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
+        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);

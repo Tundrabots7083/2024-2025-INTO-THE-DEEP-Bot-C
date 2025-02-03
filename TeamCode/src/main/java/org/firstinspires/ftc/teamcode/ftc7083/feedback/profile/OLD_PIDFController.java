@@ -1,22 +1,20 @@
-package org.firstinspires.ftc.teamcode.ftc7083.feedback;
+package org.firstinspires.ftc.teamcode.ftc7083.feedback.profile;
 
 import androidx.annotation.Nullable;
 
-    /**
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
+
+/**
      * PID controller with various feedforward components.
      */
     public final class OLD_PIDFController {
-        public static final class PIDCoefficients {
-            public double kP, kI, kD;
-        }
 
-        public interface FeedforwardFun {
-            double compute(double position, @Nullable Double velocity);
-        }
 
         private final PIDCoefficients pid;
         private final double kV, kA, kStatic;
-        private final FeedforwardFun kF;
+        private final FeedForward kF;
 
         private double errorSum;
         private long lastUpdateTs;
@@ -63,7 +61,7 @@ import androidx.annotation.Nullable;
                 double kV,
                 double kA,
                 double kStatic,
-                FeedforwardFun kF
+                FeedForward kF
         ) {
             this.pid = pid;
             this.kV = kV;
@@ -78,12 +76,12 @@ import androidx.annotation.Nullable;
                 double kA,
                 double kStatic
         ) {
-            this(pid, kV, kA, kStatic, (x, v) -> 0);
+            this(pid, kV, kA, kStatic, (g) -> 0);
         }
 
         public OLD_PIDFController(
                 PIDCoefficients pid,
-                FeedforwardFun kF
+                FeedForward kF
         ) {
             this(pid, 0, 0, 0, kF);
         }
@@ -122,6 +120,30 @@ import androidx.annotation.Nullable;
                 minOutput = min;
                 maxOutput = max;
             }
+        }
+
+        /**
+        * sets the target position
+         * @param targetPosition the target position to go to
+         */
+        public void setTargetPosition(double targetPosition) {
+                this.targetPosition = targetPosition;
+        }
+
+        /**
+         * Sets the target velocity
+        * @param targetVelocity velocity to go to
+        */
+        public void setTargetVelocity(double targetVelocity) {
+            this.targetVelocity = targetVelocity;
+        }
+
+        /**
+         * Sets the target acceleration
+         * @param targetAcceleration acceleration to go to
+         */
+        public void setTargetAcceleration(double targetAcceleration) {
+            this.targetAcceleration = targetAcceleration;
         }
 
         private double getPositionError(double measuredPosition) {
@@ -169,9 +191,9 @@ import androidx.annotation.Nullable;
                 velError = targetVelocity - measuredVelocity;
             }
 
-            double baseOutput = pid.kP * error + pid.kI * errorSum + pid.kD * velError +
+            double baseOutput = pid.p * error + pid.i * errorSum + pid.d * velError +
                     kV * targetVelocity + kA * targetAcceleration +
-                    kF.compute(measuredPosition, measuredVelocity);
+                    kF.calculate(targetPosition);
 
             double output = 0;
             if (Math.abs(baseOutput) > 1e-6) {
