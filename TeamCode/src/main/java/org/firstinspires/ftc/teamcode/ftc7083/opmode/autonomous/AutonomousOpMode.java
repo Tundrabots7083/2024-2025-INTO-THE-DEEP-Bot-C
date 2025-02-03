@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueBasketSample;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 import java.util.Arrays;
@@ -31,6 +30,13 @@ public abstract class AutonomousOpMode extends LinearOpMode {
      */
     public abstract Action getTrajectory();
 
+    /**
+     * Gets the initial pose for the trajectory.
+     *
+     * @return the initial pose for the trajectory
+     */
+    public abstract Pose2d getInitialPose();
+
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize the op-mode
@@ -42,7 +48,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         Robot robot = Robot.init(hardwareMap, telemetry);
 
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
-        robot.localizer.setPose(new Pose2d(BlueBasketSample.INITIAL_POSE_X, BlueBasketSample.INITIAL_POSE_Y, BlueBasketSample.INITIAL_ORIENTATION));
+        robot.localizer.setPose(getInitialPose());
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();

@@ -18,7 +18,7 @@ public class RedBasketSample {
     // Initial pose for the robot
     public static double INITIAL_POSE_X = -22.5;
     public static double INITIAL_POSE_Y = -60.0;
-    public static double INITIAL_ORIENTATION = 90.0;
+    public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring in the high basket
     public static double BASKET_HIGH_PRELOAD_X = -58.5;
@@ -54,7 +54,7 @@ public class RedBasketSample {
      * @param drive the Mecanum Drive used to move the robot autonomously
      */
     public RedBasketSample(AutoMecanumDrive drive) {
-        this(drive, new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), INITIAL_ORIENTATION));
+        this(drive, new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), INITIAL_POSE_ORIENTATION));
     }
 
     /**
