@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.autonomous;
 
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -19,5 +20,10 @@ public class BlueBasketSpecimenOpMode extends AutonomousOpMode {
         Robot robot = Robot.getInstance();
         BlueBasketSpecimen trajectoryBuilder = new BlueBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
+    }
+
+    @Override
+    public Pose2d getInitialPose() {
+        return new Pose2d(BlueBasketSpecimen.INITIAL_POSE_X, BlueBasketSpecimen.INITIAL_POSE_Y, BlueBasketSpecimen.INITIAL_POSE_ORIENTATION);
     }
 }

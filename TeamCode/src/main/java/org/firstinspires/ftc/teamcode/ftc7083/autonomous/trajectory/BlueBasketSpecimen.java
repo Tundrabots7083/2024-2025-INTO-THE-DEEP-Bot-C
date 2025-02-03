@@ -18,7 +18,7 @@ public class BlueBasketSpecimen {
     // Initial pose for the robot
     public static double INITIAL_POSE_X = -RedBasketSpecimen.INITIAL_POSE_X;
     public static double INITIAL_POSE_Y = -RedBasketSpecimen.INITIAL_POSE_Y;
-    public static double INITIAL_ORIENTATION = -RedBasketSpecimen.INITIAL_ORIENTATION;
+    public static double INITIAL_POSE_ORIENTATION = -RedBasketSpecimen.INITIAL_ORIENTATION;
 
     // Position for scoring on the high chamber
     public static double CHAMBER_HIGH_X = -RedBasketSpecimen.CHAMBER_HIGH_X;
@@ -55,7 +55,7 @@ public class BlueBasketSpecimen {
      * @param drive the Mecanum Drive used to move the robot autonomously
      */
     public BlueBasketSpecimen(AutoMecanumDrive drive) {
-        this(drive, new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), INITIAL_ORIENTATION));
+        this(drive, new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), INITIAL_POSE_ORIENTATION));
     }
 
     /**
