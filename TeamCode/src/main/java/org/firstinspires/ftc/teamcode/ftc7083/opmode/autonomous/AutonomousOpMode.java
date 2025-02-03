@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.ftc7083.action.TimeoutAction;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 import java.util.Arrays;
@@ -42,14 +43,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(getInitialPose());
 
-        telemetry.addLine("Initialization Complete");
-        telemetry.update();
-
-        // Run during init but before the start button is pressed
-        while (opModeInInit()) {
-            robot.localizer.update();
-        }
-
         // Update the subsystems while RoadRunner is running
         ActionEx updateSubsystems = new UpdateSubsystems(subsystems, telemetry);
 
@@ -66,9 +59,17 @@ public abstract class AutonomousOpMode extends LinearOpMode {
                 robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
         );
         Action opmodeActions = new SequentialAction(
-                getTrajectory().withTimeout(AUTONOMOUS_ACTIONS_TIMEOUT),
+                new TimeoutAction(getTrajectory(), AUTONOMOUS_ACTIONS_TIMEOUT),
                 closeoutActions
         );
+
+        telemetry.addLine("Initialization Complete");
+        telemetry.update();
+
+        // Run during init but before the start button is pressed
+        while (opModeInInit()) {
+            robot.localizer.update();
+        }
 
         waitForStart();
 
@@ -94,7 +95,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
      *
      * @return the trajectory to run in the autonomous OpMode
      */
-    public abstract ActionEx getTrajectory();
+    public abstract Action getTrajectory();
 
     /**
      * Action to update the subsystems on the robot
