@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocali
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
@@ -128,7 +127,7 @@ public class Robot {
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     public Webcam leftWebcam;
     public Webcam rightWebcam;
-    public final ArmWithProfile arm;
+    public final Arm arm;
     public final LinearSlideWithProfile linearSlide;
     public final Wrist wrist;
     public final Claw claw;
@@ -167,8 +166,8 @@ public class Robot {
 
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        arm = new ArmWithProfile(hardwareMap, telemetry);
-        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlideWithProfile.KG));
+        arm = new Arm(hardwareMap, telemetry);
+        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
