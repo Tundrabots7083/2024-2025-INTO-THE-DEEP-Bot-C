@@ -113,6 +113,7 @@ public class MotionProfile {
         return startPosition + direction * position;
     }
 
+
     /**
      * Gets a string representation of this motion profile.
      *
