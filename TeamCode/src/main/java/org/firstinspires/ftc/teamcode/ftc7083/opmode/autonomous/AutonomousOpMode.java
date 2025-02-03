@@ -30,7 +30,11 @@ public abstract class AutonomousOpMode extends LinearOpMode {
      */
     public abstract Action getTrajectory();
 
-    // Gets the initial pose for the start of the trajectory
+    /**
+     * Gets the initial pose for the trajectory.
+     *
+     * @return the initial pose for the trajectory
+     */
     public abstract Pose2d getInitialPose();
 
     @Override
