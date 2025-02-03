@@ -44,12 +44,7 @@ public class ParallelAction extends ActionExBase {
      */
     @Override
     public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-        // Run each action in the list in sequence
-        List<Boolean> actionRunning = new ArrayList<>();
-        for (Action action : actions) {
-            actions.removeIf(a -> !a.run(telemetryPacket));
-        }
-
+        actions.removeIf(a -> !a.run(telemetryPacket));
         return !actions.isEmpty();
     }
 
