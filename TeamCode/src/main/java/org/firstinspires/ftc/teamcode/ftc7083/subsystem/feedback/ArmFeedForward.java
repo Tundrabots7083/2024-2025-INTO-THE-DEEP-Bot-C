@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 
 /**
  * Feed forward component for the linear slide. This is used by the arm's PID controller to
@@ -44,7 +45,7 @@ public class ArmFeedForward implements FeedForward {
 
         // A bit hacky to get the linear slide from the Robot class like this, but it works.
         // We really should find a cleaner way to do it, but that is left for the future.
-        LinearSlide linearSlide = Robot.getInstance().linearSlide;
+        LinearSlideWithProfile linearSlide = Robot.getInstance().linearSlide;
         power *= (1 + (linearSlide.getCurrentLength() / LINEAR_SLIDE_DIVISOR));
 
         return power;
