@@ -109,21 +109,25 @@ public class LimelightDriveTest extends OpMode {
         // Drive to the location at which to pickup a sample
         double xPower;
         if (x > TOLERABLE_X_ERROR) {
-            xPower = xController.calculate(x, 0.0) + kF;
+            double pid = xController.calculate(x, 0.0);
+            double ff = pid < 0 ? -kF : kF;
+            xPower = pid + ff;
         } else {
-            xPower = 0.0;
+            xPower = kF; // TODO: set to 0.0 once kF is tuned
             xController.reset();
         }
         double yPower;
         if (y > TARGET_Y_DISTANCE + TOLERABLE_Y_ERROR) {
-            yPower = yController.calculate(y, TARGET_Y_DISTANCE) + kF;
+            double pid = yController.calculate(x, 0.0);
+            double ff = pid < 0 ? -kF : kF;
+            yPower = pid + ff;
         } else {
-            yPower = 0.0;
+            yPower = kF; // TODO: set to 0.0 once kF is tuned
             yController.reset();
         }
         robot.mecanumDrive.driveWithoutAdjustment(xPower, yPower, 0.0);
 
-        if (xPower == 0.0 && yPower == 0.0) {
+        if (xPower == kF && yPower == kF) { // TODO: check against 0.0 once kF is tuned
             telemetry.addData("Drive", "at target");
         } else {
             telemetry.addData("Drive", "move to target");
