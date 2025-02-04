@@ -72,7 +72,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         if (isStopRequested()) return;
 
         // Move the robot's intake and scoring subsystem from the ground
-        robot.intakeAndScoringSubsystem.moveToStartPosition();
+        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
 
         // Run the autonomous actions
         Actions.runBlocking(autonomousActions);
