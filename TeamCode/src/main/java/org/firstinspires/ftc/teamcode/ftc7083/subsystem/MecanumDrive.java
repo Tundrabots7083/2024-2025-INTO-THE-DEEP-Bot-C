@@ -272,7 +272,6 @@ public class MecanumDrive extends SubsystemBase {
      * @return an action to drive the robot to a position where it can intake a sample
      */
     public ActionEx actionDriveToSample(Limelight limelight) {
-        Robot robot = Robot.getInstance();
         return new DriveToSample(this, limelight, telemetry);
     }
 
@@ -283,7 +282,6 @@ public class MecanumDrive extends SubsystemBase {
      * @return an action to drive the robot to a position where it can intake a specimen
      */
     public ActionEx actionDriveToSpecimen(Limelight limelight) {
-        Robot robot = Robot.getInstance();
         return new DriveToSpecimen(this, limelight, telemetry);
     }
 
