@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.test;
 
-import androidx.core.app.NotificationCompat;
-
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
