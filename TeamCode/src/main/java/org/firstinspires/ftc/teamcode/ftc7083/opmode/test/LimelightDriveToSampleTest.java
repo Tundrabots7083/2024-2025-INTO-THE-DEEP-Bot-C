@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 
 /**
  * A test OpMode that drives the robot to a detected sample on the field. The color of the
@@ -30,7 +29,7 @@ public class LimelightDriveToSampleTest extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         robot = Robot.init(hardwareMap, telemetry);
-        driveToSample = new MecanumDrive.DriveToSample(robot.mecanumDrive, robot.limelight, telemetry);
+        driveToSample = robot.mecanumDrive.actionDriveToSample(robot.limelight);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();

@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
@@ -261,6 +263,28 @@ public class MecanumDrive extends SubsystemBase {
         }
         this.driveGain = gain;
         return this;
+    }
+
+    /**
+     * An action to drive the robot to a position where it can intake a sample.
+     *
+     * @param limelight the limelight camera used to detect the sample
+     * @return an action to drive the robot to a position where it can intake a sample
+     */
+    public ActionEx actionDriveToSample(Limelight limelight) {
+        Robot robot = Robot.getInstance();
+        return new DriveToSample(this, limelight, telemetry);
+    }
+
+    /**
+     * An action to drive the robot to a position where it can intake a specimen.
+     *
+     * @param limelight the limelight camera used to detect the specimen
+     * @return an action to drive the robot to a position where it can intake a specimen
+     */
+    public ActionEx actionDriveToSpecimen(Limelight limelight) {
+        Robot robot = Robot.getInstance();
+        return new DriveToSpecimen(this, limelight, telemetry);
     }
 
     /**
