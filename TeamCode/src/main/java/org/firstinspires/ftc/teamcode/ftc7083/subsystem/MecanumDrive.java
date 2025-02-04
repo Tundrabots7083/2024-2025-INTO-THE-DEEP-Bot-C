@@ -3,10 +3,14 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
 import java.util.Arrays;
@@ -273,5 +277,103 @@ public class MecanumDrive extends SubsystemBase {
                 ", leftFront=" + leftFront +
                 ", leftRear=" + leftRear +
                 '}';
+    }
+
+    /**
+     * Action to drive the robot to a sample found on the ground.
+     */
+    @Config
+    public static class DriveToSample extends ActionExBase {
+        // PID control values
+        public static double KP = 0.0;
+        public static double KI = 0.0;
+        public static double KD = 0.0;
+        public static double KF = 0.0;
+
+        // Distance of the Limelight camera from the front of the robot
+        public static double LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT = 12.0;
+
+        // Distances for driving
+        public static double TARGET_X_DISTANCE = 0.0; // inches, from the robot
+        public static double TARGET_Y_DISTANCE = LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT + 10.5; // inches, from the robot
+        public static double TOLERABLE_X_ERROR = 0.25; // inches
+        public static double TOLERABLE_Y_ERROR = 0.25; // inches
+
+        // PID controllers to determine power to the motors
+        private final PIDController xController = new PIDControllerImpl(KP, KI, KD);
+        private final PIDController yController = new PIDControllerImpl(KP, KI, KD);
+
+        private final MecanumDrive mecanumDrive;
+        private final Limelight limelight;
+        private final Telemetry telemetry;
+
+        public DriveToSample(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry) {
+            this.mecanumDrive = mecanumDrive;
+            this.limelight = limelight;
+            this.telemetry = telemetry;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            // Power to apply if no sample is detected
+            double ZERO_POWER = KF; // TODO: set to 0, and make a constant
+
+            // TODO: remove setting PID coefficients once tuned
+            // Set the PID coefficients
+            xController.setCoefficients(KP, KI, KD);
+            yController.setCoefficients(KP, KI, KD);
+
+            // Get the distance and angle from the sample
+            Double hypotenuse = limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE);
+            Double angle = limelight.getTx();
+            telemetry.addData("[Drive] Distance", hypotenuse);
+            telemetry.addData("[Drive] Angle", angle);
+
+            // Get the X and Y distances from the sample, if one is detected
+            double x, y;
+            if (hypotenuse != null && angle != null) {
+                telemetry.addData("[Drive] sample detected", true);
+                double theta = Math.toRadians(angle);
+                x = hypotenuse * Math.cos(theta);
+                y = hypotenuse * Math.sin(theta);
+            } else {
+                telemetry.addData("[Drive] sample detected", false);
+                x = 0;
+                y = 0;
+            }
+
+            // Drive to the location at which to pickup a sample
+            double xPower;
+            if (x > TOLERABLE_X_ERROR) {
+                double pid = xController.calculate(x, 0.0);
+                double ff = pid < 0 ? -KF : KF;
+                xPower = pid + ff;
+            } else {
+                xPower = ZERO_POWER;
+                xController.reset();
+            }
+            double yPower;
+            if (y > TARGET_Y_DISTANCE + TOLERABLE_Y_ERROR) {
+                double pid = yController.calculate(x, 0.0);
+                double ff = pid < 0 ? -KF : KF;
+                yPower = pid + ff;
+            } else {
+                yPower = ZERO_POWER;
+                yController.reset();
+            }
+            mecanumDrive.driveWithoutAdjustment(xPower, yPower, 0.0);
+
+            telemetry.addData("[Drive] X-Target", TARGET_X_DISTANCE);
+            telemetry.addData("[Drive] X-Current", x);
+            telemetry.addData("[Drive] X-Power", xPower);
+            telemetry.addData("[Drive] Y-Target", TARGET_Y_DISTANCE);
+            telemetry.addData("[Drive] Y-Current", y);
+            telemetry.addData("[Drive] Y-Power", yPower);
+
+            boolean atTarget = xPower == ZERO_POWER && yPower == ZERO_POWER;
+            telemetry.addData("[Drive] atTarget", atTarget);
+
+            return !atTarget;
+        }
     }
 }
