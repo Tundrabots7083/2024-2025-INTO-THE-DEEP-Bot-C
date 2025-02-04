@@ -16,6 +16,7 @@ public class RedChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
         Robot robot = Robot.getInstance();
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
         RedChamber trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }
