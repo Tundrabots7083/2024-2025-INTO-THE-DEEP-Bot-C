@@ -343,18 +343,18 @@ public class MecanumDrive extends SubsystemBase {
             yController.setCoefficients(KP, KI, KD);
 
             // Get the distance and angle from the sample
-            Double hypotenuse = limelight.getDistance(targetPosition);
+            Double distance = limelight.getDistance(targetPosition);
             Double angle = limelight.getTx();
-            telemetry.addData("[Drive] Distance", hypotenuse);
+            telemetry.addData("[Drive] Distance", distance);
             telemetry.addData("[Drive] Angle", angle);
 
             // Get the X and Y distances from the sample, if one is detected
             double x, y;
-            if (hypotenuse != null && angle != null) {
+            if (distance != null && angle != null) {
                 telemetry.addData("[Drive] sample detected", true);
                 double theta = Math.toRadians(angle);
-                x = hypotenuse * Math.cos(theta);
-                y = hypotenuse * Math.sin(theta);
+                x = distance * Math.cos(theta);
+                y = distance * Math.sin(theta);
             } else {
                 telemetry.addData("[Drive] sample detected", false);
                 x = 0;
