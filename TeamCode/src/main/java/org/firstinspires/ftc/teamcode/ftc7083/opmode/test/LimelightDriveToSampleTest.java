@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
  * sample to drive to is set based on <code>Robot.INTAKE_COLOR</code>. Tuning constants are in
  * <code>Robot.DriveTo</code>.
  */
-@TeleOp(name = "Limelight Drive", group = "tests")
-public class LimelightDriveTest extends OpMode {
+@TeleOp(name = "Limelight Drive To Sample", group = "tests")
+public class LimelightDriveToSampleTest extends OpMode {
     private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     private Robot robot;
     private Action driveToSample;
