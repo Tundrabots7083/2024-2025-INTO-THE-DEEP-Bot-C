@@ -55,11 +55,13 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         // Move the robot to the starting position
         ActionEx closeoutActions = new ParallelAction(
                 updateSubsystems,
-                robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
-                robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
+                new SequentialAction(
+                        robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
+                        robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
+                )
         );
         Action opmodeActions = new SequentialAction(
-                new TimeoutAction(getTrajectory(), AUTONOMOUS_ACTIONS_TIMEOUT),
+                autonomousActions.withTimeout(AUTONOMOUS_ACTIONS_TIMEOUT),
                 closeoutActions
         );
 
