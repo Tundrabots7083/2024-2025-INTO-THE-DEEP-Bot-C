@@ -280,10 +280,10 @@ public class MecanumDrive extends SubsystemBase {
     }
 
     /**
-     * Action to drive the robot to a sample found on the ground.
+     * Drives the robot to a sample or specimen on the field
      */
     @Config
-    public static class DriveToSample extends ActionExBase {
+    public abstract static class DriveTo extends ActionExBase {
         // PID control values
         public static double KP = 0.0;
         public static double KI = 0.0;
@@ -294,8 +294,6 @@ public class MecanumDrive extends SubsystemBase {
         public static double LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT = 12.0;
 
         // Distances for driving
-        public static double TARGET_X_DISTANCE = 0.0; // inches, from the robot
-        public static double TARGET_Y_DISTANCE = LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT + 10.5; // inches, from the robot
         public static double TOLERABLE_X_ERROR = 0.25; // inches
         public static double TOLERABLE_Y_ERROR = 0.25; // inches
 
@@ -303,21 +301,35 @@ public class MecanumDrive extends SubsystemBase {
         private final PIDController xController = new PIDControllerImpl(KP, KI, KD);
         private final PIDController yController = new PIDControllerImpl(KP, KI, KD);
 
+        // Distances from the target to move the robot
+        private final double xTargetDistance;
+        private final double yTargetDistance;
+        private final Limelight.TargetPosition targetPosition;
+
         private final MecanumDrive mecanumDrive;
         private final Limelight limelight;
         private final Telemetry telemetry;
 
+
         /**
-         * Instantiates an action to drive to a sample on the ground.
+         * Instantiates an action to drive the robot to a sample or specimen.
          *
-         * @param mecanumDrive the drive subsystem to use to move the robot
-         * @param limelight    the Limelight camera used to detect the sample
-         * @param telemetry    telemetry used to output data to the driver station
+         * @param mecanumDrive    the drive subsystem to use to move the robot
+         * @param limelight       the Limelight camera used to detect the sample or specimen
+         * @param telemetry       telemetry used to output data to the driver station
+         * @param xTargetDistance distance from the target to which to move the robot along the X-axis
+         * @param yTargetDistance distance from the target to which to move the robot along the Y-axis
+         * @param targetPosition  the location of the target; samples are in the <code>SUBMERSIBLE</code>, while
+         *                        specimens are <code>WALL</code>.
          */
-        public DriveToSample(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry) {
+        public DriveTo(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry,
+                       double xTargetDistance, double yTargetDistance, Limelight.TargetPosition targetPosition) {
             this.mecanumDrive = mecanumDrive;
             this.limelight = limelight;
             this.telemetry = telemetry;
+            this.xTargetDistance = xTargetDistance;
+            this.yTargetDistance = yTargetDistance;
+            this.targetPosition = targetPosition;
         }
 
         @Override
@@ -331,7 +343,7 @@ public class MecanumDrive extends SubsystemBase {
             yController.setCoefficients(KP, KI, KD);
 
             // Get the distance and angle from the sample
-            Double hypotenuse = limelight.getDistance(Limelight.TargetPosition.SUBMERSIBLE);
+            Double hypotenuse = limelight.getDistance(targetPosition);
             Double angle = limelight.getTx();
             telemetry.addData("[Drive] Distance", hypotenuse);
             telemetry.addData("[Drive] Angle", angle);
@@ -360,7 +372,7 @@ public class MecanumDrive extends SubsystemBase {
                 xController.reset();
             }
             double yPower;
-            if (y > TARGET_Y_DISTANCE + TOLERABLE_Y_ERROR) {
+            if (y > yTargetDistance + TOLERABLE_Y_ERROR) {
                 double pid = yController.calculate(x, 0.0);
                 double ff = pid < 0 ? -KF : KF;
                 yPower = pid + ff;
@@ -370,10 +382,10 @@ public class MecanumDrive extends SubsystemBase {
             }
             mecanumDrive.driveWithoutAdjustment(xPower, yPower, 0.0);
 
-            telemetry.addData("[Drive] X-Target", TARGET_X_DISTANCE);
+            telemetry.addData("[Drive] X-Target", xTargetDistance);
             telemetry.addData("[Drive] X-Current", x);
             telemetry.addData("[Drive] X-Power", xPower);
-            telemetry.addData("[Drive] Y-Target", TARGET_Y_DISTANCE);
+            telemetry.addData("[Drive] Y-Target", yTargetDistance);
             telemetry.addData("[Drive] Y-Current", y);
             telemetry.addData("[Drive] Y-Power", yPower);
 
@@ -381,6 +393,46 @@ public class MecanumDrive extends SubsystemBase {
             telemetry.addData("[Drive] atTarget", atTarget);
 
             return !atTarget;
+        }
+    }
+
+    /**
+     * Action to drive the robot to a sample found on the ground.
+     */
+    public static class DriveToSample extends DriveTo {
+        // Distances for driving
+        public static double TARGET_X_DISTANCE = 0.0; // inches, from the robot
+        public static double TARGET_Y_DISTANCE = LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT + 10.5; // inches, from the robot
+
+        /**
+         * Instantiates an action to drive to a sample on the ground.
+         *
+         * @param mecanumDrive the drive subsystem to use to move the robot
+         * @param limelight    the Limelight camera used to detect the sample
+         * @param telemetry    telemetry used to output data to the driver station
+         */
+        public DriveToSample(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry) {
+            super(mecanumDrive, limelight, telemetry, TARGET_X_DISTANCE, TARGET_Y_DISTANCE, Limelight.TargetPosition.SUBMERSIBLE);
+        }
+    }
+
+    /**
+     * Action to drive the robot to a specimen found on the wall.
+     */
+    public static class DriveToSpecimen extends DriveTo {
+        // Distances for driving
+        public static double TARGET_X_DISTANCE = 0.0; // inches, from the robot
+        public static double TARGET_Y_DISTANCE = LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT + 4.0; // inches, from the robot
+
+        /**
+         * Instantiates an action to drive to a specimen on the wall.
+         *
+         * @param mecanumDrive the drive subsystem to use to move the robot
+         * @param limelight    the Limelight camera used to detect the specimen
+         * @param telemetry    telemetry used to output data to the driver station
+         */
+        public DriveToSpecimen(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry) {
+            super(mecanumDrive, limelight, telemetry, TARGET_X_DISTANCE, TARGET_Y_DISTANCE, Limelight.TargetPosition.WALL);
         }
     }
 }
