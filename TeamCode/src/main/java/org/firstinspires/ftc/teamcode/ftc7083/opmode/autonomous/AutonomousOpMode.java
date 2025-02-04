@@ -27,8 +27,8 @@ import java.util.List;
  * Base autonomous op mode
  */
 public abstract class AutonomousOpMode extends LinearOpMode {
-    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 27500;
-    public static int RETRACT_SLIDE_TIMEOUT = 1000;
+    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 27000;
+    public static int RETRACT_SLIDE_TIMEOUT = 1500;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,26 +43,21 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(getInitialPose());
 
-        // Update the subsystems while RoadRunner is running
-        ActionEx updateSubsystems = new UpdateSubsystems(subsystems, telemetry);
-
-        // Run the trajectory
-        ActionEx autonomousActions = new ParallelAction(
-                updateSubsystems,
-                getTrajectory()
-        );
-
-        // Move the robot to the starting position
-        ActionEx closeoutActions = new ParallelAction(
-                updateSubsystems,
+        // Run the trajectory and, once done, move to the start position, all the while ensuring the
+        // subsystems are updated
+        Action autonomousActions = new ParallelAction(
+                (telemetryPacket) -> { // Update all subsystems
+                    for (Subsystem subsystem : subsystems) {
+                        subsystem.execute();
+                    }
+                    telemetry.update();
+                    return true;
+                },
                 new SequentialAction(
+                        new TimeoutAction(getTrajectory(), AUTONOMOUS_ACTIONS_TIMEOUT),
                         robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
                         robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
                 )
-        );
-        Action opmodeActions = new SequentialAction(
-                autonomousActions.withTimeout(AUTONOMOUS_ACTIONS_TIMEOUT),
-                closeoutActions
         );
 
         telemetry.addLine("Initialization Complete");
@@ -98,26 +93,4 @@ public abstract class AutonomousOpMode extends LinearOpMode {
      * @return the trajectory to run in the autonomous OpMode
      */
     public abstract Action getTrajectory();
-
-    /**
-     * Action to update the subsystems on the robot
-     */
-    private static class UpdateSubsystems extends ActionExBase {
-        private final List<Subsystem> subsystems;
-        private final Telemetry telemetry;
-
-        public UpdateSubsystems(List<Subsystem> subsystems, Telemetry telemetry) {
-            this.subsystems = subsystems;
-            this.telemetry = telemetry;
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            for (Subsystem subsystem : subsystems) {
-                subsystem.execute();
-            }
-            telemetry.update();
-            return true;
-        }
-    };
 }
