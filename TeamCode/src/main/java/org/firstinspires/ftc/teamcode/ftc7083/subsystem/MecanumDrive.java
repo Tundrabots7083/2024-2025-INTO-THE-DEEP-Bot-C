@@ -307,6 +307,13 @@ public class MecanumDrive extends SubsystemBase {
         private final Limelight limelight;
         private final Telemetry telemetry;
 
+        /**
+         * Instantiates an action to drive to a sample on the ground.
+         *
+         * @param mecanumDrive the drive subsystem to use to move the robot
+         * @param limelight    the Limelight camera used to detect the sample
+         * @param telemetry    telemetry used to output data to the driver station
+         */
         public DriveToSample(MecanumDrive mecanumDrive, Limelight limelight, Telemetry telemetry) {
             this.mecanumDrive = mecanumDrive;
             this.limelight = limelight;
