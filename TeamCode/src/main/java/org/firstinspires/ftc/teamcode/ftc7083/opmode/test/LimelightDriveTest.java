@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 /**
  * A test OpMode that drives the robot to a detected sample on the field. The color of the
  * sample to drive to is set based on <code>Robot.INTAKE_COLOR</code>. Tuning constants are in
- * <code>Robot.DriveToSample</code>.
+ * <code>Robot.DriveTo</code>.
  */
 @TeleOp(name = "Limelight Drive", group = "tests")
 public class LimelightDriveTest extends OpMode {
