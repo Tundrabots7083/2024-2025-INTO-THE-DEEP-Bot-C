@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedBasketSpe
 public class RedBasketSpecimenOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot robot = Robot.getInstance();
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
+        Robot robot = Robot.getInstance();
         RedBasketSpecimen trajectoryBuilder = new RedBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }

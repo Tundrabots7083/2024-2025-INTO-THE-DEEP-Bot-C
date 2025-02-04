@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.RedChamber;
 public class RedChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot robot = Robot.getInstance();
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
+        Robot robot = Robot.getInstance();
         RedChamber trajectoryBuilder = new RedChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }

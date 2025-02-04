@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueBasketSp
 public class BlueBasketSpecimenOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot robot = Robot.getInstance();
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
+        Robot robot = Robot.getInstance();
         BlueBasketSpecimen trajectoryBuilder = new BlueBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }

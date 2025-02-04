@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueChamber;
 public class BlueChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot robot = Robot.getInstance();
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
+        Robot robot = Robot.getInstance();
         BlueChamber trajectoryBuilder = new BlueChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }
