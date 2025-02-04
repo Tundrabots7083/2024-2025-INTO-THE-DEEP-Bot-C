@@ -16,6 +16,7 @@ public class BlueChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
         Robot robot = Robot.getInstance();
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
         BlueChamber trajectoryBuilder = new BlueChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }

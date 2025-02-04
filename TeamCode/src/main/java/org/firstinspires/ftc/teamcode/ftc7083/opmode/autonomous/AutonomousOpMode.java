@@ -36,8 +36,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
-
         Robot robot = Robot.init(hardwareMap, telemetry);
 
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);

@@ -18,6 +18,7 @@ public class RedBasketSpecimenOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
         Robot robot = Robot.getInstance();
+        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
         RedBasketSpecimen trajectoryBuilder = new RedBasketSpecimen(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }
