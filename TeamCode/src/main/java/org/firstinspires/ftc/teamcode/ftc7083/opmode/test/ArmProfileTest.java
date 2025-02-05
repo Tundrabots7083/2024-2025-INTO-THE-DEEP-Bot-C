@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 
 @Config
-@TeleOp(name = "Linear Slide Test", group = "tests")
+@TeleOp(name = "Arm Profile Slide Test", group = "tests")
 public class ArmProfileTest extends OpMode {
     public static double ARM_ANGLE = 0.0;
     public static double LINEAR_SLIDE_LENGTH = 0.0;
