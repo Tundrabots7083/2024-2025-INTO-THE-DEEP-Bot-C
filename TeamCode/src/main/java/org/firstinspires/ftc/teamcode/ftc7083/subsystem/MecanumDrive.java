@@ -332,7 +332,6 @@ public class MecanumDrive extends SubsystemBase {
         private final Limelight limelight;
         private final Telemetry telemetry;
 
-
         /**
          * Instantiates an action to drive the robot to a sample or specimen.
          *
@@ -383,7 +382,7 @@ public class MecanumDrive extends SubsystemBase {
                 y = Double.NaN;
             }
 
-            // Drive to the location at which to pickup a sample
+            // Get the power to apply along the X-axis
             double xPower;
             double xError = Math.abs(x - xTargetDistance);
             if (!Double.isNaN(x) && xError > TOLERABLE_X_ERROR) {
@@ -394,6 +393,8 @@ public class MecanumDrive extends SubsystemBase {
                 xPower = ZERO_POWER;
                 xController.reset();
             }
+
+            // Get the power to apply along the Y-axis
             double yPower;
             double yError = Math.abs(y - yTargetDistance);
             if (!Double.isNaN(y) && yError > TOLERABLE_Y_ERROR) {
@@ -404,6 +405,8 @@ public class MecanumDrive extends SubsystemBase {
                 yPower = ZERO_POWER;
                 yController.reset();
             }
+
+            // Drive to the target coordinates
             mecanumDrive.driveWithoutAdjustment(xPower, yPower, 0.0);
 
             telemetry.addData("[Drive] X-Target", xTargetDistance);
