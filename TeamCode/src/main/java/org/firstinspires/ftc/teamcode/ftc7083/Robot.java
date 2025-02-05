@@ -249,12 +249,6 @@ public class Robot {
      * Calibrate the SparkFun OTOS.
      */
     private void calibrateOTOS() {
-        telemetry.addLine("OTOS calibration beginning!");
-
-        // Reset the tracking algorithm - this resets the position to the origin,
-        // but can also be used to recover from some rare tracking errors
-        otos.resetTracking();
-
         // RR localizer note:
         // don't change the units, it will stop Dashboard field view from working properly
         // and might cause various other issues
@@ -267,24 +261,7 @@ public class Robot {
                 Math.toRadians(SparkFunParams.MOUNTING_HEADING_IN_DEGREES));
         otos.setOffset(offset);
 
-        // The IMU on the OTOS includes a gyroscope and accelerometer, which could
-        // have an offset. Note that as of firmware version 1.0, the calibration
-        // will be lost after a power cycle; the OTOS performs a quick calibration
-        // when it powers up, but it is recommended to perform a more thorough
-        // calibration at the start of all your programs. Note that the sensor must
-        // be completely stationary and flat during calibration! When calling
-        // calibrateImu(), you can specify the number of samples to take and whether
-        // to wait until the calibration is complete. If no parameters are provided,
-        // it will take 255 samples and wait until done; each sample takes about
-        // 2.4ms, so about 612ms total
-
-        // RR localizer note: It is technically possible to change the number of samples to slightly reduce init times,
-        // however, I found that it caused pretty severe heading drift.
-        // Also, if you're careful to always wait more than 612ms in init, you could technically disable waitUntilDone;
-        // this would allow your OpMode code to run while the calibration occurs.
-        // However, that may cause other issues.
-        // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
-        otos.calibrateImu(SparkFunParams.NUM_IMU_CALIBRATION_SAMPLES, true);
+        telemetry.addLine("OTOS calibration beginning!");
 
         // Here we can set the linear and angular scalars, which can compensate for
         // scaling issues with the sensor measurements. Note that as of firmware
@@ -313,6 +290,25 @@ public class Robot {
                                                                       Params.INITIAL_POS_Y,
                                                                       Math.toRadians(Params.INITIAL_POS_HEADING));
         otos.setPosition(currentPosition);
+
+        // The IMU on the OTOS includes a gyroscope and accelerometer, which could
+        // have an offset. Note that as of firmware version 1.0, the calibration
+        // will be lost after a power cycle; the OTOS performs a quick calibration
+        // when it powers up, but it is recommended to perform a more thorough
+        // calibration at the start of all your programs. Note that the sensor must
+        // be completely stationary and flat during calibration! When calling
+        // calibrateImu(), you can specify the number of samples to take and whether
+        // to wait until the calibration is complete. If no parameters are provided,
+        // it will take 255 samples and wait until done; each sample takes about
+        // 2.4ms, so about 612ms total
+
+        // RR localizer note: It is technically possible to change the number of samples to slightly reduce init times,
+        // however, I found that it caused pretty severe heading drift.
+        // Also, if you're careful to always wait more than 612ms in init, you could technically disable waitUntilDone;
+        // this would allow your OpMode code to run while the calibration occurs.
+        // However, that may cause other issues.
+        // In the future I hope to do that by default and just add a check in updatePoseEstimate for it
+        otos.calibrateImu(SparkFunParams.NUM_IMU_CALIBRATION_SAMPLES, true);
 
         telemetry.addLine("OTOS calibration complete!");
     }
