@@ -24,15 +24,15 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForwardW
 @Config
 public class ArmWithProfile extends SubsystemBase {
     // PID tuning values
-    public static double KP = 0.08;
+    public static double KP = 0.25;
     public static double KI = 0.0;
     public static double KD = 0.0;
-    public static double KG = 0.0;
+    public static double KG = 0.1;
     private final double KV = 0;
     private final double KA = 0;
     public static double KS = 0.0;
-    public static double maxVelocity = 120;
-    public static double maxAcceleration = 95;
+    public static double maxVelocity = 200;
+    public static double maxAcceleration = 250;
 
     PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
 
@@ -124,8 +124,8 @@ public class ArmWithProfile extends SubsystemBase {
         double power = pidfController.update(profile.getTimestamp(), currentAngle);
         shoulderMotor.setPower(power);
 
-        telemetry.addData("[LS] ProfileTargetPos", profileTargetPosition);
-        telemetry.addData("[LS] Power", power);
+        telemetry.addData("[Arm] ProfileTargetPos", profileTargetPosition);
+        telemetry.addData("[Arm] Power", power);
 
         // Make sure the slide is at it's target for a number of consecutive loops. This is designed
         // to handle cases of "bounce" in the slide when moving to the target angle.
