@@ -356,7 +356,7 @@ public class MecanumDrive extends SubsystemBase {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             // Power to apply if no sample is detected
-            double ZERO_POWER = KF; // TODO: change to 0.0
+            double ZERO_POWER = KF; // TODO: change to 0.0 once KF is determined
 
             // TODO: remove setting PID coefficients once tuned
             // Set the PID coefficients
