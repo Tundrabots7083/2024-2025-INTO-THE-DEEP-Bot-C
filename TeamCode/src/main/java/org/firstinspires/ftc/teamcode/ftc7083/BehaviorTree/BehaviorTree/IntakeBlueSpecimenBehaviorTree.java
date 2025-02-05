@@ -63,7 +63,7 @@ public class IntakeBlueSpecimenBehaviorTree {
         robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
         this.wrist = robot.wrist;
-        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry, GlobalShutterCamera.GlobalShutterCameraDetectionType.DETECT_COLOR);
         this.limelight = new Limelight(hardwareMap,telemetry);
         telemetry.addLine("Got Past Robot");
         telemetry.update();

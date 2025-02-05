@@ -19,7 +19,7 @@ public class GlobalShutterSeparatedTest extends LinearOpMode {
             telemetry.setMsTransmissionInterval(50);   // Speed up telemetry updates, Just use for debugging.
             telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 
-            GlobalShutterCamera globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+            GlobalShutterCamera globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry, GlobalShutterCamera.GlobalShutterCameraDetectionType.DETECT_COLOR);
             SampleProcessor sampleProcessor = new SampleProcessor();
 
 
@@ -30,8 +30,8 @@ public class GlobalShutterSeparatedTest extends LinearOpMode {
 
 
                     Double yellowAngle = sampleProcessor.execute(globalShutterCamera.getYellowDetections());
-                    // double blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
-                    // double redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
+                    // double blueAngle = sampleProcessor.execute(wristGlobalShutterCamera.getBlueDetections());
+                    // double redAngle = sampleProcessor.execute(wristGlobalShutterCamera.getRedDetections());
 
                     telemetry.addData("Yellow Angle", yellowAngle);
                     // telemetry.addData("Blue Angle", blueAngle);

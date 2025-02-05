@@ -12,18 +12,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunParams;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
-import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
+import org.firstinspires.ftc.teamcode.ftc7083.localization.GlobalShutterAprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.LinearSlideFeedForward;
@@ -31,7 +28,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -134,7 +130,9 @@ public class Robot {
     public final Claw claw;
     public Limelight limelight;
     public final SparkFunOTOS otos;
-    public GlobalShutterCamera globalShutterCamera;
+    public GlobalShutterCamera wristGlobalShutterCamera;
+    public GlobalShutterCamera aprilTagGlobalShutterCamera;
+    public OpModeType opModeType;
     //public final ColorSensor colorSensor;
 
     public List<Webcam> webcams;
@@ -156,6 +154,8 @@ public class Robot {
         robot = this;
         this.telemetry = telemetry;
 
+        this.opModeType = opModeType;
+
         // Enable bulk reads. This is almost always the "correct" answer, and can speed up loop
         // times. We will be managing the bulk read caches manually, which requires each OpMode
         // to clear the cache at the start of each loop.
@@ -172,7 +172,8 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+        wristGlobalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry, GlobalShutterCamera.GlobalShutterCameraDetectionType.DETECT_COLOR);
+        aprilTagGlobalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry, GlobalShutterCamera.GlobalShutterCameraDetectionType.DETECT_APRILTAGS);
         limelight = new Limelight(hardwareMap, telemetry);
         //colorSensor = new ColorSensor(hardwareMap, telemetry);
 
@@ -210,7 +211,11 @@ public class Robot {
 
         }*/
 
-        localizer = new SparkFunOTOSLocalizer(otos);
+        if (opModeType == OpModeType.AUTO){
+            localizer = new SparkFunOTOSLocalizer(otos);
+        } else {
+            localizer = new GlobalShutterAprilTagLocalizer(aprilTagGlobalShutterCamera);
+        }
         this.telemetry.addLine("[Robot] initialized");
     }
 

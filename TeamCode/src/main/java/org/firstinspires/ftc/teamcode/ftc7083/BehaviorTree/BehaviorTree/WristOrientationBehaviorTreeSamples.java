@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree;
 
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.AllianceColor;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.CloseClaw;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectSampleOrientation;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.LowerArmToSubmersibleSample;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.RaiseArmToNeutralPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.TurnWrist;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Action;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BehaviorTree;
@@ -22,7 +17,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class WristOrientationBehaviorTreeSamples {
     private BehaviorTree tree;
@@ -49,7 +43,7 @@ public class WristOrientationBehaviorTreeSamples {
 
         robot = Robot.getInstance();
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
-        this.globalShutterCamera = robot.globalShutterCamera;
+        this.globalShutterCamera = robot.wristGlobalShutterCamera;
         this.wrist = robot.wrist;
 
         this.root = new Sequence(

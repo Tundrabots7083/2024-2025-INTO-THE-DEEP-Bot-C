@@ -8,15 +8,24 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamServer;
+import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.processors.ColorBlobLocatorProcessorEx;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.processors.ColorRangeEx;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.processors.ImageRegionEx;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessorImpl;
 import org.firstinspires.ftc.vision.opencv.ColorSpace;
 import org.opencv.core.Scalar;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,12 +36,22 @@ public class GlobalShutterCamera extends SubsystemBase {
 
 
         public static final Size RESOLUTION_1920x1200 = new Size(1920,1200);
+        public static final Size RESOLUTION_1280x800 = new Size(1280,800);
+        public static final Size RESOLUTION_800x600 = new Size(800,600);
+
+
 
 
         private VisionPortal visionPortal;
         private ColorBlobLocatorProcessorEx yellowColorLocator;
         private ColorBlobLocatorProcessorEx blueColorLocator;
         private ColorBlobLocatorProcessorEx redColorLocator;
+        private AprilTagProcessor aprilTagProcessor;
+
+    private Position cameraPosition = new Position(DistanceUnit.INCH,
+            6.125, 6.125, 10.5, 0);
+    private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
+            0, -90, -90, 0);
 
 
     /**
@@ -41,58 +60,91 @@ public class GlobalShutterCamera extends SubsystemBase {
          * @param hardwareMap mapping of all the hardware on the robot
          * @param telemetry   the telemetry used to provide output on the driver station
          */
-        public GlobalShutterCamera(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry) {
+        public GlobalShutterCamera(@NonNull HardwareMap hardwareMap, @NonNull Telemetry telemetry, GlobalShutterCameraDetectionType detectionType) {
 
-            WebcamName webcamName = hardwareMap.get(WebcamName.class, "GlobalShutterCamera");
-            initWebcam(webcamName);
+            WebcamName webcamName;
 
+            if(detectionType == GlobalShutterCameraDetectionType.DETECT_COLOR) {
+                webcamName = hardwareMap.get(WebcamName.class, "WristGlobalShutterCamera");
+            } else {
+                webcamName = hardwareMap.get(WebcamName.class, "AprilTagGlobalShutterCamera");
+            }
+
+            initWebcam(webcamName, detectionType);
             CameraStreamServer.getInstance().setSource(visionPortal);
         }
 
         /**
          * Initialize the ColorBlobLocator processor for the webcam
          */
-        private void initWebcam(WebcamName webcam) {
+        private void initWebcam(WebcamName webcam, GlobalShutterCameraDetectionType detectionType) {
 
-            // Create the ColorBlobLocator processor.
-            yellowColorLocator = new ColorBlobLocatorProcessorEx.Builder()
-                    .setTargetColorRange(new ColorRangeEx(ColorSpace.HSV, new Scalar( 20, 100,80), new Scalar( 30, 255,  255)))
-                    .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
-                    .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
-                    .setDrawContours(true)                        // Show contours on the Stream Preview
-                    .setBlurSize(3)                               // Smooth the transitions between different colors in image
-                    .build();
+            switch (detectionType){
+                case DETECT_COLOR:
 
-            blueColorLocator = new ColorBlobLocatorProcessorEx.Builder()
-                    .setTargetColorRange(new ColorRangeEx(ColorSpace.HSV, new Scalar( 100, 124, 53), new Scalar( 123, 255,  255)))
-                    .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
-                    .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
-                    .setDrawContours(true)                        // Show contours on the Stream Preview
-                    .setBlurSize(3)                               // Smooth the transitions between different colors in image
-                    .build();
+                    // Create the ColorBlobLocator processor.
+                    yellowColorLocator = new ColorBlobLocatorProcessorEx.Builder()
+                            .setTargetColorRange(new ColorRangeEx(ColorSpace.HSV, new Scalar( 20, 100,80), new Scalar( 30, 255,  255)))
+                            .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
+                            .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
+                            .setDrawContours(true)                        // Show contours on the Stream Preview
+                            .setBlurSize(3)                               // Smooth the transitions between different colors in image
+                            .build();
 
-
-            redColorLocator = new ColorBlobLocatorProcessorEx.Builder()
-                    .setTargetColorRangeEx(new ColorRangeEx(ColorSpace.HSV, new Scalar( 135, 50, 40), new Scalar( 180, 255,  255)), new ColorRangeEx(ColorSpace.HSV, new Scalar( 0, 50, 40), new Scalar( 10, 255,  255)))
-                    .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
-                    .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
-                    .setDrawContours(true)                        // Show contours on the Stream Preview
-                    .setBlurSize(3)                               // Smooth the transitions between different colors in image
-                    .build();
+                    blueColorLocator = new ColorBlobLocatorProcessorEx.Builder()
+                            .setTargetColorRange(new ColorRangeEx(ColorSpace.HSV, new Scalar( 100, 124, 53), new Scalar( 123, 255,  255)))
+                            .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
+                            .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
+                            .setDrawContours(true)                        // Show contours on the Stream Preview
+                            .setBlurSize(3)                               // Smooth the transitions between different colors in image
+                            .build();
 
 
-            // Create the vision portal by using a builder.
-            visionPortal = new VisionPortal.Builder()
-                    .setCamera(webcam)
-                    .setCameraResolution(RESOLUTION_1920x1200)
-                    .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                    .addProcessors(yellowColorLocator, blueColorLocator, redColorLocator)
-                    .setLiveViewContainerId(0)
-                    .build();
+                    redColorLocator = new ColorBlobLocatorProcessorEx.Builder()
+                            .setTargetColorRangeEx(new ColorRangeEx(ColorSpace.HSV, new Scalar( 135, 50, 40), new Scalar( 180, 255,  255)), new ColorRangeEx(ColorSpace.HSV, new Scalar( 0, 50, 40), new Scalar( 10, 255,  255)))
+                            .setContourMode(ColorBlobLocatorProcessorEx.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
+                            .setRoi(ImageRegionEx.entireFrame())  // search the entirety of camera view
+                            .setDrawContours(true)                        // Show contours on the Stream Preview
+                            .setBlurSize(3)                               // Smooth the transitions between different colors in image
+                            .build();
 
-            // Stopping the LiveView is recommended during competition to save CPU resources when
-            // a LiveView is not required for debugging purposes.
-            visionPortal.stopLiveView();
+                    // Create the vision portal by using a builder.
+                    visionPortal = new VisionPortal.Builder()
+                            .setCamera(webcam)
+                            .setCameraResolution(RESOLUTION_1920x1200)
+                            .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                            .addProcessors(yellowColorLocator, blueColorLocator, redColorLocator)
+                            .setLiveViewContainerId(0)
+                            .build();
+
+                    // Stopping the LiveView is recommended during competition to save CPU resources when
+                    // a LiveView is not required for debugging purposes.
+                    visionPortal.stopLiveView();
+
+                    break;
+                case DETECT_APRILTAGS:
+                    // Create the AprilTag processor.
+                    aprilTagProcessor = new AprilTagProcessor.Builder()
+                            .setCameraPose(cameraPosition, cameraOrientation)
+                            .build();
+
+                    // Create the vision portal by using a builder.
+                    visionPortal = new VisionPortal.Builder()
+                            .setCamera(webcam)
+                            .setCameraResolution(RESOLUTION_1280x800)
+                            .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                            .addProcessor(aprilTagProcessor)
+                            .setLiveViewContainerId(1)
+                            .build();
+
+                    // Stopping the LiveView is recommended during competition to save CPU resources when
+                    // a LiveView is not required for debugging purposes.
+                    visionPortal.stopLiveView();
+
+                    break;
+                default:
+                    this.initWebcam(webcam, GlobalShutterCameraDetectionType.DETECT_COLOR);
+            }
         }
 
         /**
@@ -135,6 +187,10 @@ public class GlobalShutterCamera extends SubsystemBase {
         public List<ColorBlobLocatorProcessorEx.Blob> getRedDetections() {
             return redColorLocator.getBlobs();
         }
+
+    public List<AprilTagDetection> getAprilTagDetections() {
+        return aprilTagProcessor.getDetections();
+    }
 
         /**
          * Get the current rate at which frames are passing through the vision portal
@@ -197,4 +253,10 @@ public class GlobalShutterCamera extends SubsystemBase {
                     ", visionPortal=" + visionPortal +
                     '}';
         }
+
+    public enum GlobalShutterCameraDetectionType {
+        DETECT_COLOR,
+        DETECT_APRILTAGS;
     }
+    }
+
