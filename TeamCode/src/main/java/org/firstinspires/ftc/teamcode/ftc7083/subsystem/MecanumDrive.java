@@ -385,7 +385,7 @@ public class MecanumDrive extends SubsystemBase {
 
             // Drive to the location at which to pickup a sample
             double xPower;
-            if (Math.abs(x) > TOLERABLE_X_ERROR) {
+            if (Math.abs(x) > xTargetDistance + TOLERABLE_X_ERROR) {
                 double pid = xController.calculate(x, xTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 xPower = pid + ff;
