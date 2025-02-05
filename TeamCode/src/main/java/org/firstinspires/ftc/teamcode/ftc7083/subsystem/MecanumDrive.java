@@ -316,8 +316,8 @@ public class MecanumDrive extends SubsystemBase {
         public static double LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT = 12.0;
 
         // Distances for driving
-        public static double TOLERABLE_X_ERROR = 0.25; // inches
-        public static double TOLERABLE_Y_ERROR = 0.25; // inches
+        public static double TOLERABLE_X_ERROR = 0.5; // inches
+        public static double TOLERABLE_Y_ERROR = 0.5; // inches
 
         // PID controllers to determine power to the motors
         private final PIDController xController = new PIDControllerImpl(KP, KI, KD);
@@ -357,7 +357,7 @@ public class MecanumDrive extends SubsystemBase {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             // Power to apply if no sample is detected
-            double ZERO_POWER = KF; // TODO: set to 0, and make a constant
+            double ZERO_POWER = KF; // TODO: change to 0.0
 
             // TODO: remove setting PID coefficients once tuned
             // Set the PID coefficients
@@ -385,7 +385,7 @@ public class MecanumDrive extends SubsystemBase {
 
             // Drive to the location at which to pickup a sample
             double xPower;
-            if (x > TOLERABLE_X_ERROR) {
+            if (Math.abs(x) > TOLERABLE_X_ERROR) {
                 double pid = xController.calculate(x, 0.0);
                 double ff = pid < 0 ? -KF : KF;
                 xPower = pid + ff;
@@ -394,7 +394,7 @@ public class MecanumDrive extends SubsystemBase {
                 xController.reset();
             }
             double yPower;
-            if (y > yTargetDistance + TOLERABLE_Y_ERROR) {
+            if (Math.abs(y) > yTargetDistance + TOLERABLE_Y_ERROR) {
                 double pid = yController.calculate(x, 0.0);
                 double ff = pid < 0 ? -KF : KF;
                 yPower = pid + ff;
