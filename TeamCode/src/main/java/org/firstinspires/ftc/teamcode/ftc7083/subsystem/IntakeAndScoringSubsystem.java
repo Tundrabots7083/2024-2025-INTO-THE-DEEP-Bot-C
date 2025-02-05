@@ -283,7 +283,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToNeutralPosition() {
         moveToPosition(NEUTRAL_X, NEUTRAL_Y);
         robot.wrist.setToIntakeSpecimen();
-        telemetry.addData("[IAS] position", "intake specimen");
+        telemetry.addData("[IAS] position", "neutral");
     }
 
     /**
@@ -859,7 +859,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+            intakeAndScoringSubsystem.moveToNeutralPosition();
         }
     }
 
