@@ -379,13 +379,14 @@ public class MecanumDrive extends SubsystemBase {
                 y = distance * Math.sin(theta);
             } else {
                 telemetry.addData("[Drive] sample detected", false);
-                x = 0;
-                y = 0;
+                x = Double.NaN;
+                y = Double.NaN;
             }
 
             // Drive to the location at which to pickup a sample
             double xPower;
-            if (Math.abs(x) > xTargetDistance + TOLERABLE_X_ERROR) {
+            double xError = Math.abs(x - xTargetDistance);
+            if (!Double.isNaN(x) && xError > TOLERABLE_X_ERROR) {
                 double pid = xController.calculate(x, xTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 xPower = pid + ff;
@@ -394,8 +395,9 @@ public class MecanumDrive extends SubsystemBase {
                 xController.reset();
             }
             double yPower;
-            if (Math.abs(y) > yTargetDistance + TOLERABLE_Y_ERROR) {
-                double pid = yController.calculate(x, yTargetDistance);
+            double yError = Math.abs(y - yTargetDistance);
+            if (!Double.isNaN(y) && yError > TOLERABLE_Y_ERROR) {
+                double pid = yController.calculate(y, yTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 yPower = pid + ff;
             } else {
