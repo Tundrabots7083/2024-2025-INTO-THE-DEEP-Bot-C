@@ -385,7 +385,7 @@ public class MecanumDrive extends SubsystemBase {
             // Get the power to apply along the X-axis
             double xPower;
             double xError = Math.abs(x - xTargetDistance);
-            if (!Double.isNaN(x) && xError > TOLERABLE_X_ERROR) {
+            if (xError > TOLERABLE_X_ERROR) {
                 double pid = xController.calculate(x, xTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 xPower = pid + ff;
@@ -397,7 +397,7 @@ public class MecanumDrive extends SubsystemBase {
             // Get the power to apply along the Y-axis
             double yPower;
             double yError = Math.abs(y - yTargetDistance);
-            if (!Double.isNaN(y) && yError > TOLERABLE_Y_ERROR) {
+            if (yError > TOLERABLE_Y_ERROR) {
                 double pid = yController.calculate(y, yTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 yPower = pid + ff;
