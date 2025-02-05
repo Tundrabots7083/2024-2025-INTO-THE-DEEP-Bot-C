@@ -378,7 +378,7 @@ public class MecanumDrive extends SubsystemBase {
                 x = distance * Math.cos(theta);
                 y = distance * Math.sin(theta);
             } else {
-                telemetry.addData("[Drive] sample detected", false);
+                telemetry.addData("[Drive] no sample detected", false);
                 x = Double.NaN;
                 y = Double.NaN;
             }
