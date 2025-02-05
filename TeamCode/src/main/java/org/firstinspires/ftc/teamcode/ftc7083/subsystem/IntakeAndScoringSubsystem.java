@@ -85,7 +85,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
     public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 5;
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 8;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X = ARM_LENGTH + 6.0;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
     public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
