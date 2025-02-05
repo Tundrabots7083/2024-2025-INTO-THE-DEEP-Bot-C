@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerEx;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
@@ -385,7 +386,8 @@ public class MecanumDrive extends SubsystemBase {
             // Get the power to apply along the X-axis
             double xPower;
             double xError = Math.abs(x - xTargetDistance);
-            if (xError > TOLERABLE_X_ERROR) {
+            boolean xAtTarget =!(xError > TOLERABLE_X_ERROR);
+            if (!xAtTarget) {
                 double pid = xController.calculate(x, xTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 xPower = pid + ff;
@@ -397,7 +399,8 @@ public class MecanumDrive extends SubsystemBase {
             // Get the power to apply along the Y-axis
             double yPower;
             double yError = Math.abs(y - yTargetDistance);
-            if (yError > TOLERABLE_Y_ERROR) {
+            boolean yAtTarget = !(yError > TOLERABLE_Y_ERROR);
+            if (!yAtTarget) {
                 double pid = yController.calculate(y, yTargetDistance);
                 double ff = pid < 0 ? -KF : KF;
                 yPower = pid + ff;
@@ -416,7 +419,7 @@ public class MecanumDrive extends SubsystemBase {
             telemetry.addData("[Drive] Y-Current", y);
             telemetry.addData("[Drive] Y-Power", yPower);
 
-            boolean atTarget = xPower == ZERO_POWER && yPower == ZERO_POWER;
+            boolean atTarget = xAtTarget && yAtTarget;
             telemetry.addData("[Drive] atTarget", atTarget);
 
             return !atTarget;
