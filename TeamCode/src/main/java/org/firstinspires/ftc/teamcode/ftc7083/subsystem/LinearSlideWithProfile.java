@@ -26,21 +26,21 @@ public class LinearSlideWithProfile extends SubsystemBase {
 
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
 
-    public static double KP = 0.4;
-    public static double KI = 0.4;
-    public static double KD = 0.05;
-    public static double KG = 0.3;
-    public static double KV = 0;
-    public static double KA = 0;
-    public static double KS = 0.1;
-    public static double maxVelocity = 0.1;
-    public static double maxAcceleration = 0.1;
+    public static double KP = 0.7;
+    public static double KI = 0.0;
+    public static double KD = 0.0;
+    public static double KG = 0.0;
+    private double KV = 0;
+    private double KA = 0;
+    public static double KS = 0.0;
+    public static double maxVelocity = 120;
+    public static double maxAcceleration = 95;
 
     PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 1.5; // inches
-    public static int AT_TARGET_COUNT = 5;
+    public static double TOLERABLE_ERROR = 0.5; // inches
+    public static int AT_TARGET_COUNT = 1;
 
     public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 40;
@@ -74,6 +74,7 @@ public class LinearSlideWithProfile extends SubsystemBase {
         slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
         pidfController = new OLD_PIDFController(pidCoefficients,KV,KA,KS, feedForward);
+        pidfController.setOutputBounds(-1,1);
     }
 
     /**
@@ -95,7 +96,6 @@ public class LinearSlideWithProfile extends SubsystemBase {
         double targetLength = Range.clip(length, MIN_EXTENSION_LENGTH, MAX_EXTENSION_LENGTH);
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
-            pidfController.setTargetPosition(targetLength);
             profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentLength(),targetLength);
             pidfController.reset();
             atTargetCount = 0;
@@ -135,8 +135,12 @@ public class LinearSlideWithProfile extends SubsystemBase {
     public void execute() {
         double currentLength = getCurrentLength();
         double profileTargetPosition = profile.calculatePosition();
-        double power = pidfController.update(profile.getTimestamp(), profileTargetPosition);
+        pidfController.setTargetPosition(profileTargetPosition);
+        double power = pidfController.update(profile.getTimestamp(), currentLength);
         slideMotor.setPower(power);
+
+        telemetry.addData("[LS] ProfileTargetPos", profileTargetPosition);
+        telemetry.addData("[LS] Power", power);
 
         // Make sure the slide is at it's target for a number of consecutive loops. This is designed
         // to handle cases of "bounce" in the slide when moving to the target angle.
