@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 
 /**
