@@ -406,7 +406,7 @@ public class MecanumDrive extends SubsystemBase {
                 yController.reset();
             }
 
-            // Drive to the target coordinates
+            // Drive to the target coordinates using the calculated power
             mecanumDrive.driveWithoutAdjustment(xPower, yPower, 0.0);
 
             telemetry.addData("[Drive] X-Target", xTargetDistance);
