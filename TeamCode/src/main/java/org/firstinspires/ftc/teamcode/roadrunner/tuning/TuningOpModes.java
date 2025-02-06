@@ -26,7 +26,7 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.SparkFunOTOSDrive;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.TankDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.TwoDeadWheelLocalizer;
@@ -58,13 +58,13 @@ public final class TuningOpModes {
         DriveViewFactory dvf;
         if (DRIVE_CLASS.equals(SparkFunOTOSDrive.class)) {
             dvf = hardwareMap -> {
-                Robot.init(hardwareMap, FtcDashboard.getInstance().getTelemetry());
+                Robot robot = Robot.init(hardwareMap, FtcDashboard.getInstance().getTelemetry());
                 SparkFunOTOSDrive od = new SparkFunOTOSDrive(hardwareMap, new Pose2d(0, 0, 0));
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                parEncs.add(new OtosEncoder(od.otos,false,false, od.leftBack));
-                perpEncs.add(new OtosEncoder(od.otos,true,false, od.leftBack));
+                parEncs.add(new OtosEncoder(robot.otos,false,false, robot.mecanumDrive.leftRear));
+                perpEncs.add(new OtosEncoder(robot.otos,true,false, robot.mecanumDrive.leftRear));
 
                 return new DriveView(
                         DriveType.MECANUM,
@@ -74,12 +74,12 @@ public final class TuningOpModes {
                         Params.maxProfileAccel,
                         hardwareMap.getAll(LynxModule.class),
                         Arrays.asList(
-                                od.leftFront,
-                                od.leftBack
+                                robot.mecanumDrive.leftFront,
+                                robot.mecanumDrive.leftRear
                         ),
                         Arrays.asList(
-                                od.rightFront,
-                                od.rightBack
+                                robot.mecanumDrive.rightFront,
+                                robot.mecanumDrive.rightRear
                         ),
                         leftEncs,
                         rightEncs,

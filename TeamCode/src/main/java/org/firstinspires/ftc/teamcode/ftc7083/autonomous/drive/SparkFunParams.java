@@ -26,7 +26,7 @@ public class SparkFunParams {
     // tweaked slightly to compensate for imperfect mounting (eg. 1.3 degrees).
     public static double MOUNTING_OFFSET_X = 0;
     public static double MOUNTING_OFFSET_Y = 0;
-    public static double MOUNTING_HEADING_IN_DEGREES = 180;
+    public static double MOUNTING_HEADING_IN_DEGREES = 89.396;
 
     // Here we can set the linear and angular scalars, which can compensate for
     // scaling issues with the sensor measurements. Note that as of firmware

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 
 /**
  * Parameters originally embedded in RoadRunner's MecanumDrive, split out here for ease of finding
@@ -19,17 +18,17 @@ public class Params {
     // Initial robot position. This can be overridden using the setPosition() method.
     public static int INITIAL_POS_X = 0;
     public static int INITIAL_POS_Y = 0;
-    public static int INITIAL_POS_HEADING = 0;
+    public static int INITIAL_POS_HEADING = 90;
 
     // drive model parameters
     public static double inPerTick = 1; // If you're using OTOS/Pinpoint leave this at 1 (all values will be in inches, 1 tick = 1 inch)
-    public static double lateralInPerTick = inPerTick; // // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
-    public static double trackWidthTicks = 1;
+    public static double lateralInPerTick = 0.6325; // // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
+    public static double trackWidthTicks = 7.373;
 
     // feedforward parameters (in tick units)
-    public static double kS = 0;;
-    public static double kV = 0;
-    public static double kA = 0; // Initial value; increase by factor of 10 to find valid value
+    public static double kS = 0.8134;;
+    public static double kV = 0.1958;
+    public static double kA = 0.0000001; // Initial value; increase by factor of 10 to find valid value (TODO: NOT TUNED YET)
 
     // path profile parameters (in inches)
     public static double maxWheelVel = 50;
