@@ -29,7 +29,7 @@ public class Limelight extends SubsystemBase {
     private final double LIMELIGHT_LATERAL_OFFSET = 4.5;
     private static final double SAMPLE_HEIGHT_INCHES = 1.1;
     private static final double WALL_HEIGHT_INCHES = 10;
-    private static double LL_DISTANCE_FROM_BACK_OF_SLIDE = -2; // had -1.6 previously (too close) had -2.5 (too far)
+    private static double LL_DISTANCE_FROM_BACK_OF_SLIDE = -1.2; // had -1.6 previously (too close) had -2.5 (too far)
 
 
     /**

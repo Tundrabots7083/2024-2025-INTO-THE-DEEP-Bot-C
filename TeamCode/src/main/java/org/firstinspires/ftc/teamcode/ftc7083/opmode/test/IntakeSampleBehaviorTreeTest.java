@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 
 import java.util.List;
 
@@ -30,6 +31,15 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
+            // as the bulk read caches are being handled manually.
+        List<LynxModule> allHubs;
+
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.clearBulkCache();
+        }
+
             Status result = this.behaviorTree.tick();
 
             telemetry.addData("[IntakeSampleBT]", "Behavior tree result: %s", result);
@@ -49,6 +59,9 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
     }
 
     private void initialize(){
+
+        Robot.init(hardwareMap,telemetry);
+
         this.behaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
 
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
@@ -59,6 +72,7 @@ public class IntakeSampleBehaviorTreeTest extends LinearOpMode {
         for (LynxModule hub : allHubs) {
             hub.clearBulkCache();
         }
+
     }
 
 }

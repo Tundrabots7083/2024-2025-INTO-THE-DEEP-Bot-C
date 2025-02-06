@@ -65,6 +65,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public static double ARM_HEIGHT_ADJUSTMENT = 0.5;
     public static double TRIGGER_MIN_THRESHOLD = 0.1;
 
+    private int intakeCount = 0;
+
     private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     private final Telemetry telemetry;
 
@@ -280,15 +282,13 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
-                    Status result = Status.RUNNING;
+                    Status result;
                     this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
-                    while(result == Status.RUNNING) {
-                        result = this.wristOrientationBehaviorTreeRedSamples.tick();
-                    }
+                    result = this.wristOrientationBehaviorTreeRedSamples.tick();
                     if (result == Status.FAILURE) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
                         gamepad1.rumble(1000);
-                    } else {
+                    } else if (result == Status.SUCCESS){
                         state = State.INTAKE_AUTO_ORIENTED;
                     }
                     break;
@@ -375,19 +375,43 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        } /*else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
+        } else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
             switch (state) {
-                case NEUTRAL_POSITION:
-                    Status result = Status.RUNNING;
-                    this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
-                    while(result == Status.RUNNING) {
+                case START_POSITION:
+                    Status result;
+                    if(intakeCount == 0){
+                        this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
+                    }
+                    result = this.intakeSampleBehaviorTree.tick();
+                    while(result == Status.RUNNING && !gamepad1.share) {
                         result = this.intakeSampleBehaviorTree.tick();
                     }
-                    if (result == Status.FAILURE) {
+                    intakeCount++;
+                    if (result == Status.FAILURE || gamepad1.share) {
                         state = State.INTAKE_AUTO_GRAB_FAILED;
+                        intakeCount = 0;
                         gamepad1.rumble(1000);
-                    } else {
+                    } else if (result == Status.SUCCESS){
                         state = State.NEUTRAL_POSITION;
+                        intakeCount = 0;
+                    }
+                    break;
+                case NEUTRAL_POSITION:
+                    if(intakeCount == 0){
+                        this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
+                    }
+                    result = this.intakeSampleBehaviorTree.tick();
+                    while(result == Status.RUNNING && !gamepad1.share) {
+                        result = this.intakeSampleBehaviorTree.tick();
+                    }
+                    intakeCount++;
+                    if (result == Status.FAILURE || gamepad1.share) {
+                        state = State.INTAKE_AUTO_GRAB_FAILED;
+                        intakeCount = 0;
+                        gamepad1.rumble(1000);
+                    } else if (result == Status.SUCCESS){
+                        state = State.NEUTRAL_POSITION;
+                        intakeCount = 0;
                     }
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
@@ -398,7 +422,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        }*/
+        }
 
         // Open and close the claw; used for acquiring samples/specimens and scoring
         // or depositing them

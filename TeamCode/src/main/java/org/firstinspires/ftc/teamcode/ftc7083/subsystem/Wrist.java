@@ -25,8 +25,8 @@ public class Wrist extends SubsystemBase {
     public static double ROLL_DEGREES_OFFSET = 156.0;
 
     // Minimum and maximum pitch and roll values we allow to be set
-    public static double MIN_ROLL = -45;
-    public static double MAX_ROLL = 45;
+    public static double MIN_ROLL = -70;
+    public static double MAX_ROLL = 70;
     public static double MIN_PITCH = 0;
     public static double MAX_PITCH = 208;
 

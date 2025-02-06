@@ -39,10 +39,9 @@ public class LinearSlideWithProfile extends SubsystemBase {
     PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 1.0; // inches
-    public static int AT_TARGET_COUNT = 1;
+    public static double TOLERABLE_ERROR = 0.34; // inches
 
-    public static double MIN_EXTENSION_LENGTH = 0;
+    public static double MIN_EXTENSION_LENGTH = 0.25;
     public static double MAX_EXTENSION_LENGTH = 40;
 
     private final Motor slideMotor;
@@ -50,7 +49,6 @@ public class LinearSlideWithProfile extends SubsystemBase {
     private OLD_PIDFController pidfController;
     private MotionProfile profile;
     private double targetLength = 0;
-    private int atTargetCount = 0;
 
     /**
      * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
@@ -98,7 +96,6 @@ public class LinearSlideWithProfile extends SubsystemBase {
             this.targetLength = targetLength;
             profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentLength(),targetLength);
             pidfController.reset();
-            atTargetCount = 0;
         }
     }
 
@@ -145,22 +142,14 @@ public class LinearSlideWithProfile extends SubsystemBase {
 
         telemetry.addData("[LS] ProfileTargetPos", profileTargetPosition);
         telemetry.addData("[LS] Power", power);
-
-        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target angle.
-        double error = Math.abs(targetLength - currentLength);
-        if (error <= TOLERABLE_ERROR) {
-            atTargetCount++;
-        } else {
-            atTargetCount = 0;
-        }
     }
 
     /**
      * checks if the length is within the tolerable error and if it is then the motor will stop
      */
     public boolean isAtTarget() {
-        boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        double error = Math.abs(targetLength - getCurrentLength());
+        boolean atTarget = error <= TOLERABLE_ERROR;
         telemetry.addData("[Slide] atTarget", atTarget);
         return atTarget;
     }
