@@ -118,6 +118,10 @@ public class ArmWithProfile extends SubsystemBase {
      * Sends power to the shoulder motor.
      */
     public void execute() {
+        if(profile == null) {
+            profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentAngle(),targetAngle);
+            pidfController.reset();
+        }
         double currentAngle = getCurrentAngle();
         double profileTargetPosition = profile.calculatePosition();
         pidfController.setTargetPosition(profileTargetPosition);
