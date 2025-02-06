@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 
