@@ -83,7 +83,7 @@ public class IntakeRedSpecimenBehaviorTree {
                         new Action(new NavigateAndOrientToSample(telemetry,mecanumDrive),telemetry),
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new WristSpecimenIntakePosition(telemetry,wrist),telemetry),
-                        new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
+                        //new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new CloseClaw(telemetry,robot),telemetry),
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)
                 ),telemetry);

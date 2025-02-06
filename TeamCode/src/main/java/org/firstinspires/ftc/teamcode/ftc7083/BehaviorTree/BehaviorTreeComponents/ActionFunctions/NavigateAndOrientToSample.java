@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.ActionFunction;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BlackBoardSingleton;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDControllerImpl;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.OLD_PIDFController;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 
     @Config
@@ -15,18 +17,22 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
         MecanumDrive mecanumDrive;
         Telemetry telemetry;
 
-        public static double KPDrive = 0.019;
-        public static double KIDrive = 0.09;
+        public static double KPDrive = 0.03;
+        public static double KIDrive = 0.0;
         public static double KDDrive = 0.0;
-        public static double KPTurn = 0.017;
-        public static double KITurn = 0.09;
+        public static double KPTurn = 0.014;
+        public static double KITurn = 0.0;
         public static double KDTurn = 0.0;
+
+        private final PIDCoefficients DRIVEpidCoefficients = new PIDCoefficients(KPDrive,KIDrive,KDDrive);
+        private final PIDCoefficients TURNpidCoefficients = new PIDCoefficients(KPTurn,KITurn,KDTurn);
+
         public static double TOLERABLE_ERROR = 0.5; // inches
         public static double MAXIMUM_INTAKE_DISTANCE = 30; //inches
-        public static double INTAKE_ANGLE = 0.0;
+        private final double INTAKE_ANGLE = 0.0;
 
-        private final PIDControllerImpl DrivePIDController;
-        private final PIDControllerImpl TurnPIDController;
+        private final OLD_PIDFController DrivePIDController;
+        private final OLD_PIDFController TurnPIDController;
 
         protected Status lastStatus = Status.FAILURE;
         protected int runCount = 0;
@@ -34,10 +40,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
         public NavigateAndOrientToSample(Telemetry telemetry, MecanumDrive mecanumDrive) {
             this.mecanumDrive = mecanumDrive;
             this.telemetry = telemetry;
-            DrivePIDController = new PIDControllerImpl(KPDrive, KIDrive, KDDrive);
+            DrivePIDController = new OLD_PIDFController(DRIVEpidCoefficients,0,0,0.16);
             DrivePIDController.reset();
 
-            TurnPIDController = new PIDControllerImpl(KPTurn,KITurn,KDTurn);
+            TurnPIDController = new OLD_PIDFController(TURNpidCoefficients,0,0,0.1);
             TurnPIDController.reset();
         }
 
@@ -48,6 +54,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
             double turnError;
             double drivePower = 0.0;
             double turnPower = 0.0;
+
+            DrivePIDController.setTargetPosition(0.0);
+            TurnPIDController.setTargetPosition(INTAKE_ANGLE);
 
             if (lastStatus == Status.SUCCESS) {
                 telemetry.addData("[NavigateWithinRange] status:", "Just left it as success");
@@ -90,10 +99,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
             }
 
             if (distanceError >= TOLERABLE_ERROR) {
-                drivePower = DrivePIDController.calculate(0, -distanceError);
+                drivePower = DrivePIDController.update( -distanceError);
             }
             if (Math.abs(turnError) >= TOLERABLE_ERROR) {
-                turnPower = TurnPIDController.calculate(INTAKE_ANGLE, turnError);
+                turnPower = TurnPIDController.update(turnError);
             }
 
             mecanumDrive.driveWithoutAdjustment(0,drivePower,turnPower);
