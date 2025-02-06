@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 
 @Config
 @TeleOp(name = "Arm Tuning", group = "tests")
@@ -20,7 +19,7 @@ public class ArmTuning extends OpMode {
 
     public static double GEARING = 22.0 / 10.0;
 
-    public static double ARM_ANGLE = Arm.START_ANGLE;
+    public static double ARM_ANGLE = ArmWithProfile.START_ANGLE;
     private Motor motor;
 
     @Override
