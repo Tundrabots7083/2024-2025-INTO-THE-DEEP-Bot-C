@@ -133,6 +133,10 @@ public class LinearSlideWithProfile extends SubsystemBase {
      * sets the power for the pid controller
      */
     public void execute() {
+        if(profile == null) {
+            profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentLength(),targetLength);
+            pidfController.reset();
+        }
         double currentLength = getCurrentLength();
         double profileTargetPosition = profile.calculatePosition();
         pidfController.setTargetPosition(profileTargetPosition);
