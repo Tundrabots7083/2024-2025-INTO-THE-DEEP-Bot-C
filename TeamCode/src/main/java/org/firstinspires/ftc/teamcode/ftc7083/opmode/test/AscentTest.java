@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 
 @TeleOp(name = "Ascent Test", group = "tests")
 public class AscentTest extends OpMode {
