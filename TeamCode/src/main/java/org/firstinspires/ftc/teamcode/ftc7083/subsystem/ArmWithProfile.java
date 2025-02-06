@@ -37,14 +37,13 @@ public class ArmWithProfile extends SubsystemBase {
     PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 2.5; // In degrees
-    public static int AT_TARGET_COUNT = 1;
+    public static double TOLERABLE_ERROR = 1.5; // In degrees
 
     public static double GEARING = 2.45;
     public static double START_ANGLE = -36.0;
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
     public static double TICKS_PER_REV = 1993.6; // GoBuilda ticks per rev
-    public static double MIN_ANGLE = -36.0;
+    public static double MIN_ANGLE = -35.0;
     public static double MAX_ANGLE = 100.0;
 
     private final Motor shoulderMotor;
@@ -52,7 +51,6 @@ public class ArmWithProfile extends SubsystemBase {
     private OLD_PIDFController pidfController;
     private MotionProfile profile;
     private double targetAngle = START_ANGLE;
-    private int atTargetCount = 0;
 
     /**
      * Makes an arm that can raise and lower.
@@ -110,7 +108,6 @@ public class ArmWithProfile extends SubsystemBase {
             this.targetAngle = targetAngle;
             profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentAngle(),targetAngle);
             pidfController.reset();
-            atTargetCount = 0;
         }
     }
 
@@ -131,14 +128,6 @@ public class ArmWithProfile extends SubsystemBase {
         telemetry.addData("[Arm] ProfileTargetPos", profileTargetPosition);
         telemetry.addData("[Arm] Power", power);
 
-        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target angle.
-        double error = Math.abs(targetAngle - currentAngle);
-        if (error <= TOLERABLE_ERROR) {
-            atTargetCount++;
-        } else {
-            atTargetCount = 0;
-        }
     }
 
     /**
@@ -147,7 +136,8 @@ public class ArmWithProfile extends SubsystemBase {
      * @return <code>true</code> if the arm is at the target angle; <code>false</code> otherwise.
      */
     public boolean isAtTarget() {
-        boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        double error = Math.abs(targetAngle - getCurrentAngle());
+        boolean atTarget = error <= TOLERABLE_ERROR;
         telemetry.addData("[Arm] atTarget", atTarget);
         return atTarget;
     }

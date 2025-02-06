@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.ActionFunction;
@@ -16,6 +17,7 @@ public class CloseClaw implements ActionFunction {
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
     private TelemetryPacket tp = new TelemetryPacket();
+    ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     public CloseClaw (Telemetry telemetry,Robot robot) {
         this.robot = robot;
@@ -29,9 +31,13 @@ public class CloseClaw implements ActionFunction {
             return lastStatus;
         }
 
+        if(runCount == 0) {
+            timer.reset();
+        }
+
         robot.intakeAndScoringSubsystem.actionCloseClaw().run(tp);
 
-        if (runCount > 40) {
+        if (timer.time() >= 75) {
             status = Status.SUCCESS;
         }
 

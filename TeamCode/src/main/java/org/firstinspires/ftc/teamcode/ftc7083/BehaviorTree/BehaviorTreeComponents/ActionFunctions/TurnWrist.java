@@ -12,7 +12,7 @@ public class TurnWrist implements ActionFunction  {
    // IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     Wrist wrist;
     Telemetry telemetry;
-    ElapsedTime time = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
@@ -25,7 +25,6 @@ public class TurnWrist implements ActionFunction  {
     public TurnWrist (Telemetry telemetry,Wrist wrist) {
         this.wrist =wrist;
         this.telemetry = telemetry;
-        this.time.reset();
     }
 
     public Status perform(BlackBoardSingleton blackBoard) {
@@ -39,11 +38,12 @@ public class TurnWrist implements ActionFunction  {
 
         if(runCount == 0 && sampleAngle != null) {
                 wrist.setRollDegrees(-sampleAngle);
+                timer.reset();
                 telemetry.addData("[TurnWrist] Sample angle", sampleAngle);
                 telemetry.update();
             }
 
-        if(time.time() >= 100) {
+        if(timer.time() >= 75) {
             status = Status.SUCCESS;
         }
 

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponent
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ExtendArmToSubmersibleSample;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.IsBotOriented;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.LowerArmToSubmersibleSample;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.MoveToDetectPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.MoveToStartPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.NavigateAndOrientToSample;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.OpenClaw;
@@ -81,7 +82,6 @@ public class IntakeSampleBehaviorTree {
                                         new Action(new DetectYellowSamples(telemetry,limelight, Limelight.TargetPosition.SUBMERSIBLE),telemetry)),telemetry
                         ),
                         new Action(new NavigateAndOrientToSample(telemetry,mecanumDrive),telemetry),
-                        new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new WristIntakePosition(telemetry,wrist),telemetry),
                         new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Selector(
@@ -103,17 +103,16 @@ public class IntakeSampleBehaviorTree {
     }
 
     public Status tick() {
+
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
-        /*List<LynxModule> allHubs;
-
-        allHubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : allHubs) {
+        for (LynxModule hub : robot.allHubs) {
             hub.clearBulkCache();
-        }*/
+        }
+
         // Run the behavior tree
         Status result = tree.tick();
-        //intakeAndScoringSubsystem.execute();
+        intakeAndScoringSubsystem.execute();
         telemetry.addData("IntakeSample", "Run - Behavior tree result: %s",result);
         telemetry.update();
 
