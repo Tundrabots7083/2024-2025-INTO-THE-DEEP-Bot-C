@@ -44,6 +44,6 @@ public class SparkFunParams {
     // multiple speeds to get an average, then set the linear scalar to the
     // inverse of the error. For example, if you move the robot 100 inches and
     // the sensor reports 103 inches, set the linear scalar to 100/103 = 0.971
-    public static double LINEAR_SCALAR = 1.0;
-    public static double ANGULAR_SCALAR = 1.0;
+    public static double LINEAR_SCALAR = 1.209;
+    public static double ANGULAR_SCALAR = 0.998;
 }

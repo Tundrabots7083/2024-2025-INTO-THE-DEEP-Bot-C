@@ -179,7 +179,7 @@ public class MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        leftFront = robot.mecanumDrive.rightFront;
+        leftFront = robot.mecanumDrive.leftFront;
         leftBack = robot.mecanumDrive.leftRear;
         rightBack = robot.mecanumDrive.rightRear;
         rightFront = robot.mecanumDrive.rightFront;
