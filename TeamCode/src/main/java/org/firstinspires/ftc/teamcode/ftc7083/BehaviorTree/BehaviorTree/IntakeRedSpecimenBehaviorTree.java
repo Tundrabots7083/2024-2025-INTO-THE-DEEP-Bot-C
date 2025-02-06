@@ -8,10 +8,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponent
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectBlueSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectSampleOrientation;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ExtendArmToSubmersibleSample;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ExtendArmToWallSpecimen;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.IsBotOriented;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.LowerArmToSubmersibleSample;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.MoveToDetectPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.MoveToStartPosition;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.NavigateAndOrientToSample;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.OpenClaw;
@@ -75,7 +73,7 @@ public class IntakeRedSpecimenBehaviorTree {
 
         this.root = new Sequence(
                 Arrays.asList(
-                        new Action(new MoveToDetectPosition(telemetry,intakeAndScoringSubsystem),telemetry),
+                        new Action(new MoveToStartPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new OpenClaw(telemetry,robot),telemetry),
                         new Selector(
                                 Arrays.asList(
@@ -85,7 +83,7 @@ public class IntakeRedSpecimenBehaviorTree {
                         new Action(new NavigateAndOrientToSample(telemetry,mecanumDrive),telemetry),
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new WristSpecimenIntakePosition(telemetry,wrist),telemetry),
-                        new Action(new ExtendArmToWallSpecimen(telemetry,intakeAndScoringSubsystem),telemetry),
+                        //new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new CloseClaw(telemetry,robot),telemetry),
                         new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry)
                 ),telemetry);
