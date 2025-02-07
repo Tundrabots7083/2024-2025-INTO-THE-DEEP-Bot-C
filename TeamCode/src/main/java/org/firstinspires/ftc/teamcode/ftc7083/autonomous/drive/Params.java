@@ -40,9 +40,9 @@ public class Params {
     public static double maxAngAccel = Math.PI;
 
     // path controller gains
-    public static double axialGain = 8.0;
-    public static double lateralGain = 3.75;
-    public static double headingGain = -0.35; // shared with turn
+    public static double axialGain = 13.0;
+    public static double lateralGain = 18.0;
+    public static double headingGain = 10.0; // shared with turn
 
     public static double axialVelGain = 0.0;
     public static double lateralVelGain = 0.0;

@@ -26,8 +26,8 @@ public class AutonomousTest extends LinearOpMode {
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Drive constants
-    public static double DRIVE_Y_DISTANCE = 48.0;
-    public static double DRIVE_X_DISTANCE = 0.0;
+    public static double DRIVE_Y_DISTANCE = 48.0; // OTOS and RoadRunner report 48 when driven by RoadRunner
+    public static double DRIVE_X_DISTANCE = 12.0;
     public static double DRIVE_ORIENTATION = 90.0;
 
     @Override
@@ -52,7 +52,8 @@ public class AutonomousTest extends LinearOpMode {
 
         Pose2d robotPose = new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), Math.toRadians(INITIAL_POSE_ORIENTATION));
         Action driveActions = drive.actionBuilder(robotPose)
-                .lineToY(DRIVE_Y_DISTANCE)
+//                .lineToY(DRIVE_Y_DISTANCE)
+                .strafeToSplineHeading(new Vector2d(DRIVE_X_DISTANCE, 2), Math.toRadians(INITIAL_POSE_ORIENTATION))
                 .build();
         telemetry.update();
 
