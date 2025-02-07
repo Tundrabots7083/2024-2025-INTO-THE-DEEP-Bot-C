@@ -76,8 +76,12 @@ public class GlobalShutterAprilTagLocalizer implements Localizer {
 
     @Override
     public Pose2d getPose() {
-        update();
-        return currentPose;
+        if (aprilTagsDetected()) {
+            update();
+            return currentPose;
+        } else {
+            return null;
+        }
     }
 
     @SuppressLint("DefaultLocale")

@@ -35,22 +35,23 @@ public class DetectAprilTags_GlobalShutter implements ActionFunction {
             return lastStatus;
         }
 
-        telemetry.addData("[DetectAprilTags]", " perform count: %d", count);
+        telemetry.addData("[DetectAprilTags]", " perform count: ", count);
         telemetry.update();
         count++;
 
         currentPose = localizer.getPose();
 
-        blackBoard.setValue("Current_X_pose",currentPose.position.x);
-        blackBoard.setValue("Current_Y_pose",currentPose.position.y);
-        blackBoard.setValue("Current_Heading",currentPose.heading);
+        if(currentPose != null) {
 
+            blackBoard.setValue("Current_X_pose", currentPose.position.x);
+            blackBoard.setValue("Current_Y_pose", currentPose.position.y);
+            blackBoard.setValue("Current_Heading", currentPose.heading);
+            telemetry.addData("[DetectAprilTags] X-Pose", currentPose.position.x);
+            telemetry.addData("[DetectAprilTags] Y-Pose", currentPose.position.y);
+            telemetry.update();
 
-
-         telemetry.update();
-
-        blackBoard.setValue("Current_X_pose",currentPose.position.x);
-
+            status = Status.SUCCESS;
+        } else {
             telemetry.addData("[DetectAprilTags]", "Didn't detect anything");
             telemetry.update();
 
@@ -59,6 +60,7 @@ public class DetectAprilTags_GlobalShutter implements ActionFunction {
             } else {
                 status = Status.RUNNING;
             }
+        }
 
         lastStatus = status;
         return status;
