@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOri
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 
-@Autonomous(name = "Wrist Orientation BT", group = "Test")
+@Autonomous(name = "Wrist Orientation BT", group = "tests")
 public class WristOrientationTest extends LinearOpMode {
 
     WristOrientationBehaviorTreeSamples behaviorTree = null;

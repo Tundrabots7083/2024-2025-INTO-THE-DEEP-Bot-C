@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -311,7 +312,7 @@ public class MecanumDrive extends SubsystemBase {
         public static double KP = 0.0;
         public static double KI = 0.0;
         public static double KD = 0.0;
-        public static double KF = 0.0;
+        public static double KF = 0.075;
 
         // Distance of the Limelight camera from the front of the robot
         public static double LIMELIGHT_DISTANCE_TO_FRONT_OF_ROBOT = 12.0;
@@ -378,7 +379,7 @@ public class MecanumDrive extends SubsystemBase {
                 x = distance * Math.cos(theta);
                 y = distance * Math.sin(theta);
             } else {
-                telemetry.addData("[Drive] no sample detected", false);
+                telemetry.addData("[Drive] sample detected", false);
                 x = Double.NaN;
                 y = Double.NaN;
             }
