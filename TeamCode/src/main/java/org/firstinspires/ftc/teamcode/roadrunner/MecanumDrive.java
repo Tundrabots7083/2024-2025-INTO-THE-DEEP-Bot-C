@@ -52,7 +52,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-@Config
 public class MecanumDrive {
 
     public final MecanumKinematics kinematics = new MecanumKinematics(

@@ -8,20 +8,27 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 /**
  * Base autonomous op mode
  */
 @Config
+@Autonomous(name = "Autonomous Trajectory Test", group = "tests")
 public class AutonomousTest extends LinearOpMode {
+    // Initial robot pose
     public static double INITIAL_POSE_X = 0.0;
     public static double INITIAL_POSE_Y = 0.0;
     public static double INITIAL_POSE_ORIENTATION = 90.0;
+
+    // Drive constants
+    public static double DRIVE_Y_DISTANCE = 48.0;
+    public static double DRIVE_X_DISTANCE = 0.0;
+    public static double DRIVE_ORIENTATION = 90.0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,28 +46,35 @@ public class AutonomousTest extends LinearOpMode {
             robot.localizer.update();
             telemetry.update();
         }
+
         Pose2d otosPose = robot.localizer.getPose();
-        telemetry.addData("OTOS Pose", otosPose);
         SparkFunOTOSDrive drive = new SparkFunOTOSDrive(hardwareMap, otosPose);
 
         Pose2d robotPose = new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), Math.toRadians(INITIAL_POSE_ORIENTATION));
-        telemetry.addData("Robot Pose", robotPose);
         Action driveActions = drive.actionBuilder(robotPose)
-                .lineToY(48)
+                .lineToY(DRIVE_Y_DISTANCE)
                 .build();
+        telemetry.update();
 
         waitForStart();
 
         if (isStopRequested()) return;
 
+        telemetry.addData("OTOS Pose", otosPose);
+        telemetry.addData("Robot Pose", robotPose);
+        telemetry.update();
+
         // Run the action, making sure to update the telemetry as the actions run
         Actions.runBlocking(
                 new ParallelAction(
-                        (telemetryPacket) -> {
-                            telemetry.update();
-                            return true;
-                        },
-                        driveActions
+                        driveActions,
+                        new ParallelAction(
+                                (telemetryPacket) -> {
+                                    telemetry.update();
+                                    return true;
+                                },
+                                driveActions
+                        )
                 )
         );
     }
