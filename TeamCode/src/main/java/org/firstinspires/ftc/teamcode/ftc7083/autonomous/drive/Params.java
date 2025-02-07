@@ -22,13 +22,13 @@ public class Params {
 
     // drive model parameters
     public static double inPerTick = 1; // If you're using OTOS/Pinpoint leave this at 1 (all values will be in inches, 1 tick = 1 inch)
-    public static double lateralInPerTick = 0.6325; // // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
-    public static double trackWidthTicks = 7.373;
+    public static double lateralInPerTick = inPerTick; // // Tune this with LateralRampLogger (even if you use OTOS/Pinpoint)
+    public static double trackWidthTicks = 0;
 
     // feedforward parameters (in tick units)
-    public static double kS = 0.8134;;
-    public static double kV = 0.1958;
-    public static double kA = 0.0000001; // Initial value; increase by factor of 10 to find valid value (TODO: NOT TUNED YET)
+    public static double kS = 0;;
+    public static double kV = 0;
+    public static double kA = 0; // Initial value; increase by factor of 10 to find valid value
 
     // path profile parameters (in inches)
     public static double maxWheelVel = 50;
