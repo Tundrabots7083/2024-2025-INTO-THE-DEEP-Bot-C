@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 /**
  * Base autonomous op mode
@@ -37,9 +39,13 @@ public class AutonomousTest extends LinearOpMode {
             robot.localizer.update();
             telemetry.update();
         }
-        
-        SparkFunOTOSDrive drive = new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose());
-        Action driveActions = drive.actionBuilder(new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), Math.toRadians(INITIAL_POSE_ORIENTATION)))
+        Pose2d otosPose = robot.localizer.getPose();
+        telemetry.addData("OTOS Pose", otosPose);
+        SparkFunOTOSDrive drive = new SparkFunOTOSDrive(hardwareMap, otosPose);
+
+        Pose2d robotPose = new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), Math.toRadians(INITIAL_POSE_ORIENTATION));
+        telemetry.addData("Robot Pose", robotPose);
+        Action driveActions = drive.actionBuilder(robotPose)
                 .lineToY(48)
                 .build();
 
@@ -47,6 +53,15 @@ public class AutonomousTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        Actions.runBlocking(driveActions);
+        // Run the action, making sure to update the telemetry as the actions run
+        Actions.runBlocking(
+                new ParallelAction(
+                        (telemetryPacket) -> {
+                            telemetry.update();
+                            return true;
+                        },
+                        driveActions
+                )
+        );
     }
 }
