@@ -27,7 +27,7 @@ public class Params {
 
     // feedforward parameters (in tick units)
     public static double kS = 0.8586;
-    public static double kV = 0.1315;
+    public static double kV = 0.1309;
     public static double kA = 0.001; // Initial value; increase by factor of 10 to find valid value
 
     // path profile parameters (in inches)
@@ -40,9 +40,9 @@ public class Params {
     public static double maxAngAccel = Math.PI;
 
     // path controller gains
-    public static double axialGain = 4.0;
-    public static double lateralGain = 3.0;
-    public static double headingGain = 5.0; // shared with turn
+    public static double axialGain = 8.0;
+    public static double lateralGain = 3.75;
+    public static double headingGain = -0.35; // shared with turn
 
     public static double axialVelGain = 0.0;
     public static double lateralVelGain = 0.0;
