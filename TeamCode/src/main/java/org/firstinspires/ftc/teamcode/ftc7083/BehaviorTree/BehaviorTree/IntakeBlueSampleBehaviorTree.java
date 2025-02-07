@@ -7,8 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.CloseClaw;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectBlueSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectSampleOrientation;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectYellowSamples;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ExtendArmToSubmersibleSample;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.ExtendArmToWallSpecimen;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.IsBotOriented;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.LowerArmToSubmersibleSample;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.MoveToStartPosition;
@@ -34,9 +34,8 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class IntakeBlueSpecimenBehaviorTree {
+public class IntakeBlueSampleBehaviorTree {
 
     private BehaviorTree tree;
     private Node root;
@@ -50,7 +49,7 @@ public class IntakeBlueSpecimenBehaviorTree {
     protected MecanumDrive mecanumDrive;
     private Robot robot;
 
-    public IntakeBlueSpecimenBehaviorTree(HardwareMap hardwareMap, Telemetry telemetry) {
+    public IntakeBlueSampleBehaviorTree(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
@@ -61,11 +60,11 @@ public class IntakeBlueSpecimenBehaviorTree {
         this.blackBoard = BlackBoardSingleton.getInstance(telemetry);
         this.blackBoard.reset();
 
-        robot = Robot.init(hardwareMap,telemetry, Robot.OpModeType.AUTO);
+        robot = Robot.getInstance();
         this.intakeAndScoringSubsystem = robot.intakeAndScoringSubsystem;
         this.wrist = robot.wrist;
-        this.globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
-        this.limelight = new Limelight(hardwareMap,telemetry);
+        this.globalShutterCamera = robot.globalShutterCamera;
+        this.limelight = robot.limelight;
         telemetry.addLine("Got Past Robot");
         telemetry.update();
 
@@ -78,12 +77,12 @@ public class IntakeBlueSpecimenBehaviorTree {
                         new Selector(
                                 Arrays.asList(
                                         new Conditional(new IsBotOriented()),
-                                        new Action(new DetectBlueSamples(telemetry,limelight, Limelight.TargetPosition.WALL),telemetry)),telemetry
+                                        new Action(new DetectBlueSamples(telemetry,limelight, Limelight.TargetPosition.SUBMERSIBLE),telemetry),
+                                        new Action(new DetectYellowSamples(telemetry,limelight, Limelight.TargetPosition.SUBMERSIBLE),telemetry)),telemetry
                         ),
                         new Action(new NavigateAndOrientToSample(telemetry,mecanumDrive),telemetry),
-                        new Action(new RaiseArmToNeutralPosition(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Action(new WristIntakePosition(telemetry,wrist),telemetry),
-                        new Action(new ExtendArmToWallSpecimen(telemetry,intakeAndScoringSubsystem),telemetry),
+                        new Action(new ExtendArmToSubmersibleSample(telemetry,intakeAndScoringSubsystem),telemetry),
                         new Selector(
                                 Arrays.asList(
                                         new Sequence(
@@ -103,14 +102,13 @@ public class IntakeBlueSpecimenBehaviorTree {
     }
 
     public Status tick() {
+
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop
         // as the bulk read caches are being handled manually.
-        List<LynxModule> allHubs;
-
-        allHubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : allHubs) {
+        for (LynxModule hub : robot.allHubs) {
             hub.clearBulkCache();
         }
+
         // Run the behavior tree
         Status result = tree.tick();
         intakeAndScoringSubsystem.execute();

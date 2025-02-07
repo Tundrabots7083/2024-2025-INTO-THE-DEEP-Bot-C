@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.ActionFunction;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BlackBoardSingleton;
@@ -13,6 +15,7 @@ public class ExtendArmToWallSpecimen implements ActionFunction {
 
     protected Status lastStatus = Status.FAILURE;
     protected int runCount = 0;
+    ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     public ExtendArmToWallSpecimen(Telemetry telemetry, IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
@@ -27,6 +30,10 @@ public class ExtendArmToWallSpecimen implements ActionFunction {
             return lastStatus;
         }
 
+        if(runCount == 0) {
+        timer.reset();
+        }
+
 
 
         if(blackBoard.getValue("xDistanceToSample") != null) {
@@ -39,7 +46,7 @@ public class ExtendArmToWallSpecimen implements ActionFunction {
         intakeAndScoringSubsystem.moveToPosition(xDistance,10);
         intakeAndScoringSubsystem.execute();
 
-        if(intakeAndScoringSubsystem.isAtTarget()) {
+        if(intakeAndScoringSubsystem.isAtTarget() && timer.time() >= 50) {
             status = Status.SUCCESS;
         }
 
