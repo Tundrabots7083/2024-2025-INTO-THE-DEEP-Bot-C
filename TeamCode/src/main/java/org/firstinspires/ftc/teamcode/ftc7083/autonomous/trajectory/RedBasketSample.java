@@ -21,8 +21,8 @@ public class RedBasketSample {
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring in the high basket
-    public static double BASKET_HIGH_PRELOAD_X = -58.5;
-    public static double BASKET_HIGH_PRELOAD_Y = -58.5;;
+    public static double BASKET_HIGH_PRELOAD_X = -52.5;
+    public static double BASKET_HIGH_PRELOAD_Y = -65.5;;
     public static double BASKET_HIGH_PRELOAD_ORIENTATION = 65;
 
     // Intake positions for spike mark 1
@@ -90,17 +90,17 @@ public class RedBasketSample {
                 // Score pre-loaded sample in the basket
                 .strafeToSplineHeading(new Vector2d(BASKET_HIGH_PRELOAD_X, BASKET_HIGH_PRELOAD_Y), Math.toRadians(BASKET_HIGH_PRELOAD_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
-                // Pick up the sample from Spike Mark 1 and score in the high basket
-                .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_1_X, YELLOW_SPIKE_MARK_1_Y), Math.toRadians(YELLOW_SPIKE_MARK_1_ORIENTATION))
-                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_1_X, BASKET_HIGH_SPECIMEN_1_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_1_ORIENTATION))
-                .stopAndAdd(ias.actionScoreSampleHighBasket())
-                // Pick up the sample from Spike Mark 2 and score in the high basket
-                .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_2_X, YELLOW_SPIKE_MARK_2_Y), Math.toRadians(YELLOW_SPIKE_MARK_2_ORIENTATION))
-                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_2_X, BASKET_HIGH_SPECIMEN_2_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_2_ORIENTATION))
-                .stopAndAdd(ias.actionScoreSampleHighBasket())
-                // Move to the start position
+//                // Pick up the sample from Spike Mark 1 and score in the high basket
+//                .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_1_X, YELLOW_SPIKE_MARK_1_Y), Math.toRadians(YELLOW_SPIKE_MARK_1_ORIENTATION))
+//                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
+//                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_1_X, BASKET_HIGH_SPECIMEN_1_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_1_ORIENTATION))
+//                .stopAndAdd(ias.actionScoreSampleHighBasket())
+//                // Pick up the sample from Spike Mark 2 and score in the high basket
+//                .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_2_X, YELLOW_SPIKE_MARK_2_Y), Math.toRadians(YELLOW_SPIKE_MARK_2_ORIENTATION))
+//                .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
+//                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_2_X, BASKET_HIGH_SPECIMEN_2_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_2_ORIENTATION))
+//                .stopAndAdd(ias.actionScoreSampleHighBasket())
+//                // Move to the start position
                 .stopAndAdd(ias.actionMoveToStartPosition())
                 .build();
     }

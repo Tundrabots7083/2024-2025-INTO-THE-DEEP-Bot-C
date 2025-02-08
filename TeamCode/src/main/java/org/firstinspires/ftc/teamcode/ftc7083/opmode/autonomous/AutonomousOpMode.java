@@ -71,9 +71,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         // Handle the stop button being pressed immediately after the start button has been pressed
         if (isStopRequested()) return;
 
-        // Move the robot's intake and scoring subsystem from the ground
-        robot.intakeAndScoringSubsystem.moveToNeutralPosition();
-
         // Run the autonomous actions
         Actions.runBlocking(autonomousActions);
     }
