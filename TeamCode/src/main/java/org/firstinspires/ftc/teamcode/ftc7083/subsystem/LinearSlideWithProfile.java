@@ -39,7 +39,7 @@ public class LinearSlideWithProfile extends SubsystemBase {
     PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 0.5; // inches
+    public static double TOLERABLE_ERROR = 1.0; // inches
     public static int AT_TARGET_COUNT = 1;
 
     public static double MIN_EXTENSION_LENGTH = 0;
