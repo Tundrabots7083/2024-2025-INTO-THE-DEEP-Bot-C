@@ -21,28 +21,28 @@ public class RedBasketSample {
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring in the high basket
-    public static double BASKET_HIGH_PRELOAD_X = -58.5;
-    public static double BASKET_HIGH_PRELOAD_Y = -58.5;;
+    public static double BASKET_HIGH_PRELOAD_X = -52.5;
+    public static double BASKET_HIGH_PRELOAD_Y = -65.5;;
     public static double BASKET_HIGH_PRELOAD_ORIENTATION = 65;
 
     // Intake positions for spike mark 1
     public static double YELLOW_SPIKE_MARK_1_X = -57.5;
-    public static double YELLOW_SPIKE_MARK_1_Y = -50.5;
-    public static double YELLOW_SPIKE_MARK_1_ORIENTATION = 108;
+    public static double YELLOW_SPIKE_MARK_1_Y = -55.5;
+    public static double YELLOW_SPIKE_MARK_1_ORIENTATION = 120;
 
     // Position for scoring in the high basket
-    public static double BASKET_HIGH_SPECIMEN_1_X = -58.5;
-    public static double BASKET_HIGH_SPECIMEN_1_Y = -60.5;;
+    public static double BASKET_HIGH_SPECIMEN_1_X = -52.5;
+    public static double BASKET_HIGH_SPECIMEN_1_Y = -65.5;;
     public static double BASKET_HIGH_SPECIMEN_1_ORIENTATION = 65;
 
     // Intake positions for spike mark 2
     public static double YELLOW_SPIKE_MARK_2_X = -67.5;
-    public static double YELLOW_SPIKE_MARK_2_Y = -53.5;
-    public static double YELLOW_SPIKE_MARK_2_ORIENTATION = 110;
+    public static double YELLOW_SPIKE_MARK_2_Y = -55.5;
+    public static double YELLOW_SPIKE_MARK_2_ORIENTATION = 120;
 
     // Position for scoring in the high basket
-    public static double BASKET_HIGH_SPECIMEN_2_X = -62.5;
-    public static double BASKET_HIGH_SPECIMEN_2_Y = -62.5;;
+    public static double BASKET_HIGH_SPECIMEN_2_X = -57.5;
+    public static double BASKET_HIGH_SPECIMEN_2_Y = -65.5;;
     public static double BASKET_HIGH_SPECIMEN_2_ORIENTATION = 65;
 
     private final TrajectoryActionBuilder actionBuilder;
