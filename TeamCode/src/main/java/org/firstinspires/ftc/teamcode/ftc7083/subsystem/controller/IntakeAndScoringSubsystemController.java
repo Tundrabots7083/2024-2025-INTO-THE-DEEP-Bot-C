@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeBlueSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeBlueSpecimenBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeRedSampleBehaviorTree;
 import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
@@ -82,7 +83,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
 
     WristOrientationBehaviorTreeSamples wristOrientationBehaviorTreeRedSamples;
     IntakeSampleBehaviorTree intakeSampleBehaviorTree;
-    IntakeBlueSpecimenBehaviorTree intakeBlueSpecimenBehaviorTree;
+    IntakeBlueSampleBehaviorTree intakeBlueSampleBehaviorTree;
     IntakeRedSampleBehaviorTree intakeRedSampleBehaviorTree;
 
     /**
@@ -380,14 +381,15 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.NEUTRAL_POSITION;
             }
         } else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
+            Status result;
             switch (state) {
                 case START_POSITION:
-                    Status result;
+                case NEUTRAL_POSITION:
                     if(intakeCount == 0){
                         if (Robot.INTAKE_COLOR == Robot.SampleIntakeColor.RED) {
                             this.intakeRedSampleBehaviorTree = new IntakeRedSampleBehaviorTree(hardwareMap, telemetry);
                         } else if (Robot.INTAKE_COLOR == Robot.SampleIntakeColor.BLUE) {
-                            this.intakeBlueSpecimenBehaviorTree = new IntakeBlueSpecimenBehaviorTree(hardwareMap,telemetry);
+                            this.intakeBlueSampleBehaviorTree = new IntakeBlueSampleBehaviorTree(hardwareMap,telemetry);
                         }
                     }
                     if(Robot.INTAKE_COLOR == Robot.SampleIntakeColor.RED) {
@@ -402,15 +404,15 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                         if (result == Status.FAILURE) {
                             state = State.INTAKE_AUTO_GRAB_FAILED;
                             intakeCount = 0;
-                            gamepad1.rumble(1000);
+                            gamepad1.rumble(1.0,1.0,250);
                         } else if (result == Status.SUCCESS) {
                             state = State.NEUTRAL_POSITION;
                             intakeCount = 0;
                         }
                     } else if (Robot.INTAKE_COLOR == Robot.SampleIntakeColor.BLUE) {
-                        result = this.intakeBlueSpecimenBehaviorTree.tick();
+                        result = this.intakeBlueSampleBehaviorTree.tick();
                         while (result == Status.RUNNING) {
-                            result = this.intakeBlueSpecimenBehaviorTree.tick();
+                            result = this.intakeBlueSampleBehaviorTree.tick();
                             if(gamepad1.share && !previousGamepad1.share) {
                                 result = Status.FAILURE;
                             }
@@ -419,34 +421,12 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                         if (result == Status.FAILURE) {
                             state = State.INTAKE_AUTO_GRAB_FAILED;
                             intakeCount = 0;
-                            gamepad1.rumble(1000);
+                            gamepad1.rumble(1.0,1.0,250);
                         } else if (result == Status.SUCCESS) {
                             state = State.NEUTRAL_POSITION;
                             intakeCount = 0;
                         }
                     }
-                    break;
-                case NEUTRAL_POSITION:
-                    if(intakeCount == 0){
-                        this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
-                    }
-                    result = this.intakeSampleBehaviorTree.tick();
-                    while(result == Status.RUNNING && !gamepad1.share) {
-                        result = this.intakeSampleBehaviorTree.tick();
-                    }
-                    intakeCount++;
-                    if (result == Status.FAILURE || gamepad1.share) {
-                        state = State.INTAKE_AUTO_GRAB_FAILED;
-                        intakeCount = 0;
-                        gamepad1.rumble(1000);
-                    } else if (result == Status.SUCCESS){
-                        state = State.NEUTRAL_POSITION;
-                        intakeCount = 0;
-                    }
-                    break;
-                case INTAKE_AUTO_GRAB_FAILED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
                     break;
                 default:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
