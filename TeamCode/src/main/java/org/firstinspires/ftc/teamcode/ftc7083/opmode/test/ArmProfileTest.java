@@ -8,14 +8,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
 
 @Config
-@TeleOp(name = "Linear Slide Test", group = "tests")
-public class LinearSlideTest extends OpMode {
+@TeleOp(name = "Arm Profile Slide Test", group = "tests")
+public class ArmProfileTest extends OpMode {
+    public static double ARM_ANGLE = 0.0;
     public static double LINEAR_SLIDE_LENGTH = 0.0;
-    private double lastLinearSlideLength = 0.0;
-    private LinearSlideWithProfile linearSlide;
+    private double lastArmAngle = 0.0;
+    private double lastSlideLength = 0.0;
+    private ArmWithProfile arm;
     private Robot robot;
 
     @Override
@@ -25,7 +28,7 @@ public class LinearSlideTest extends OpMode {
         Robot.init(hardwareMap,telemetry);
         robot = Robot.getInstance();
 
-        linearSlide = robot.linearSlide;
+        arm = robot.arm;
 
 
         telemetry.addLine("Initialization Complete");
@@ -35,21 +38,25 @@ public class LinearSlideTest extends OpMode {
     @Override
     public void start() {
         robot.intakeAndScoringSubsystem.moveToNeutralPosition();
-        linearSlide.setLength(LINEAR_SLIDE_LENGTH);
+        arm.setTargetAngle(ARM_ANGLE);
     }
 
     @Override
     public void loop() {
 
-        if(LINEAR_SLIDE_LENGTH != lastLinearSlideLength) {
-            linearSlide.setLength(LINEAR_SLIDE_LENGTH);
-            lastLinearSlideLength = LINEAR_SLIDE_LENGTH;
+        if(ARM_ANGLE != lastArmAngle) {
+            arm.setTargetAngle(ARM_ANGLE);
+            lastArmAngle = ARM_ANGLE;
+        }
+
+        if(LINEAR_SLIDE_LENGTH != lastSlideLength) {
+            robot.linearSlide.setLength(LINEAR_SLIDE_LENGTH);
+            lastSlideLength = LINEAR_SLIDE_LENGTH;
         }
 
         robot.intakeAndScoringSubsystem.execute();
-        robot.arm.setTargetAngle(50);
-        telemetry.addData("Target Length", linearSlide.getTargetLength());
-        telemetry.addData("Current Length", linearSlide.getCurrentLength());
+        telemetry.addData("Target Length", arm.getTargetAngle());
+        telemetry.addData("Current Length", arm.getCurrentAngle());
         telemetry.update();
 
         // Clear the bulk cache for each Lynx module hub. This must be performed once per loop

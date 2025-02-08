@@ -42,7 +42,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;
     public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
-    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE;
+    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;
     public static double INTAKE_CLOSE_LOWERED_Y = 2.0; // INTAKE_HEIGHT_LOWERED - 0.5; (TODO: change)
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;
@@ -77,7 +77,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 2;
     public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
     public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
@@ -283,7 +283,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToNeutralPosition() {
         moveToPosition(NEUTRAL_X, NEUTRAL_Y);
         robot.wrist.setToIntakeSpecimen();
-        telemetry.addData("[IAS] position", "intake specimen");
+        telemetry.addData("[IAS] position", "neutral");
     }
 
     /**
@@ -859,7 +859,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
+            intakeAndScoringSubsystem.moveToNeutralPosition();
         }
     }
 

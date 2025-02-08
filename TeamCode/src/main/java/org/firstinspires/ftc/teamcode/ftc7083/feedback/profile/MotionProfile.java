@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ftc7083.feedback;
+package org.firstinspires.ftc.teamcode.ftc7083.feedback.profile;
 
 import androidx.annotation.NonNull;
 
@@ -33,6 +33,15 @@ public class MotionProfile {
         if (this.startPosition == this.endPosition) {
             this.endPosition += 1;
         }
+    }
+
+    /**
+     * Returns the elapsed time as the profile calculates it
+     *
+     * @return elapsed time
+     */
+    public long getTimestamp() {
+        return (long)((System.currentTimeMillis() - this.startTime)); // leave as milliseconds
     }
 
     /**
@@ -112,6 +121,7 @@ public class MotionProfile {
 
         return startPosition + direction * position;
     }
+
 
     /**
      * Gets a string representation of this motion profile.
