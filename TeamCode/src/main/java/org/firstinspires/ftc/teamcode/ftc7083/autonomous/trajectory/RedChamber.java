@@ -22,7 +22,7 @@ public class RedChamber {
 
     // Position for scoring on the high chamber
     public static double CHAMBER_PRELOAD_X = 0;
-    public static double CHAMBER_PRELOAD_Y = -44;
+    public static double CHAMBER_PRELOAD_Y = -42;
     public static double CHAMBER_PRELOAD_ORIENTATION = 120;
     public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 2.0;
 
