@@ -21,17 +21,19 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  */
 @Config
 public class LinearSlide extends SubsystemBase {
+    // PID control constants
+    public static double KP = 0.3;
+    public static double KI = 0.4;
+    public static double KD = 0.05;
+    public static double KS = 0.0;
+    public static double KG = 0.3;
+
     public static double SPOOL_DIAMETER = 2.025; // in inches (measured on 01/27 as 1.482")
     public static double TICKS_PER_REV = 537.7;
     public double GEARING = 1.0; // No gears
 
     public static double ACHIEVABLE_MAX_RPM_FRACTION = 1.0;
 
-    public static double KP = 0.7;
-    public static double KI = 0.0;
-    public static double KD = 0.0;
-    public static double KS = 0.0;
-    public static double KG = 0.0;
     public static double maxVelocity = 120;
     public static double maxAcceleration = 95;
 
