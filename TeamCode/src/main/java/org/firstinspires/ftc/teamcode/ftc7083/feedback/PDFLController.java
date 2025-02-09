@@ -3,31 +3,31 @@ package org.firstinspires.ftc.teamcode.ftc7083.feedback;
 import com.acmerobotics.dashboard.config.Config;
 
 /**
- * A PID controller that includes feed forward and a lower limit.
+ * A PID controller that includes a static component and feed forward.
+ * <p>
+ * The static component addresses friction on the system. This will vary based on the direction
+ * of movement, where the friction varies based on the direction the mechanism is moving.
  * <p>
  * The feed forward component is intended to address the effects of gravity on the system, and
  * can vary depending on the type of mechanism being used. For example, a slide will typically have
  * a constant feed forward component, whereas an arm may change as the arm rotates through its
  * motion (e.g., the gravity affecting the arm is highest when horizontal, and zero when vertical.
- * <p>
- * The lower limit component addresses friction on the system. This will vary based on the direction
- * of movement, where the friction varies based on the direction the mechanism is moving.
  */
 @Config
 public class PDFLController extends PIDControllerEx {
-    public static double DEFAULT_DEADZONE = 5.0;
-    private double kL;
+    public static double DEFAULT_DEADZONE = 1e-6;
+    private double kS;
     private double deadzone = DEFAULT_DEADZONE;
 
     /**
      * Instantiates a PDFL controller that does not use the integral and differential components.
      *
      * @param kP proportional term, multiplied directly by the state error
+     * @param kS static term, with the opposite sign added based on the direction of movement
      * @param kF feed forward term, added to the output of the PID calculation
-     * @param kL lower limit term, with the opposite sign added based on the direction of movement
      */
-    public PDFLController(double kP, double kF, double kL) {
-        this(kP, 0, 0, kF, kL);
+    public PDFLController(double kP, double kS, double kF) {
+        this(kP, 0, 0, kF, kS);
     }
 
     /**
@@ -36,18 +36,31 @@ public class PDFLController extends PIDControllerEx {
      * @param kP proportional term, multiplied directly by the state error
      * @param kI integral term, multiplied directly by the state error integral
      * @param kD derivative term, multiplied directly by the state error rate of change
+     * @param kS static term, with the opposite sign added based on the direction of movement
      * @param kF feed forward term, added to the output of the PID calculation
-     * @param kL lower limit term, with the opposite sign added based on the direction of movement
      */
-    public PDFLController(double kP, double kI, double kD, double kF, double kL) {
-        super(kP, kI, kD, kF);
-        this.kL = kL;
+    public PDFLController(double kP, double kI, double kD, double kS, double kF) {
+        this(kP, kI, kD, kS, p -> kF);
     }
 
     /**
-     * Sets a deadzone for the PDFL controller.
+     * Creates a new PID controller with the provided FeedForward function.
      *
-     * @param deadzone the deadzone for the PDFL controller.
+     * @param Kp proportional term, multiplied directly by the state error
+     * @param Ki integral term, multiplied directly by the state error integral
+     * @param Kd derivative term, multiplied directly by the state error rate of change
+     * @param kS static term, with the opposite sign added based on the direction of movement
+     * @param ff the feed forward function
+     */
+    public PDFLController(double Kp, double Ki, double Kd, double kS, FeedForward ff) {
+        super(Kp, Ki, Kd, ff);
+        this.kS = kS;
+    }
+
+    /**
+     * Sets a deadzone for the static component in the PDFL controller.
+     *
+     * @param deadzone the deadzone for the static component in the PDFL controller.
      */
     public void setDeadzone(double deadzone) {
         this.deadzone = deadzone;
@@ -55,12 +68,8 @@ public class PDFLController extends PIDControllerEx {
 
     @Override
     public double calculate(double reference, double state) {
-        double error = calculateError(reference, state);
-
         double pidf = super.calculate(reference, state);
-        double l = lComponent(error);
-
-        return pidf + l;
+        return pidf + staticComponent(pidf);
     }
 
     /**
@@ -69,25 +78,38 @@ public class PDFLController extends PIDControllerEx {
      * @param kP proportional term, multiplied directly by the state error
      * @param kI integral term, multiplied directly by the state error integral
      * @param kD derivative term, multiplied directly by the state error rate of change
+     * @param kS static term, with the opposite sign added based on the direction of movement
      * @param kF feed forward term, added to the output of the PID calculation
-     * @param kL lower limit term, with the opposite sign added based on the direction of movement
      */
-    public void setCoefficients(double kP, double kI, double kD, double kF, double kL) {
-        setCoefficients(kP, kI, kD, kF);
-        this.kL = kL;
+    public void setCoefficients(double kP, double kI, double kD, double kS, double kF) {
+        setCoefficients(kP, kI, kD, kS, p-> kF);
     }
 
     /**
-     * Gets the lower limit component based on the current error.
+     * Sets the PID coefficients to the new values.
      *
-     * @param error the current error
-     * @return the lower limit component based on the current error
+     * @param kP proportional term, multiplied directly by the state error
+     * @param kI integral term, multiplied directly by the state error integral
+     * @param kD derivative term, multiplied directly by the state error rate of change
+     * @param kS static term, with the opposite sign added based on the direction of movement
+     * @param kF feed forward term, added to the output of the PID calculation
      */
-    private double lComponent(double error) {
-        if (Math.abs(error) < deadzone) {
+    public void setCoefficients(double kP, double kI, double kD, double kS, FeedForward kF) {
+        setCoefficients(kP, kI, kD, kF);
+        this.kS = kS;
+    }
+
+    /**
+     * Gets the static component based on the PIDF calculation.
+     *
+     * @param pidf the value calculated by the PIDF controller
+     * @return the static component based on the PIDF calculation
+     */
+    private double staticComponent(double pidf) {
+        if (Math.abs(pidf) >= deadzone) {
+            return Math.copySign(kS, pidf);
+        } else {
             return 0.0;
         }
-        double direction = Math.signum(error);
-        return direction * kL;
     }
 }

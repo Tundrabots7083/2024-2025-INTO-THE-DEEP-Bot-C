@@ -1,108 +1,123 @@
 package org.firstinspires.ftc.teamcode.ftc7083.filter;
 
-import androidx.annotation.NonNull;
+import org.firstinspires.ftc.teamcode.ftc7083.utils.LinearRegression;
+import org.firstinspires.ftc.teamcode.ftc7083.utils.SizedStack;
 
 /**
- * The Kalman filter is a recursive algorithm that estimates the state of a linear dynamic system
- * from a series of noisy measurements.
+ * This Kalman Filter implementation has three parameters to tune.
+ * <ul>
+ *     <li>
+ *         Q is the sensor covariance, or how much we trust the sensor, low values for the sensor
+ *         means that we believe the sensor will have lots of noise and vice versa. Higher values
+ *         puts more emphasis on the sensor.
+ *     </li>
+ *     <li>
+ *         R is the model covariance, or how much we trust the linear regression. Higher values puts
+ *         more emphasis on the regression.
+ *     </li>
+ *     <li>
+ *         N is the number of elements back we perform the regression on. In most cases, a value
+ *         between <code>3</code> and <code>5</code> works best.
+ *     </li>
+ * </ul>
  */
-public class KalmanFilter {
-    // Initial values, used when resetting the Kalman filter
-    private final double initialState; // Initial state estimate
-    private final double initialErrorCovariance; // Initial error estimate
-    // Covariance Estimates
-    private final double processNoise;     // Process noise covariance
-    private final double measurementNoise; // Measurement noise covariance
-    // Current values
-    private double state;            // Current state estimate
-    private double errorCovariance;  // Current error
+public class KalmanFilter implements Filter {
+    protected final double Q;
+    protected final double R;
+    protected final int N;
+    protected final SizedStack<Double> estimates;
+    protected double P = 1;
+    protected double K = 0;
+    protected double x;
+    protected LinearRegression regression;
 
     /**
-     * Creates a new Kalman filter
+     * A kalman filter that uses a least squares regression as it's model.
      *
-     * @param initialState           the initial state estimate
-     * @param initialErrorCovariance the initial error covariance
-     * @param processNoise           the initial process noise covariance
-     * @param measurementNoise       the initial measurement noise covariance
+     * @param Q Sensor Covariance
+     * @param R Model Covariance
+     * @param N Number of elements we can hold in our stack.
      */
-    public KalmanFilter(double initialState, double initialErrorCovariance, double processNoise, double measurementNoise) {
-        this.initialState = initialState;
-        this.initialErrorCovariance = initialErrorCovariance;
-
-        this.state = initialState;
-        this.errorCovariance = initialErrorCovariance;
-        this.processNoise = processNoise;
-        this.measurementNoise = measurementNoise;
+    public KalmanFilter(double Q, double R, int N) {
+        this.Q = Q;
+        this.R = R;
+        this.N = N;
+        this.x = 0;
+        this.estimates = new SizedStack<>(N);
+        initializeStackWith0();
+        regression = new LinearRegression(stackToDoubleArray());
+        findK();
     }
 
     /**
-     * Gets the current state estimate.
-     *
-     * @return the current state estimate.
+     * initialize the stack to all 0's
      */
-    public double getState() {
-        return state;
-    }
-
-    /**
-     * Resets the Kalman filter to the initial state.
-     */
-    public void reset() {
-        state = initialState;
-        errorCovariance = initialErrorCovariance;
-    }
-
-    /**
-     * Updates the current state based on the measurement.
-     *
-     * @param measurement the system measurement.
-     */
-    public void update(double measurement) {
-        // Prediction
-        double predictedState = state;
-        double predictedErrorCovariance = errorCovariance + processNoise;
-
-        // Update
-        double kalmanGain = predictedErrorCovariance / (predictedErrorCovariance + measurementNoise);
-        state = predictedState + kalmanGain * (measurement - predictedState);
-        errorCovariance = (1 - kalmanGain) * predictedErrorCovariance;
-    }
-
-    /**
-     * Gets a string representation of this kalman filter.
-     *
-     * @return a string representation of this kalman filter
-     */
-    @NonNull
-    @Override
-    public String toString() {
-        return "KalmanFilter{" +
-                "initialState=" + initialState +
-                ", initialErrorCovariance=" + initialErrorCovariance +
-                ", processNoise=" + processNoise +
-                ", measurementNoise=" + measurementNoise +
-                ", state=" + state +
-                ", errorCovariance=" + errorCovariance +
-                '}';
-    }
-
-    /*
-    // Example usage
-    public static void main(String[] args) {
-        double initialState = 0.0;
-        double initialErrorCovariance = 1.0;
-        double processNoise = 0.01;
-        double measurementNoise = 0.1;
-
-        KalmanFilter kalmanFilter = new KalmanFilter(initialState, initialErrorCovariance, processNoise, measurementNoise);
-
-        // Simulate measurements
-        double[] measurements = {6.5, 6.1, 5.3, 5.4, 4.9, 4.1, 4.1, 3.8, 3.5, 3.4, 3.5};
-
-        for (double measurement : measurements) {
-            kalmanFilter.update(measurement);
-            System.out.println("Filtered State: " + kalmanFilter.getState());
+    protected void initializeStackWith0() {
+        for (int i = 0; i < N; ++i) {
+            estimates.push(0.0);
         }
     }
-    */
+
+    /**
+     * convert the stack to an array of doubles
+     *
+     * @return an array of doubles.
+     */
+    protected double[] stackToDoubleArray() {
+        double[] newValues = new double[N];
+        for (int i = 0; i < estimates.size(); ++i) {
+            newValues[i] = estimates.get(i);
+        }
+        return newValues;
+    }
+
+    /**
+     * Iteratively compute K using the D.A.R.E
+     */
+    public void findK() {
+        for (int i = 0; i < 2000; ++i) solveDARE();
+    }
+
+    /**
+     * solve the discrete time algebraic riccati equation (D.A.R.E)
+     */
+    public void solveDARE() {
+        P = P + Q;
+        K = P / (P + R);
+        P = (1 - K) * P;
+    }
+
+    /**
+     * get the state estimate.
+     *
+     * @return state estimate
+     */
+    public double getX() {
+        return x;
+    }
+
+    /**
+     * set the state estimate.
+     *
+     * @param x state estimate
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    /**
+     * update the kalman filter for traditional; continuous values.
+     *
+     * @param measurement the current measurement
+     * @return the optimal state estimate
+     */
+    @Override
+    public double estimate(double measurement) {
+        regression.runLeastSquares();
+        x += regression.predictNextValue() - estimates.peek();
+        x += K * (measurement - x);
+        estimates.push(x);
+        regression = new LinearRegression(stackToDoubleArray());
+        return x;
+    }
 }
