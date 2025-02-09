@@ -10,8 +10,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PDFLController;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.OLD_PIDFController;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
 /**
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  * subsystem.
  */
 @Config
-public class LinearSlideWithProfile extends SubsystemBase {
+public class LinearSlide extends SubsystemBase {
     public static double SPOOL_DIAMETER = 2.025; // in inches (measured on 01/27 as 1.482")
     public static double TICKS_PER_REV = 537.7;
     public double GEARING = 1.0; // No gears
@@ -29,10 +30,8 @@ public class LinearSlideWithProfile extends SubsystemBase {
     public static double KP = 0.7;
     public static double KI = 0.0;
     public static double KD = 0.0;
-    public static double KG = 0.0;
-    private double KV = 0;
-    private double KA = 0;
     public static double KS = 0.0;
+    public static double KG = 0.0;
     public static double maxVelocity = 120;
     public static double maxAcceleration = 95;
 
@@ -47,7 +46,7 @@ public class LinearSlideWithProfile extends SubsystemBase {
 
     private final Motor slideMotor;
     private final Telemetry telemetry;
-    private OLD_PIDFController pidfController;
+    private final PIDController pidController;
     private MotionProfile profile;
     private double targetLength = 0;
     private int atTargetCount = 0;
@@ -58,7 +57,7 @@ public class LinearSlideWithProfile extends SubsystemBase {
      * @param hardwareMap Hardware Map
      * @param telemetry   Telemetry
      */
-    public LinearSlideWithProfile(HardwareMap hardwareMap, Telemetry telemetry) {
+    public LinearSlide(HardwareMap hardwareMap, Telemetry telemetry) {
         this(hardwareMap, telemetry, p->KG);
     }
 
@@ -69,12 +68,11 @@ public class LinearSlideWithProfile extends SubsystemBase {
      * @param telemetry    Telemetry
      * @param feedForward  Feed Forward
      */
-    public LinearSlideWithProfile(HardwareMap hardwareMap, Telemetry telemetry, FeedForward feedForward) {
+    public LinearSlide(HardwareMap hardwareMap, Telemetry telemetry, FeedForward feedForward) {
         this.telemetry = telemetry;
         slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
-        pidfController = new OLD_PIDFController(pidCoefficients,KV,KA,KS, feedForward);
-        pidfController.setOutputBounds(-1,1);
+        pidController = new PDFLController(KP, KI, KD, KS, feedForward);
     }
 
     /**
@@ -97,7 +95,7 @@ public class LinearSlideWithProfile extends SubsystemBase {
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
             profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentLength(),targetLength);
-            pidfController.reset();
+            pidController.reset();
             atTargetCount = 0;
         }
     }
@@ -135,12 +133,11 @@ public class LinearSlideWithProfile extends SubsystemBase {
     public void execute() {
         if(profile == null) {
             profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentLength(),targetLength);
-            pidfController.reset();
+            pidController.reset();
         }
         double currentLength = getCurrentLength();
         double profileTargetPosition = profile.calculatePosition();
-        pidfController.setTargetPosition(profileTargetPosition);
-        double power = pidfController.update(profile.getTimestamp(), currentLength);
+        double power = pidController.calculate(profileTargetPosition, currentLength);
         slideMotor.setPower(power);
 
         telemetry.addData("[LS] ProfileTargetPos", profileTargetPosition);
