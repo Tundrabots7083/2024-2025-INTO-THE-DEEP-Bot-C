@@ -14,10 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.filter.Pose2DMovingAverageFilter;
+import org.firstinspires.ftc.teamcode.ftc7083.filter.KalmanFilter;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS.Pose2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +29,18 @@ import java.util.List;
  */
 @Config
 public class AprilTagLocalizer implements Localizer {
-    // MovingAverageFilter constants
-    public static final int MIN_NUM_SAMPLES = 20;
-    public static final int WINDOW_SIZE = 10;
+    // Kalman Filter constants
+    public static double Q = 0.3;
+    public static double R = 3;
+    public static int N = 5;
 
     // Maximum distance when detecting an April Tag
     public static double MAX_APRIL_TAG_DISTANCE = 72; // 6 feet, in inches
+
+    // Kalman filters
+    private final KalmanFilter filterX = new KalmanFilter(Q, R, N);
+    private final KalmanFilter filterY = new KalmanFilter(Q, R, N);
+    private final KalmanFilter filterH = new KalmanFilter(Q, R, N);
 
     private final ElapsedTime timer = new ElapsedTime();
     private final List<Webcam> webcams;
@@ -43,7 +48,6 @@ public class AprilTagLocalizer implements Localizer {
     private Pose2d currentPose;
     private double elapsedTime = 0.0;
     private boolean aprilTagsDetected = false;
-    private final Pose2DMovingAverageFilter poseFilter = new Pose2DMovingAverageFilter(MIN_NUM_SAMPLES, WINDOW_SIZE);
 
     /**
      * Instantiates a new April Tag localizer. The localizer uses the webcams on the robot to
@@ -185,22 +189,13 @@ public class AprilTagLocalizer implements Localizer {
 
         // Take the average of all April tag detections and save as the current pose for the robot
         if (aprilTagsDetected) {
-            // Get the average AprilTag detection values using a moving average filter
-            Pose2D newPose = new Pose2D(totalX / numDetections, totalY / numDetections, totalHeading / numDetections);
-            poseFilter.filter(newPose);
-            if (poseFilter.hasMean()) {
-                Pose2D mean = poseFilter.getMean();
-
-                Pose2d pose = new Pose2d(
-                        new Vector2d(mean.x, mean.y)
-                        , new Rotation2d(mean.h, 0.0)
-                );
-                lastPose = currentPose;
-                currentPose = pose;
-                telemetry.addLine(String.format("\nPose X=%6.1f Y=%6.1f H=%6.1f", pose.position.x, pose.position.y, pose.heading.toDouble()));
-            }
-        } else {
-            poseFilter.removeMeasurement();
+            // Get the filtered AprilTag detection values using Kalman filters
+            double filteredX = filterX.estimate(totalX / numDetections);
+            double filteredY = filterY.estimate(totalY / numDetections);
+            double filteredH = filterH.estimate(totalHeading / numDetections);
+            lastPose = currentPose;
+            currentPose = new Pose2d(new Vector2d(filteredX, filteredY), new Rotation2d(filteredH, 0.0));
+            telemetry.addLine(String.format("\nPose X=%6.1f Y=%6.1f H=%6.1f", currentPose.position.x, currentPose.position.y, currentPose.heading.toDouble()));
         }
     }
 }
