@@ -29,7 +29,7 @@ public class Arm extends SubsystemBase {
     public static double KD = 0.005;
     public static double KS = 0.0;
     public static double KG = 0.1;
-    
+
     public static double maxVelocity = 200;
     public static double maxAcceleration = 250;
 
