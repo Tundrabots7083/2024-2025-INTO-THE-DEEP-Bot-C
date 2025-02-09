@@ -24,12 +24,11 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 @Config
 public class Arm extends SubsystemBase {
     // PID tuning values
-    public static double KP = 0.08;
+    public static double KP = 0.25;
     public static double KI = 0.0;
-    public static double KD = 0.005;
+    public static double KD = 0.0;
     public static double KS = 0.0;
     public static double KG = 0.1;
-
     public static double maxVelocity = 200;
     public static double maxAcceleration = 250;
 
