@@ -8,10 +8,12 @@ import org.firstinspires.ftc.teamcode.ftc7083.utils.SizedStack;
  * <ul>
  *     <li>
  *         Q is the sensor covariance, or how much we trust the sensor, low values for the sensor
- *         means that we believe the sensor will have lots of noise and vice versa.
+ *         means that we believe the sensor will have lots of noise and vice versa. Higher values
+ *         puts more emphasis on the sensor.
  *     </li>
  *     <li>
- *         R is the model covariance or how much we trust the linear regression.
+ *         R is the model covariance, or how much we trust the linear regression. Higher values puts
+ *         more emphasis on the regression.
  *     </li>
  *     <li>
  *         N is the number of elements back we perform the regression on. In most cases, a value
