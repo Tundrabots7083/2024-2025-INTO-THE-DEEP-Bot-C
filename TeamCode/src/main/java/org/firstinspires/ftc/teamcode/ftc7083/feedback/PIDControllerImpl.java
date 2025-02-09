@@ -13,7 +13,7 @@ public class PIDControllerImpl implements PIDController {
     private static final double MIN_INTEGRAL_SUM = -1.0;
     private static final double MAX_INTEGRAL_SUM = 1.0;
 
-    private final ElapsedTime timer = new ElapsedTime();
+    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     private double Kp;
     private double Ki;
     private double Kd;
