@@ -3,15 +3,30 @@ package org.firstinspires.ftc.teamcode.ftc7083.filter;
 import org.firstinspires.ftc.teamcode.ftc7083.utils.LinearRegression;
 import org.firstinspires.ftc.teamcode.ftc7083.utils.SizedStack;
 
+/**
+ * This Kalman Filter implementation has three parameters to tune.
+ * <ul>
+ *     <li>
+ *         Q is the sensor covariance, or how much we trust the sensor, low values for the sensor
+ *         means that we believe the sensor will have lots of noise and vice versa.
+ *     </li>
+ *     <li>
+ *         R is the model covariance or how much we trust the linear regression.
+ *     </li>
+ *     <li>
+ *         N is the number of elements back we perform the regression on. In most cases, a value
+ *         between <code>3</code> and <code>5</code> works best.
+ *     </li>
+ * </ul>
+ */
 public class KalmanFilter implements Filter {
-
-    protected double Q;
-    protected double R;
-    protected int N;
+    protected final double Q;
+    protected final double R;
+    protected final int N;
+    protected final SizedStack<Double> estimates;
     protected double P = 1;
     protected double K = 0;
     protected double x;
-    protected SizedStack<Double> estimates;
     protected LinearRegression regression;
 
     /**
@@ -70,6 +85,11 @@ public class KalmanFilter implements Filter {
         P = (1 - K) * P;
     }
 
+    /**
+     * get the state estimate.
+     *
+     * @return state estimate
+     */
     public double getX() {
         return x;
     }
@@ -87,7 +107,7 @@ public class KalmanFilter implements Filter {
      * update the kalman filter for traditional; continuous values.
      *
      * @param measurement the current measurement
-     * @return the optimal state estimate.
+     * @return the optimal state estimate
      */
     @Override
     public double estimate(double measurement) {
@@ -98,6 +118,4 @@ public class KalmanFilter implements Filter {
         regression = new LinearRegression(stackToDoubleArray());
         return x;
     }
-
-
 }
