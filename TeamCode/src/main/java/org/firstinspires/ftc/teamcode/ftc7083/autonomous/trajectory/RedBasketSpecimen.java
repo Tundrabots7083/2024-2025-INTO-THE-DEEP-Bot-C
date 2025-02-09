@@ -24,7 +24,7 @@ public class RedBasketSpecimen {
     public static double CHAMBER_HIGH_X = -18;
     public static double CHAMBER_HIGH_Y = -36;
     public static double CHAMBER_HIGH_ORIENTATION = 120;
-    public static double HIGH_CHAMBER_DRIVE_FORWARD = 6.5;
+    public static double HIGH_CHAMBER_DRIVE_FORWARD = 5.5;
 
     // Intake positions for spike mark 1
     public static double YELLOW_SPIKE_MARK_1_X = -57.5;

@@ -22,9 +22,9 @@ public class RedChamber {
 
     // Position for scoring on the high chamber
     public static double CHAMBER_PRELOAD_X = 0;
-    public static double CHAMBER_PRELOAD_Y = -42;
+    public static double CHAMBER_PRELOAD_Y = -46;
     public static double CHAMBER_PRELOAD_ORIENTATION = 120;
-    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 2.0;
+    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 4.6;
 
     // Positions for being between the chamber and the spike marks
     public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
