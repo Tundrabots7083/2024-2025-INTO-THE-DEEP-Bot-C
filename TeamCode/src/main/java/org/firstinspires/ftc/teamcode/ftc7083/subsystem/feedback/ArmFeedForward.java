@@ -6,17 +6,17 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 
 /**
  * Feed forward component for the linear slide. This is used by the arm's PID controller to
  * compensate the pull of gravity on the linear slide, based on the angle of the arm.
  */
 @Config
-public class ArmFeedForwardWithProfile implements FeedForward {
+public class ArmFeedForward implements FeedForward {
     public static double LINEAR_SLIDE_DIVISOR = 23.0;
-    private final ArmWithProfile arm;
+    private final Arm arm;
     private final double kG;
 
     /**
@@ -25,7 +25,7 @@ public class ArmFeedForwardWithProfile implements FeedForward {
      * @param arm the arm for the intake subsystem
      * @param kG  the gravity component to use in calculating the feed forward component
      */
-    public ArmFeedForwardWithProfile(ArmWithProfile arm, double kG) {
+    public ArmFeedForward(Arm arm, double kG) {
         this.arm = arm;
         this.kG = kG;
     }
@@ -44,7 +44,7 @@ public class ArmFeedForwardWithProfile implements FeedForward {
 
         // A bit hacky to get the linear slide from the Robot class like this, but it works.
         // We really should find a cleaner way to do it, but that is left for the future.
-        LinearSlideWithProfile linearSlide = Robot.getInstance().linearSlide;
+        LinearSlide linearSlide = Robot.getInstance().linearSlide;
         power *= (1 + (linearSlide.getCurrentLength() / LINEAR_SLIDE_DIVISOR));
 
         return power;
@@ -57,7 +57,7 @@ public class ArmFeedForwardWithProfile implements FeedForward {
      */
     @NonNull
     public String toString() {
-        return "LinearSlideFeedForward{" +
+        return "ArmFeedForward{" +
                 "ArmAngle=" + arm.getCurrentAngle() +
                 ", kG=" + kG +
                 "}";

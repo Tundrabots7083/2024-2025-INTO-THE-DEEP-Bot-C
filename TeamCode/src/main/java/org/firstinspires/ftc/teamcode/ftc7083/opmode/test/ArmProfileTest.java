@@ -8,8 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 
 @Config
 @TeleOp(name = "Arm Profile Slide Test", group = "tests")
@@ -18,7 +17,7 @@ public class ArmProfileTest extends OpMode {
     public static double LINEAR_SLIDE_LENGTH = 0.0;
     private double lastArmAngle = 0.0;
     private double lastSlideLength = 0.0;
-    private ArmWithProfile arm;
+    private Arm arm;
     private Robot robot;
 
     @Override
