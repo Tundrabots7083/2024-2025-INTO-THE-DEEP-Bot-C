@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.test;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -33,6 +35,8 @@ public class TuneLinearSlidePID extends OpMode {
 
     @Override
     public void init() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         Arm.KP = ARM_KP;
         Arm.KI = ARM_KI;
         Arm.KD = ARM_KD;
@@ -45,8 +49,10 @@ public class TuneLinearSlidePID extends OpMode {
         LinearSlide.KD = LINEAR_SLIDE_KD;
         LinearSlide.KS = LINEAR_SLIDE_KS;
         LinearSlide.KG = LINEAR_SLIDE_KG;
-
         linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
+
+        telemetry.addLine("Initialization Complete");
+        telemetry.update();
     }
 
     @Override
