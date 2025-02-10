@@ -127,8 +127,8 @@ public class Arm extends SubsystemBase {
         telemetry.addData("[Arm] ProfileTargetPos", profileTargetPosition);
         telemetry.addData("[Arm] Power", power);
 
-        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target angle.
+        // Make sure the arm is at it's target for a number of consecutive loops. This is designed
+        // to handle cases of "bounce" in the arm when moving to the target angle.
         double error = Math.abs(targetAngle - currentAngle);
         if (error <= TOLERABLE_ERROR) {
             atTargetCount++;

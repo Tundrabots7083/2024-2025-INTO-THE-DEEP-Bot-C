@@ -142,7 +142,7 @@ public class LinearSlide extends SubsystemBase {
         telemetry.addData("[LS] Power", power);
 
         // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target angle.
+        // to handle cases of "bounce" in the slide when moving to the target length.
         double error = Math.abs(targetLength - currentLength);
         if (error <= TOLERABLE_ERROR) {
             atTargetCount++;
