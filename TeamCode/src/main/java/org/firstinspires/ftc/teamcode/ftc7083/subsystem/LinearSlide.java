@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.feedback.PDFLController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 
 /**
  * A linear slide can extend and retract the wrist and claw attached to the robot's scoring
@@ -46,7 +48,7 @@ public class LinearSlide extends SubsystemBase {
 
     private final Motor slideMotor;
     private final Telemetry telemetry;
-    private final PIDController pidController;
+    private final PDFLController pidController;
     private MotionProfile profile;
     private double targetLength = Double.NaN;
     private int atTargetCount = 0;
@@ -158,6 +160,14 @@ public class LinearSlide extends SubsystemBase {
         boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
         telemetry.addData("[Slide] atTarget", atTarget);
         return atTarget;
+    }
+
+    /**
+     * Resets the linear slide's PID values. This is mainly intended for tuning the linear slide's
+     * PID.
+     */
+    public void resetPID(FeedForward ff) {
+        pidController.setCoefficients(KP, KI, KD, KS, ff);
     }
 
     /**

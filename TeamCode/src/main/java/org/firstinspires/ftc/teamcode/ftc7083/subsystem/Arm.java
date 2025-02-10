@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.arcrobotics.ftclib.controller.PController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
@@ -46,7 +47,7 @@ public class Arm extends SubsystemBase {
 
     private final Motor shoulderMotor;
     private final Telemetry telemetry;
-    private final PIDController pidController;
+    private final PDFLController pidController;
     private MotionProfile profile;
     private double targetAngle = Double.NaN;
     private int atTargetCount = 0;
@@ -146,6 +147,13 @@ public class Arm extends SubsystemBase {
         boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
         telemetry.addData("[Arm] atTarget", atTarget);
         return atTarget;
+    }
+
+    /**
+     * Resets the ARM PID values. This is mainly intended for tuning the ARM PID.
+     */
+    public void resetPID() {
+        pidController.setCoefficients(KP, KI, KD, KS,new ArmFeedForward(this, KG));
     }
 
     /**
