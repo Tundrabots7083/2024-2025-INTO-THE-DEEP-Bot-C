@@ -101,7 +101,7 @@ import java.util.List;
  *     <li>
  *         SparkFun OTOS
  *         <ul>
- *             Control Hub I2C Port 2
+ *             Control Hub I2C Port 3
  *         </ul>
  *     </li>
  * </ul>
