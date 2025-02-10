@@ -22,6 +22,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
  */
 @Config
 public class Arm extends SubsystemBase {
+    // Use motion profiles (true) or PID only (false)
+    public static boolean USE_MOTION_PROFILE = true;
+
     // PID tuning values
     public static double KP = 0.08;
     public static double KI = 0.0;
@@ -119,16 +122,21 @@ public class Arm extends SubsystemBase {
     @Override
     public void execute() {
         double currentAngle = getCurrentAngle();
-        double profileTargetPosition = profile.calculatePosition();
-        double power = pidController.calculate(profileTargetPosition, currentAngle);
+        double targetAngle;
+        if (USE_MOTION_PROFILE) {
+            targetAngle = profile.calculatePosition();
+        } else {
+            targetAngle = this.targetAngle;
+        }
+        double power = pidController.calculate(targetAngle, currentAngle);
         shoulderMotor.setPower(power);
 
-        telemetry.addData("[Arm] ProfileTargetPos", profileTargetPosition);
+        telemetry.addData("[Arm] PID Target", targetAngle);
         telemetry.addData("[Arm] Power", power);
 
         // Make sure the arm is at it's target for a number of consecutive loops. This is designed
         // to handle cases of "bounce" in the arm when moving to the target angle.
-        double error = Math.abs(targetAngle - currentAngle);
+        double error = Math.abs(this.targetAngle - currentAngle);
         if (error <= TOLERABLE_ERROR) {
             atTargetCount++;
         } else {

@@ -19,6 +19,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
  */
 @Config
 public class LinearSlide extends SubsystemBase {
+    // Use motion profiles (true) or PID only (false)
+    public static boolean USE_MOTION_PROFILE = true;
+
     // PID control constants
     public static double KP = 0.3;
     public static double KI = 0.4;
@@ -132,16 +135,21 @@ public class LinearSlide extends SubsystemBase {
     @Override
     public void execute() {
         double currentLength = getCurrentLength();
-        double profileTargetPosition = profile.calculatePosition();
-        double power = pidController.calculate(profileTargetPosition, currentLength);
+        double targetLength;
+        if (USE_MOTION_PROFILE) {
+            targetLength = profile.calculatePosition();
+        } else {
+            targetLength = this.targetLength;
+        }
+        double power = pidController.calculate(targetLength, currentLength);
         slideMotor.setPower(power);
 
-        telemetry.addData("[LS] ProfileTargetPos", profileTargetPosition);
-        telemetry.addData("[LS] Power", power);
+        telemetry.addData("[Slide] PID Target", this.targetLength);
+        telemetry.addData("[Slide] Power", power);
 
         // Make sure the slide is at it's target for a number of consecutive loops. This is designed
         // to handle cases of "bounce" in the slide when moving to the target length.
-        double error = Math.abs(targetLength - currentLength);
+        double error = Math.abs(this.targetLength - currentLength);
         if (error <= TOLERABLE_ERROR) {
             atTargetCount++;
         } else {
