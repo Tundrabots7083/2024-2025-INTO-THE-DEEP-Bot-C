@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
  */
 @Config
 public class ArmFeedForward implements FeedForward {
-    public static double LINEAR_SLIDE_DIVISOR = 23.0;
+    public static double LINEAR_SLIDE_DIVISOR = 20.0;
     private final Arm arm;
     private final double kG;
 
