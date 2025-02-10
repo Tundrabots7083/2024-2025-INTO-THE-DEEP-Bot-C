@@ -15,7 +15,7 @@ public class MotionProfile {
     private final double startPosition;
     private double endPosition;
     private boolean hasRun = false;
-    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     /**
      * Creates a new MotionProfile with the specified maximum acceleration, maximum velocity, start position, and end position.
@@ -140,8 +140,7 @@ public class MotionProfile {
                 ", maxVelocity=" + maxVelocity +
                 ", startPosition=" + startPosition +
                 ", endPosition=" + endPosition +
-                ", startTime=" + timer.startTime() +
-                ", currentTime=" + timer.milliseconds() +
+                ", runTime=" + timer.time() +
                 '}';
     }
 }
