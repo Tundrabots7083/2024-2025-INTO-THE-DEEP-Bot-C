@@ -41,7 +41,7 @@ public class LinearSlide extends SubsystemBase {
 
     // Constants for determining if the arm is at target
     public static double TOLERABLE_ERROR = 1.0; // inches
-    public static int AT_TARGET_COUNT = 1;
+    public static int AT_TARGET_COUNT = 3;
 
     public static double MIN_EXTENSION_LENGTH = 0;
     public static double MAX_EXTENSION_LENGTH = 40;
