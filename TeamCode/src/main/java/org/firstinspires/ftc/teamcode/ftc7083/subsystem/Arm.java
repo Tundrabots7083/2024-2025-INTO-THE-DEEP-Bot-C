@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.arcrobotics.ftclib.controller.PController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
@@ -13,7 +12,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PDFLController;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;

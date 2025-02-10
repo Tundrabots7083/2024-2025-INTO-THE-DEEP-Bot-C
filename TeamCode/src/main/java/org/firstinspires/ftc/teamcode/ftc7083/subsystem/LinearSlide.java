@@ -3,19 +3,15 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PController;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PDFLController;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.PIDController;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 
 /**
  * A linear slide can extend and retract the wrist and claw attached to the robot's scoring
