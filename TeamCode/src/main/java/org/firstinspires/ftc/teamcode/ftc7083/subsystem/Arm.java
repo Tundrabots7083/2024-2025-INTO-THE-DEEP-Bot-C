@@ -48,7 +48,7 @@ public class Arm extends SubsystemBase {
     private final Telemetry telemetry;
     private final PIDController pidController;
     private MotionProfile profile;
-    private double targetAngle = START_ANGLE;
+    private double targetAngle = Double.NaN;
     private int atTargetCount = 0;
 
     /**
@@ -62,6 +62,7 @@ public class Arm extends SubsystemBase {
         shoulderMotor = new Motor(hardwareMap, telemetry, "arm");
         configMotor(shoulderMotor);
         pidController = new PDFLController(KP, KI, KD, KS, new ArmFeedForward(this, KG));
+        setTargetAngle(START_ANGLE);
     }
 
     /**
@@ -100,12 +101,14 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets the shoulder motor to a position in degrees.
+     *
+     * @param angle Angle of desired arm position in degrees
      */
     public void setTargetAngle(double angle) {
         double targetAngle = Range.clip(angle, MIN_ANGLE, MAX_ANGLE);
         if (this.targetAngle != targetAngle) {
             this.targetAngle = targetAngle;
-            profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentAngle(),targetAngle);
+            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentAngle(), targetAngle);
             pidController.reset();
             atTargetCount = 0;
         }
@@ -115,10 +118,6 @@ public class Arm extends SubsystemBase {
      * Sends power to the shoulder motor.
      */
     public void execute() {
-        if(profile == null) {
-            profile = new MotionProfile(maxAcceleration,maxVelocity,getCurrentAngle(),targetAngle);
-            pidController.reset();
-        }
         double currentAngle = getCurrentAngle();
         double profileTargetPosition = profile.calculatePosition();
         double power = pidController.calculate(profileTargetPosition, currentAngle);
