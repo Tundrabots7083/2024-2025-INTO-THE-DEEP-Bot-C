@@ -37,10 +37,8 @@ public class LinearSlide extends SubsystemBase {
     public static double maxVelocity = 120;
     public static double maxAcceleration = 95;
 
-    PIDCoefficients pidCoefficients = new PIDCoefficients(KP, KI, KD);
-
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 1.0; // inches
+    public static double TOLERABLE_ERROR = 0.25; // inches
     public static int AT_TARGET_COUNT = 3;
 
     public static double MIN_EXTENSION_LENGTH = 0;
