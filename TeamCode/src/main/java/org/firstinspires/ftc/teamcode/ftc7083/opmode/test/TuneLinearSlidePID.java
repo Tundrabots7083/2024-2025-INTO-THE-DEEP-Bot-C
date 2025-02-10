@@ -72,5 +72,10 @@ public class TuneLinearSlidePID extends OpMode {
         linearSlide.resetPID(new LinearSlideFeedForward(arm, LinearSlide.KG));
 
         linearSlide.setLength(LINEAR_SLIDE_LENGTH);
+
+        telemetry.addData("Target", linearSlide.getTargetLength());
+        telemetry.addData("Current", linearSlide.getCurrentLength());
+
+        telemetry.update();
     }
 }

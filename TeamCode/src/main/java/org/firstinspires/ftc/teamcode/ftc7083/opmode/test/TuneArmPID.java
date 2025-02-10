@@ -72,5 +72,10 @@ public class TuneArmPID extends OpMode {
         linearSlide.resetPID(new LinearSlideFeedForward(arm, LinearSlide.KG));
 
         arm.setTargetAngle(ARM_ANGLE);
+
+        telemetry.addData("Target", arm.getTargetAngle());
+        telemetry.addData("Current", arm.getCurrentAngle());
+
+        telemetry.update();
     }
 }
