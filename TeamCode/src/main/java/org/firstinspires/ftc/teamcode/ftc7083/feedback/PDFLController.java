@@ -11,7 +11,7 @@ import com.acmerobotics.dashboard.config.Config;
  * The feed forward component is intended to address the effects of gravity on the system, and
  * can vary depending on the type of mechanism being used. For example, a slide will typically have
  * a constant feed forward component, whereas an arm may change as the arm rotates through its
- * motion (e.g., the gravity affecting the arm is highest when horizontal, and zero when vertical.
+ * motion (e.g., the gravity affecting the arm is highest when horizontal, and zero when vertical).
  */
 @Config
 public class PDFLController extends PIDControllerEx {

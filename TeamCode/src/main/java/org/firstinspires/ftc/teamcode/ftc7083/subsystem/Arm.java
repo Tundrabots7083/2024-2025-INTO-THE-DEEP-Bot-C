@@ -34,8 +34,8 @@ public class Arm extends SubsystemBase {
     public static double maxAcceleration = 250;
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 2.5; // In degrees
-    public static int AT_TARGET_COUNT = 1;
+    public static double TOLERABLE_ERROR = 1.0; // In degrees
+    public static int AT_TARGET_COUNT = 3;
 
     public static double GEARING = 2.45;
     public static double START_ANGLE = -36.0;
