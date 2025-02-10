@@ -133,6 +133,7 @@ public class LinearSlide extends SubsystemBase {
     /**
      * sets the power for the pid controller
      */
+    @Override
     public void execute() {
         double currentLength = getCurrentLength();
         double profileTargetPosition = profile.calculatePosition();

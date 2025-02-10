@@ -117,6 +117,7 @@ public class Arm extends SubsystemBase {
     /**
      * Sends power to the shoulder motor.
      */
+    @Override
     public void execute() {
         double currentAngle = getCurrentAngle();
         double profileTargetPosition = profile.calculatePosition();
