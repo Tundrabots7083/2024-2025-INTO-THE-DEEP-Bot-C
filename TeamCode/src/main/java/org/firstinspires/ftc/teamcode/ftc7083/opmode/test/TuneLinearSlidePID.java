@@ -28,8 +28,8 @@ public class TuneLinearSlidePID extends OpMode {
     // Angle to which to move the arm
     public static double LINEAR_SLIDE_LENGTH = 0;
 
-    private static Arm arm;
-    private static LinearSlide linearSlide;
+    private Arm arm;
+    private LinearSlide linearSlide;
 
     @Override
     public void init() {

@@ -23,13 +23,13 @@ public class TuneArmPID extends OpMode {
     public static double LINEAR_SLIDE_KI = 0;
     public static double LINEAR_SLIDE_KD = 0;
     public static double LINEAR_SLIDE_KS = 0;
-    public static double LINEAR_SLIDE_KG = LinearSlide.KG;
+    public static double LINEAR_SLIDE_KG = org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide.KG;
 
     // Angle to which to move the arm
     public static double ARM_ANGLE = 0;
 
-    private static Arm arm;
-    private static LinearSlide linearSlide;
+    private Arm arm;
+    private LinearSlide linearSlide;
 
     @Override
     public void init() {
