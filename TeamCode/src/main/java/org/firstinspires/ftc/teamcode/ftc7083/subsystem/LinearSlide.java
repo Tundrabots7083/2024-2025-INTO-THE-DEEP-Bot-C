@@ -51,6 +51,7 @@ public class LinearSlide extends SubsystemBase {
     private MotionProfile profile;
     private double targetLength = Double.NaN;
     private int atTargetCount = 0;
+    private double currentLength = MIN_EXTENSION_LENGTH;
 
     /**
      * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
@@ -109,7 +110,7 @@ public class LinearSlide extends SubsystemBase {
      * @return slide length in inches
      */
     public double getCurrentLength() {
-        return slideMotor.getCurrentInches();
+        return currentLength;
     }
 
     /**
@@ -134,7 +135,7 @@ public class LinearSlide extends SubsystemBase {
      */
     @Override
     public void execute() {
-        double currentLength = getCurrentLength();
+        currentLength = getCurrentLength();
         double targetLength;
         if (USE_MOTION_PROFILE) {
             targetLength = profile.calculatePosition();
