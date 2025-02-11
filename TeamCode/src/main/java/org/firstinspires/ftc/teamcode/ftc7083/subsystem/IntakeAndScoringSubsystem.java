@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
 import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
 
 /**
@@ -24,40 +23,6 @@ import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
 public class IntakeAndScoringSubsystem extends SubsystemBase {
     // Wait time for picking up samples
     public static int INTAKE_WAIT_TIME = 500;
-
-    // Robot measurements
-    // Length of the arm and the wrist with zero extension in inches.
-    public static double ARM_LENGTH = 15.0;
-    // Height from the field to the center of rotation of the arm in inches.
-    public static double ARM_HEIGHT = 9.5;
-    // Distance from the front of the robot to the back of the robot in inches.
-    public static double ROBOT_LENGTH = 14.25;
-    // Distance the arm can reach from the center of rotation of the arm in inches.
-    public static double MAX_ARM_LENGTH = 43.5;
-
-    // Arm Movement Constants
-    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.1;
-    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;
-
-    // Intake constants
-    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;
-    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.5;
-    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;
-    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;
-    public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;
-    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;
-    public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;
-    public static double INTAKE_CLOSE_LOWERED_Y = 2.0; // INTAKE_HEIGHT_LOWERED - 0.5; (TODO: change)
-    public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;
-    public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;
-    public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;
-    public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;
-    public static double DEPOSIT_SAMPLE_X = INTAKE_CLOSE_ABOVE_X;
-    public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;
-    public static double NEUTRAL_X = ARM_LENGTH;
-    public static double NEUTRAL_Y = ARM_HEIGHT;
-    public static double START_X = ARM_LENGTH - 4.5;
-    public static double START_Y = 0.5;
 
     // Heights of scoring places for game are in inches
     public static double HIGH_CHAMBER_HEIGHT = 26.0;
@@ -70,35 +35,61 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // Maximum horizontal length of robot when extended
     public static double MAX_EXTENDED_ROBOT_LENGTH = 40.0;
 
-    // (x, y) distances in inches from the center of rotation of
-    // the arm that the scoring subsystem needs to reach to score in
-    // different places.
-    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;
-    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 7.5;
-    public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;
-    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;
-    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
-    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
-    public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;
-    public static double HIGH_CHAMBER_SCORING_RELEASE_X = 17.5; // HIGH_CHAMBER_SCORING_X + 5;
-    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = 15; // HIGH_CHAMBER_SCORING_Y - 9;
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;
-    public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
-    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;
-    public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;
-    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 8;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X = ARM_LENGTH + 6.0;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y = 2.5;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_X = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_X;
-    public static double OBSERVATION_ZONE_INTAKE_SPECIMEN_ACQUIRE_Y = OBSERVATION_ZONE_INTAKE_SPECIMEN_GRAB_Y;
+    // Robot measurements
+    // Length of the arm and the wrist with zero extension in inches.
+    public static double ARM_LENGTH = 15.0;
+    // Height from the field to the center of rotation of the arm in inches.
+    public static double ARM_HEIGHT = 9.5;
+
+    // Arm Movement Constants
+    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.1;                        // 4.4
+    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;             // 2.9
+
+    // (x, y) distances in inches from the center of rotation of the arm that the
+    // scoring subsystem needs to reach to intake specimens and samples.
+    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.5;                // 6.9
+    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
+    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                  // 2.9
+    public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
+    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;              // 3.4
+    public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
+    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 0.9;          // 2.0
+    public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;                      // 15.0
+    public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;                // 2.5
+    public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;        // 15.0
+    public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;  // 7.5
+    public static double DEPOSIT_SAMPLE_X = INTAKE_CLOSE_ABOVE_X;                       // 22.5
+    public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;                       // 3.6
+    public static double NEUTRAL_X = ARM_LENGTH;                                        // 15.0
+    public static double NEUTRAL_Y = ARM_HEIGHT;                                        // 9.5
+    public static double START_X = ARM_LENGTH - 4.5;                                    // 10.5
+    public static double START_Y = 0.5;                                                 // 0.5
+
+    // (x, y) distances in inches from the center of rotation of the arm that the
+    // scoring subsystem needs to reach to score in different places.
+    public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;                      // 0.0
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 7.5;               // 50.5
+    public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;                   // 0.0
+    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 9.0
+    public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;                     // -3.0
+    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;                  // 50.5
+    public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;                           // 15.0
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;              // 25.0
+    public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X + 2.5; // 17.5
+    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;  // 15
+    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 15.5
+    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 32.0
+    public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;              // 0.0
+    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 9.0
+    public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;                      // -5.0
+    public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 8;                  // 33.75
 
     // Time to raise or lower arm when scoring on a chamber
     public static long ARM_LOWER_TIME = 500; // milliseconds
 
     // Other scoring constants
-    public static double LOWER_ARM_AMOUNT = 3.0;
+    public static double ARM_HEIGHT_ADJUSTMENT_AMOUNT = 3.0; // inches
 
     private final Telemetry telemetry;
     private final Robot robot;
@@ -189,7 +180,8 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     /**
      * Set the wrist roll servo position in degrees.
-     * @param targetAngle
+     *
+     * @param targetAngle the degrees to which to set the wrist roll angle
      */
     public void setWristRoll(double targetAngle) {
         robot.wrist.setRollDegrees(targetAngle);
@@ -367,7 +359,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the arm, slide, wrist, and claw to downward.
      */
     public void lowerArm() {
-        double newY = targetY - LOWER_ARM_AMOUNT;
+        double newY = targetY - ARM_HEIGHT_ADJUSTMENT_AMOUNT;
         newY = Math.max(newY, 0.0);
         moveToPosition(targetX, newY);
         telemetry.addData("[IAS] position", "lower arm");
@@ -377,7 +369,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      * Moves the arm, slide, wrist, and claw to upward.
      */
     public void raiseArm() {
-        double newY = targetY + LOWER_ARM_AMOUNT;
+        double newY = targetY + ARM_HEIGHT_ADJUSTMENT_AMOUNT;
         newY = Math.max(newY, 0.0);
         moveToPosition(targetX, newY);
         telemetry.addData("[IAS] position", "raise arm");
