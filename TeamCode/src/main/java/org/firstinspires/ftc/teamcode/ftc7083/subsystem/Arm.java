@@ -51,6 +51,7 @@ public class Arm extends SubsystemBase {
     private final PDFLController pidController;
     private MotionProfile profile;
     private double targetAngle = Double.NaN;
+    private double currentAngle = START_ANGLE;
     private int atTargetCount = 0;
 
     /**
@@ -89,7 +90,7 @@ public class Arm extends SubsystemBase {
      * @return the current position in degrees to which the arm has moved
      */
     public double getCurrentAngle() {
-        return shoulderMotor.getCurrentDegrees() + START_ANGLE;
+        return currentAngle;
     }
 
     /**
@@ -98,7 +99,7 @@ public class Arm extends SubsystemBase {
      * @return the target position in degrees to which the arm is moving
      */
     public double getTargetAngle() {
-        return shoulderMotor.getTargetDegrees();
+        return targetAngle;
     }
 
     /**
@@ -110,7 +111,7 @@ public class Arm extends SubsystemBase {
         double targetAngle = Range.clip(angle, MIN_ANGLE, MAX_ANGLE);
         if (this.targetAngle != targetAngle) {
             this.targetAngle = targetAngle;
-            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentAngle(), targetAngle);
+            profile = new MotionProfile(maxAcceleration, maxVelocity, currentAngle, targetAngle);
             pidController.reset();
             atTargetCount = 0;
         }
@@ -121,7 +122,7 @@ public class Arm extends SubsystemBase {
      */
     @Override
     public void execute() {
-        double currentAngle = getCurrentAngle();
+        currentAngle = shoulderMotor.getCurrentDegrees() + START_ANGLE;
         double targetAngle;
         if (USE_MOTION_PROFILE) {
             targetAngle = profile.calculatePosition();
