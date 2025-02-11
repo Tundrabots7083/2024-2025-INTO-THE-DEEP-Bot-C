@@ -509,6 +509,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                 state = State.HIGH_BASKET_POST_SCORING;
             }
+            if (state == State.HIGH_BASKET_RETRACTED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToNeutralPosition();
+                state = State.NEUTRAL_POSITION;
+            }
         }
 
         // Open and close the claw; used for acquiring samples/specimens and scoring
