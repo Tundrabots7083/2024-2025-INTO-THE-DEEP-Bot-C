@@ -619,6 +619,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static abstract class MoveToActionBase extends ActionExBase {
         protected final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
         protected boolean initialized = false;
+        protected ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         public MoveToActionBase(IntakeAndScoringSubsystem intakeAndScoringSubsystem) {
             this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
@@ -636,8 +637,13 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
             if (!initialized) {
                 initialize();
                 initialized = true;
+                timer.reset();
             }
-            return !isAtTarget();
+            boolean atTarget = isAtTarget();
+            if (atTarget) {
+                Robot.getInstance().telemetry.addData("[" + getClass().getSimpleName() + "] run time", timer.time());
+            }
+            return !atTarget;
         }
 
         /**
