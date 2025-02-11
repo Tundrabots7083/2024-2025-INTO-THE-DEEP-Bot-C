@@ -69,7 +69,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     // (x, y) distances in inches from the center of rotation of the arm that the
     // scoring subsystem needs to reach to score in different places.
     public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;                      // 0.0
-    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 7.5;               // 50.5
+    public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 6.5;               // 49.5
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;                   // 0.0
     public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 9.0
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;                     // -3.0
