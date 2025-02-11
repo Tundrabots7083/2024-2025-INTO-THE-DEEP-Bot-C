@@ -636,9 +636,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             if (!initialized) {
+                timer.reset();
                 initialize();
                 initialized = true;
-                timer.reset();
             }
             boolean atTarget = isAtTarget();
             if (atTarget) {
