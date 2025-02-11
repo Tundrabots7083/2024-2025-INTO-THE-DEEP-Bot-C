@@ -131,7 +131,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 default:
                     intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
@@ -142,9 +142,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             switch (state) {
                 case NEUTRAL_POSITION:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_PRE_RETRACTED;
                     break;
-                case HIGH_BASKET_RETRACTED:
+                case HIGH_BASKET_PRE_RETRACTED:
+                case HIGH_BASKET_POST_RETRACTED:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                     state = State.HIGH_BASKET_PRE_SCORING;
                     break;
@@ -159,7 +160,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 default:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
@@ -178,7 +179,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -201,7 +202,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -220,7 +221,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -289,7 +290,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -351,7 +352,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -383,7 +384,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -410,7 +411,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
-                    state = State.HIGH_BASKET_RETRACTED;
+                    state = State.HIGH_BASKET_POST_RETRACTED;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -509,7 +510,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                 state = State.HIGH_BASKET_POST_SCORING;
             }
-            if (state == State.HIGH_BASKET_RETRACTED && intakeAndScoringSubsystem.isAtTarget()) {
+            if (state == State.HIGH_BASKET_POST_RETRACTED && intakeAndScoringSubsystem.isAtTarget()) {
                 intakeAndScoringSubsystem.moveToNeutralPosition();
                 state = State.NEUTRAL_POSITION;
             }
@@ -546,8 +547,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         DROP_OFF_SPECIMEN_CLAW_OPEN,
         HIGH_BASKET_CLAW_OPENED,
         HIGH_BASKET_PRE_SCORING,
+        HIGH_BASKET_PRE_RETRACTED,
         HIGH_BASKET_POST_SCORING,
-        HIGH_BASKET_RETRACTED,
+        HIGH_BASKET_POST_RETRACTED,
         HIGH_BASKET_SCORING,
         HIGH_CHAMBER_LOWERED,
         HIGH_CHAMBER_SCORING,
