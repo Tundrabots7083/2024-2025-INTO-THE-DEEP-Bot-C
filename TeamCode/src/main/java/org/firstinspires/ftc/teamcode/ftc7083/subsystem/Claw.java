@@ -30,8 +30,8 @@ public class Claw extends SubsystemBase {
 
     // Make default open/close degrees settable by FTC dashboard
     public static double CLOSE_DEGREE_OFFSET = 175;
-    public static double DEFAULT_CLOSE_DEGREES = 14;
-    public static double DEFAULT_OPEN_DEGREES = 55;
+    public static double CLOSE_DEGREES = 14;
+    public static double OPEN_DEGREES = 55;
 
     // Make max claw degrees settable by FTC dashboard
     public static double MAX_CLAW_DEGREES = 355.0;
@@ -62,7 +62,7 @@ public class Claw extends SubsystemBase {
      * Sets the claw to its opened position.
      */
     public void open() {
-        setDegrees(DEFAULT_OPEN_DEGREES);
+        setDegrees(OPEN_DEGREES);
     }
 
     /**
@@ -99,7 +99,7 @@ public class Claw extends SubsystemBase {
      * Sets the claw to its closed position.
      */
     public void close() {
-        setDegrees(DEFAULT_CLOSE_DEGREES);
+        setDegrees(CLOSE_DEGREES);
     }
 
     /**
