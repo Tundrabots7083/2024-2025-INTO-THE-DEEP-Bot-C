@@ -185,7 +185,7 @@ public class LinearSlide extends SubsystemBase {
     public String toString() {
         return "LinearSlide{" +
                 "target=" + targetLength +
-                ", current=" + getCurrentLength() +
+                ", current=" + currentLength +
                 "}";
     }
 }

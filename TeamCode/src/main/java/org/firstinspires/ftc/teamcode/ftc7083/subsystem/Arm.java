@@ -173,7 +173,7 @@ public class Arm extends SubsystemBase {
     public String toString() {
         return "Arm{" +
                 "target=" + targetAngle +
-                ", current=" + getCurrentAngle() +
+                ", current=" + currentAngle +
                 "}";
     }
 
