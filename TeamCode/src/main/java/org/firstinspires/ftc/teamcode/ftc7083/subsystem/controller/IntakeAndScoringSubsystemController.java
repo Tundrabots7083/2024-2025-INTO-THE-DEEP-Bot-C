@@ -2,13 +2,8 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem.controller;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.IntakeSampleBehaviorTree;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.WristOrientationBehaviorTreeSamples;
-import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
-import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
@@ -73,9 +68,6 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public static double ARM_HEIGHT_ADJUSTMENT = 0.5;
     public static double TRIGGER_MIN_THRESHOLD = 0.1;
 
-    // Use wrist orientation logic (true) or just lower the arm to the target (false)
-    public static boolean USE_WRIST_ORIENTATION = false;
-
     private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     private final Telemetry telemetry;
 
@@ -85,11 +77,6 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private State state = State.NEUTRAL_POSITION;
     private boolean clawOpen = false;
 
-    private HardwareMap hardwareMap;
-
-    WristOrientationBehaviorTreeSamples wristOrientationBehaviorTreeRedSamples;
-    IntakeSampleBehaviorTree intakeSampleBehaviorTree;
-
     /**
      * Instantiate a scoring subsystem controller, which uses gamepad controls to control the
      * scoring subsystem.
@@ -97,8 +84,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      * @param intakeAndScoringSubsystem the scoring subsystem being controlled
      * @param telemetry                 the telemetry used to provide user output on the driver station and FTC dashboard
      */
-    public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry, HardwareMap hardwareMap) {
-        this.hardwareMap = hardwareMap;
+    public IntakeAndScoringSubsystemController(IntakeAndScoringSubsystem intakeAndScoringSubsystem, Telemetry telemetry) {
         this.intakeAndScoringSubsystem = intakeAndScoringSubsystem;
         this.telemetry = telemetry;
         //this.intakeRedSpecimenBehaviorTree = new IntakeRedSpecimenBehaviorTree(hardwareMap, telemetry);
@@ -246,30 +232,11 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    if (Robot.getInstance().claw.isAtTarget() && !USE_WRIST_ORIENTATION) {
-                        intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
-                        state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
-                    } else {
-                        state = State.INTAKE_FAR_CLAW_OPENED;
-                    }
+                    state = State.INTAKE_FAR_CLAW_OPENED;
                     break;
                 case INTAKE_FAR_CLAW_OPENED:
-                    if (USE_WRIST_ORIENTATION) {
-                        Status result = Status.RUNNING;
-                        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap, telemetry);
-                        while (result == Status.RUNNING) {
-                            result = this.wristOrientationBehaviorTreeRedSamples.tick();
-                        }
-                        if (result == Status.FAILURE) {
-                            state = State.INTAKE_AUTO_GRAB_FAILED;
-                            gamepad1.rumble(1000);
-                        } else {
-                            state = State.INTAKE_AUTO_ORIENTED;
-                        }
-                    } else {
-                        intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
-                        state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
-                    }
+                    intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+                    state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
@@ -308,30 +275,11 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    if (Robot.getInstance().claw.isAtTarget() && !USE_WRIST_ORIENTATION) {
-                        intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
-                        state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
-                    } else {
-                        state = State.INTAKE_CLOSE_CLAW_OPENED;
-                    }
+                    state = State.INTAKE_CLOSE_CLAW_OPENED;
                     break;
                 case INTAKE_CLOSE_CLAW_OPENED:
-                    if (USE_WRIST_ORIENTATION) {
-                        Status result = Status.RUNNING;
-                        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
-                        while(result == Status.RUNNING) {
-                            result = this.wristOrientationBehaviorTreeRedSamples.tick();
-                        }
-                        if (result == Status.FAILURE) {
-                            state = State.INTAKE_AUTO_GRAB_FAILED;
-                            gamepad1.rumble(1000);
-                        } else {
-                            state = State.INTAKE_AUTO_ORIENTED;
-                        }
-                    } else {
-                        intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
-                        state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
-                    }
+                    intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                    state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();

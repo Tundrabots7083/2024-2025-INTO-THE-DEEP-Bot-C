@@ -41,7 +41,7 @@ public class PrimaryTeleOpBlueAlliance extends OpMode {
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
 
         MecanumDriveController mecanumDriveController = new MecanumDriveController(robot.mecanumDrive, telemetry);
-        IntakeAndScoringSubsystemController intakeAndScoringSubsystemController = new IntakeAndScoringSubsystemController(robot.intakeAndScoringSubsystem, telemetry, hardwareMap);
+        IntakeAndScoringSubsystemController intakeAndScoringSubsystemController = new IntakeAndScoringSubsystemController(robot.intakeAndScoringSubsystem, telemetry);
         controllers = Arrays.asList(mecanumDriveController, intakeAndScoringSubsystemController);
 
         telemetry.addLine("Initialization Complete");
