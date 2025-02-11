@@ -23,11 +23,11 @@ public class LinearSlide extends SubsystemBase {
     public static boolean USE_MOTION_PROFILE = true;
 
     // PID control constants
-    public static double KP = 0.3;
-    public static double KI = 0.4;
-    public static double KD = 0.05;
+    public static double KP = 0.7;
+    public static double KI = 0.0;
+    public static double KD = 0.0;
     public static double KS = 0.0;
-    public static double KG = 0.3;
+    public static double KG = 0.0;
 
     public static double SPOOL_DIAMETER = 2.025; // in inches (measured on 01/27 as 1.482")
     public static double TICKS_PER_REV = 537.7;
@@ -42,8 +42,8 @@ public class LinearSlide extends SubsystemBase {
     public static double TOLERABLE_ERROR = 0.25; // inches
     public static int AT_TARGET_COUNT = 3;
 
-    public static double MIN_EXTENSION_LENGTH = 0.25;
-    public static double MAX_EXTENSION_LENGTH = 40;
+    public static double MIN_EXTENSION_LENGTH = 0.0;
+    public static double MAX_EXTENSION_LENGTH = 25.0;
 
     private final Motor slideMotor;
     private final Telemetry telemetry;

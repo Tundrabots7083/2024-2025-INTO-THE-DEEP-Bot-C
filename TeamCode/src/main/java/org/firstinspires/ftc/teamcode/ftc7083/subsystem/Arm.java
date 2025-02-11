@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.ArmFeedForward;
 @Config
 public class Arm extends SubsystemBase {
     // Use motion profiles (true) or PID only (false)
-    public static boolean USE_MOTION_PROFILE = true;
+    public static boolean USE_MOTION_PROFILE = false;
 
     // PID tuning values
     public static double KP = 0.08;

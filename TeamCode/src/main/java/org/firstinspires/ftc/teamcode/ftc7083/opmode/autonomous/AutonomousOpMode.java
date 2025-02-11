@@ -43,12 +43,16 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(getInitialPose());
 
+        robot.claw.close();
+        robot.claw.execute();
+
         telemetry.addLine("Initialization Complete");
         telemetry.update();
 
         // Run during init but before the start button is pressed
         while (opModeInInit()) {
             robot.localizer.update();
+            telemetry.update();
         }
 
         waitForStart();
