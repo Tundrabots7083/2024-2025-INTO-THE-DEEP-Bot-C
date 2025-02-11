@@ -52,6 +52,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  *         slide if pressed a second time.
  *     </li>
  *     <li>
+ *         <em>gamepad1.dpad_right</em>: retract the arm from the submersible to the neutral position.
+ *     </li>
+ *     <li>
  *         <em>gamepad1.triangle</em>: move the scoring subsystem to intake a specimen off the wall.
  *     </li>
  *     <li>
