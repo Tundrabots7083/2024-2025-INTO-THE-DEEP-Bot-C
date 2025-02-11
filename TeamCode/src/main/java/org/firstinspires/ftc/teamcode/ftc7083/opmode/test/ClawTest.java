@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.ftc7083.opmode.test;
 
-import static org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw.DEFAULT_OPEN_DEGREES;
+import static org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw.OPEN_DEGREES;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -39,7 +39,7 @@ public class ClawTest extends OpMode {
     public void loop() {
         double currentClawPosition; // Current position of claw in degrees
         if (DEFAULT_OPEN) {
-            telemetry.addData("Open claw to default degrees", DEFAULT_OPEN_DEGREES);
+            telemetry.addData("Open claw to default degrees", OPEN_DEGREES);
             claw.open();
             currentClawPosition = claw.getCurrentPosition();
             telemetry.addData("Claw position after open claw to default", currentClawPosition);
