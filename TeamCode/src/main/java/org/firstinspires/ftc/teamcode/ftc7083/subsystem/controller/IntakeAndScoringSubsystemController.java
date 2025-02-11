@@ -229,7 +229,12 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    state = State.INTAKE_FAR_CLAW_OPENED;
+                    if (Robot.getInstance().claw.isAtTarget() && !USE_WRIST_ORIENTATION) {
+                        intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+                        state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
+                    } else {
+                        state = State.INTAKE_FAR_CLAW_OPENED;
+                    }
                     break;
                 case INTAKE_FAR_CLAW_OPENED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
@@ -272,7 +277,12 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    state = State.INTAKE_CLOSE_CLAW_OPENED;
+                    if (Robot.getInstance().claw.isAtTarget() && !USE_WRIST_ORIENTATION) {
+                        intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                        state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
+                    } else {
+                        state = State.INTAKE_CLOSE_CLAW_OPENED;
+                    }
                     break;
                 case INTAKE_CLOSE_CLAW_OPENED:
                     intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
