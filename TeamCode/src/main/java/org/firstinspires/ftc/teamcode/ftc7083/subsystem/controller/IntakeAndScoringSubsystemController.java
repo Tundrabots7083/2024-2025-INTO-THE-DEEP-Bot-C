@@ -65,9 +65,6 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public static boolean AUTOMATE_SAMPLE_PICKUP = true;
     public static boolean AUTOMATE_DROPOFF_SAMPLE = true;
 
-    public static double ARM_HEIGHT_ADJUSTMENT = 0.5;
-    public static double TRIGGER_MIN_THRESHOLD = 0.1;
-
     private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     private final Telemetry telemetry;
 
