@@ -62,6 +62,11 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
  */
 @Config
 public class IntakeAndScoringSubsystemController implements SubsystemController {
+    // Automate certain intake and scoring actions
+    public static boolean AUTOMATE_HIGH_BASKET_SCORING = true;
+    public static boolean AUTOMATE_SAMPLE_PICKUP = true;
+    public static boolean AUTOMATE_DROPOFF_SAMPLE = true;
+
     public static double ARM_HEIGHT_ADJUSTMENT = 0.5;
     public static double TRIGGER_MIN_THRESHOLD = 0.1;
 
@@ -144,6 +149,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToBasketHighScoringPosition();
                     state = State.HIGH_BASKET_SCORING;
                     break;
+                case HIGH_BASKET_CLAW_OPENED:
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
                     state = State.HIGH_BASKET_POST_SCORING;
@@ -235,6 +241,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
+                    intakeAndScoringSubsystem.openClaw();
+                    state = State.INTAKE_FAR_CLAW_OPENED;
+                    break;
+                case INTAKE_FAR_CLAW_OPENED:
                     if (USE_WRIST_ORIENTATION) {
                         Status result = Status.RUNNING;
                         this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap, telemetry);
@@ -265,8 +275,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_FAR_CLAW_CLOSED;
                     break;
                 case INTAKE_FAR_CLAW_CLOSED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
+                    state = State.INTAKE_FAR_ABOVE_SAMPLE;
                      break;
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
@@ -288,6 +298,10 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
+                    intakeAndScoringSubsystem.openClaw();
+                    state = State.INTAKE_CLOSE_CLAW_OPENED;
+                    break;
+                case INTAKE_CLOSE_CLAW_OPENED:
                     if (USE_WRIST_ORIENTATION) {
                         Status result = Status.RUNNING;
                         this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
@@ -318,8 +332,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     break;
                 case INTAKE_CLOSE_CLAW_CLOSED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
+                    intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                    state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
                     break;
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
@@ -333,6 +347,11 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 default:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
+            }
+        } else if (gamepad1.dpad_right && !previousGamepad1.dpad_right) {
+            if (state == State.INTAKE_CLOSE_ABOVE_SAMPLE || state == State.INTAKE_FAR_ABOVE_SAMPLE) {
+                intakeAndScoringSubsystem.moveToNeutralPosition();
+                state = State.NEUTRAL_POSITION;
             }
         } else if (gamepad1.triangle && !previousGamepad1.triangle) {
             switch (state) {
@@ -413,6 +432,72 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         }*/
 
+        // Automate opening the claw, dropping the arm down, grabbing a sample, and raising the arm
+        if (AUTOMATE_SAMPLE_PICKUP) {
+            // Close intake position movements
+            if (state == State.INTAKE_CLOSE_CLAW_OPENED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
+            }
+            if (state == State.INTAKE_CLOSE_LOWERED_TO_SAMPLE && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.closeClaw();
+                state = State.INTAKE_CLOSE_CLAW_CLOSED;
+            }
+            if (state == State.INTAKE_CLOSE_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
+            }
+
+            // Far intake position movements
+            if (state == State.INTAKE_FAR_CLAW_OPENED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
+            }
+            if (state == State.INTAKE_FAR_LOWERED_TO_SAMPLE && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.closeClaw();
+                state = State.INTAKE_FAR_CLAW_CLOSED;
+            }
+            if (state == State.INTAKE_FAR_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                state = State.INTAKE_FAR_ABOVE_SAMPLE;
+            }
+
+            // Automate intake off wall
+            if (state == State.INTAKE_SPECIMEN_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToIntakeSpecimenRaisedPosition();
+                state = State.INTAKE_SPECIMEN_RAISED;
+            }
+        }
+
+        // Automate dropping off a sample
+        if (AUTOMATE_DROPOFF_SAMPLE) {
+            if (state == State.DROP_OFF_SPECIMEN && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.openClaw();
+                state = State.DROP_OFF_SPECIMEN_CLAW_OPEN;
+            }
+            if (state == State.DROP_OFF_SPECIMEN_CLAW_OPEN && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToNeutralPosition();
+                state = State.NEUTRAL_POSITION;
+            }
+        }
+
+        // Automate scoring in the high basket. For now, don't auto-retract the linear slide as it
+        // might get caught on baskets on descent if the robot is driven too close to the baskets.
+        if (AUTOMATE_HIGH_BASKET_SCORING) {
+            if (state == State.HIGH_BASKET_PRE_SCORING && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToBasketHighScoringPosition();
+                state = State.HIGH_BASKET_SCORING;
+            }
+            if (state == State.HIGH_BASKET_SCORING && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.openClaw();
+                state = State.HIGH_BASKET_CLAW_OPENED;
+            }
+            if (state == State.HIGH_BASKET_CLAW_OPENED && intakeAndScoringSubsystem.isAtTarget()) {
+                intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
+                state = State.HIGH_BASKET_POST_SCORING;
+            }
+        }
+
         // Open and close the claw; used for acquiring samples/specimens and scoring
         // or depositing them
         if (gamepad2.left_bumper && !previousGamepad2.left_bumper) {
@@ -442,6 +527,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         ASCENT_LEVEL_ONE,
         DROP_OFF_SPECIMEN,
         DROP_OFF_SPECIMEN_CLAW_OPEN,
+        HIGH_BASKET_CLAW_OPENED,
         HIGH_BASKET_PRE_SCORING,
         HIGH_BASKET_POST_SCORING,
         HIGH_BASKET_RETRACTED,
@@ -451,9 +537,11 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         INTAKE_CLOSE_ABOVE_SAMPLE,
         INTAKE_CLOSE_LOWERED_TO_SAMPLE,
         INTAKE_CLOSE_CLAW_CLOSED,
+        INTAKE_CLOSE_CLAW_OPENED,
         INTAKE_FAR_ABOVE_SAMPLE,
         INTAKE_FAR_LOWERED_TO_SAMPLE,
         INTAKE_FAR_CLAW_CLOSED,
+        INTAKE_FAR_CLAW_OPENED,
         INTAKE_AUTO_ORIENTED,
         INTAKE_AUTO_GRAB_FAILED,
         LOW_BASKET_RETRACTED,
