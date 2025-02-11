@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.ftc7083.action.TimeoutAction;
+import org.firstinspires.ftc.teamcode.ftc7083.math.FTCMath;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Subsystem;
 
 import java.util.Arrays;
@@ -41,20 +43,27 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         List<Subsystem> subsystems = Arrays.asList(robot.mecanumDrive, robot.intakeAndScoringSubsystem);
         robot.localizer.setPose(getInitialPose());
 
+        robot.claw.close();
+        robot.claw.execute();
+
         telemetry.addLine("Initialization Complete");
         telemetry.update();
 
         // Run during init but before the start button is pressed
         while (opModeInInit()) {
             robot.localizer.update();
+            telemetry.update();
         }
 
         waitForStart();
 
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         // Create the trajectory to run and, once done, move to the start position, all the while
         // ensuring the subsystems are updated
         Action autonomousActions = new ParallelAction(
                 (telemetryPacket) -> { // Update all subsystems
+                    telemetry.addData("Loop Time", FTCMath.round(timer.time(), 2));
+                    timer.reset();
                     for (Subsystem subsystem : subsystems) {
                         subsystem.execute();
                     }

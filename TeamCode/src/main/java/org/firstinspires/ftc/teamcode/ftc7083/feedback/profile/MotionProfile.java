@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.ftc7083.feedback.profile;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 /**
  * The MotionProfile class represents a motion profile with specified maximum acceleration, maximum velocity,
  * start position, and end position. It calculates the current position based on the elapsed time since the
@@ -12,7 +14,8 @@ public class MotionProfile {
     private final double maxVelocity;
     private final double startPosition;
     private double endPosition;
-    private long startTime;
+    private boolean hasRun = false;
+    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
 
     /**
      * Creates a new MotionProfile with the specified maximum acceleration, maximum velocity, start position, and end position.
@@ -40,8 +43,8 @@ public class MotionProfile {
      *
      * @return elapsed time
      */
-    public long getTimestamp() {
-        return (long)((System.currentTimeMillis() - this.startTime)); // leave as milliseconds
+    public double getTimestamp() {
+        return timer.time();
     }
 
     /**
@@ -51,7 +54,7 @@ public class MotionProfile {
      * <code>false</code> if there is still some motion required to reach the end.
      */
     public boolean isAtEnd() {
-        double elapsedTime = (System.currentTimeMillis() - this.startTime) / 1000.0; // convert to seconds
+        double elapsedTime = timer.seconds();
         double distance = Math.abs(endPosition - startPosition);
         double accelerationDt = maxVelocity / maxAcceleration;
         double halfwayDistance = distance / 2;
@@ -76,11 +79,12 @@ public class MotionProfile {
      * @return The current position.
      */
     public double calculatePosition() {
-        if (this.startTime == 0) {
-            this.startTime = System.currentTimeMillis();
+        if (!hasRun) {
+            timer.reset();
+            hasRun = true;
         }
 
-        double elapsedTime = (System.currentTimeMillis() - this.startTime) / 1000.0; // convert to seconds
+        double elapsedTime = timer.seconds();
         double distance = Math.abs(endPosition - startPosition);
         double direction = Math.signum(endPosition - startPosition);
         double accelerationDt = maxVelocity / maxAcceleration;
@@ -136,7 +140,7 @@ public class MotionProfile {
                 ", maxVelocity=" + maxVelocity +
                 ", startPosition=" + startPosition +
                 ", endPosition=" + endPosition +
-                ", startTime=" + startTime +
+                ", runTime=" + timer.time() +
                 '}';
     }
 }

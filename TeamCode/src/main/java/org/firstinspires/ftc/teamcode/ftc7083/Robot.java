@@ -12,24 +12,20 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunParams;
-import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
-import org.firstinspires.ftc.teamcode.ftc7083.localization.AprilTagAndOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.ArmWithProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Limelight;
-import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlideWithProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Webcam;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.feedback.LinearSlideFeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Wrist;
-import org.firstinspires.ftc.vision.VisionPortal;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -105,7 +101,7 @@ import java.util.List;
  *     <li>
  *         SparkFun OTOS
  *         <ul>
- *             Control Hub I2C Port 2
+ *             Control Hub I2C Port 3
  *         </ul>
  *     </li>
  * </ul>
@@ -126,8 +122,8 @@ public class Robot {
     public final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     public Webcam leftWebcam;
     public Webcam rightWebcam;
-    public final ArmWithProfile arm;
-    public final LinearSlideWithProfile linearSlide;
+    public final Arm arm;
+    public final LinearSlide linearSlide;
     public final Wrist wrist;
     public final Claw claw;
     public Limelight limelight;
@@ -162,11 +158,10 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-
         // Instantiate all the hardware on the robot
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        arm = new ArmWithProfile(hardwareMap, telemetry);
-        linearSlide = new LinearSlideWithProfile(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlideWithProfile.KG));
+        arm = new Arm(hardwareMap, telemetry);
+        linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);

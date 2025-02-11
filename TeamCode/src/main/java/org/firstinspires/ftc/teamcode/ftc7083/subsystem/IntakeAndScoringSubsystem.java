@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
 import org.firstinspires.ftc.teamcode.ftc7083.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.ftc7083.action.WaitAction;
 
 /**
  * This class uses the Arm, LinearSlide, Wrist, and Claw subsystems to pick up, control,
@@ -77,9 +79,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;
     public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;
-    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 2;
-    public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X;
-    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;
+    public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;
+    public static double HIGH_CHAMBER_SCORING_RELEASE_X = 17.5; // HIGH_CHAMBER_SCORING_X + 5;
+    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = 15; // HIGH_CHAMBER_SCORING_Y - 9;
     public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;
     public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;
@@ -1069,7 +1071,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         @Override
         public boolean isAtTarget() {
             double elapsedTime = timer.time();
-            return elapsedTime >= ARM_LOWER_TIME;
+            boolean atTarget = elapsedTime >= ARM_LOWER_TIME;
+            FtcDashboard.getInstance().getTelemetry().addData("[Lower Arm] atTarget", atTarget);
+            return atTarget;
         }
     }
 

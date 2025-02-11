@@ -65,6 +65,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public static double ARM_HEIGHT_ADJUSTMENT = 0.5;
     public static double TRIGGER_MIN_THRESHOLD = 0.1;
 
+    // Use wrist orientation logic (true) or just lower the arm to the target (false)
+    public static boolean USE_WRIST_ORIENTATION = false;
+
     private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     private final Telemetry telemetry;
 
@@ -232,16 +235,21 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
-                    Status result = Status.RUNNING;
-                    this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
-                    while(result == Status.RUNNING) {
-                       result = this.wristOrientationBehaviorTreeRedSamples.tick();
-                    }
-                    if (result == Status.FAILURE) {
-                        state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(1000);
+                    if (USE_WRIST_ORIENTATION) {
+                        Status result = Status.RUNNING;
+                        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap, telemetry);
+                        while (result == Status.RUNNING) {
+                            result = this.wristOrientationBehaviorTreeRedSamples.tick();
+                        }
+                        if (result == Status.FAILURE) {
+                            state = State.INTAKE_AUTO_GRAB_FAILED;
+                            gamepad1.rumble(1000);
+                        } else {
+                            state = State.INTAKE_AUTO_ORIENTED;
+                        }
                     } else {
-                        state = State.INTAKE_AUTO_ORIENTED;
+                        intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+                        state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
                     }
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
@@ -280,16 +288,21 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
-                    Status result = Status.RUNNING;
-                    this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
-                    while(result == Status.RUNNING) {
-                        result = this.wristOrientationBehaviorTreeRedSamples.tick();
-                    }
-                    if (result == Status.FAILURE) {
-                        state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(1000);
+                    if (USE_WRIST_ORIENTATION) {
+                        Status result = Status.RUNNING;
+                        this.wristOrientationBehaviorTreeRedSamples = new WristOrientationBehaviorTreeSamples(hardwareMap,telemetry);
+                        while(result == Status.RUNNING) {
+                            result = this.wristOrientationBehaviorTreeRedSamples.tick();
+                        }
+                        if (result == Status.FAILURE) {
+                            state = State.INTAKE_AUTO_GRAB_FAILED;
+                            gamepad1.rumble(1000);
+                        } else {
+                            state = State.INTAKE_AUTO_ORIENTED;
+                        }
                     } else {
-                        state = State.INTAKE_AUTO_ORIENTED;
+                        intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                        state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     }
                     break;
                 case INTAKE_AUTO_GRAB_FAILED:
