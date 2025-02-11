@@ -179,15 +179,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
-     * Set the wrist roll servo position in degrees.
-     *
-     * @param targetAngle the degrees to which to set the wrist roll angle
-     */
-    public void setWristRoll(double targetAngle) {
-        robot.wrist.setRollDegrees(targetAngle);
-    }
-
-    /**
      * Moves the subsystem to the starting position, with the claw closed.
      */
     public void moveToStartPosition() {
@@ -373,28 +364,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         newY = Math.max(newY, 0.0);
         moveToPosition(targetX, newY);
         telemetry.addData("[IAS] position", "raise arm");
-    }
-
-    /**
-     * Increases the slide length by the amount provided. A positive value extends the slide;
-     * a negative value retracts the arm.
-     *
-     * @param amount the amount by which to adjust the arm angle.
-     */
-    public void adjustX(double amount) {
-        targetX += amount;
-        setSlideLength();
-    }
-
-    /**
-     * Increases the arm angle by the amount provided. A positive value moves the arm up; a negative
-     * value moves the arm down.
-     *
-     * @param amount the amount by which to adjust the arm angle.
-     */
-    public void adjustY(double amount) {
-        targetY += amount;
-        setArmAngle();
     }
 
     /**
