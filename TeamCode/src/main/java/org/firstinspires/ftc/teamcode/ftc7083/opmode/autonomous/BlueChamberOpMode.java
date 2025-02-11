@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive;
-import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.BlueChamber;
+import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Chamber;
 
 /**
  * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
@@ -17,12 +17,12 @@ public class BlueChamberOpMode extends AutonomousOpMode {
     public Action getTrajectory() {
         Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
         Robot robot = Robot.getInstance();
-        BlueChamber trajectoryBuilder = new BlueChamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
+        Chamber trajectoryBuilder = new Chamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
     }
 
     @Override
     public Pose2d getInitialPose() {
-        return new Pose2d(BlueChamber.INITIAL_POSE_X, BlueChamber.INITIAL_POSE_Y, BlueChamber.INITIAL_POSE_ORIENTATION);
+        return new Pose2d(Chamber.INITIAL_POSE_X, Chamber.INITIAL_POSE_Y, Chamber.INITIAL_POSE_ORIENTATION);
     }
 }

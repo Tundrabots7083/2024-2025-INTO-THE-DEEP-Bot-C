@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.AutoMecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
- * Autonomous trajectory builder for the Blue Alliance when scoring specimen on the chamber.
+ * Autonomous trajectory builder for the Red Alliance when scoring specimen on the chamber.
  */
 @Config
-public class BlueChamber {
+public class Chamber {
     // Initial pose for the robot
     public static double INITIAL_POSE_X = 22.5;
     public static double INITIAL_POSE_Y = -60.0;
@@ -22,9 +22,9 @@ public class BlueChamber {
 
     // Position for scoring on the high chamber
     public static double CHAMBER_PRELOAD_X = 0;
-    public static double CHAMBER_PRELOAD_Y = -42;
+    public static double CHAMBER_PRELOAD_Y = -46;
     public static double CHAMBER_PRELOAD_ORIENTATION = 120;
-    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 2.0;
+    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 2.5;
 
     // Positions for being between the chamber and the spike marks
     public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
@@ -64,34 +64,34 @@ public class BlueChamber {
     private final TrajectoryActionBuilder actionBuilder;
 
     /**
-     * Creates a new autonomous trajectory builder for the Blue Alliance when scoring on the
+     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
      * chamber. This uses the default Pose2d for the robot.
      *
      * @param drive the Mecanum Drive used to move the robot autonomously
      */
-    public BlueChamber(AutoMecanumDrive drive) {
+    public Chamber(AutoMecanumDrive drive) {
         this(drive, new Pose2d(new Vector2d(INITIAL_POSE_X, INITIAL_POSE_Y), Math.toRadians(INITIAL_POSE_ORIENTATION)));
     }
 
     /**
-     * Creates a new autonomous trajectory builder for the Blue Alliance when scoring on the
+     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
      * chamber. This uses the specified pose for the robot, which allows the invoker to override
      * the pose if desired.
      *
      * @param drive       the Mecanum Drive used to move the robot autonomously
      * @param initialPose the initial pose for the robot
      */
-    public BlueChamber(AutoMecanumDrive drive, Pose2d initialPose) {
+    public Chamber(AutoMecanumDrive drive, Pose2d initialPose) {
         this(drive.actionBuilder(initialPose));
     }
 
     /**
-     * Creates a new autonomous trajectory builder for the Blue Alliance when scoring on the
+     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
      * chamber. This uses the specified trajectory action builder for building the trajectories.
      *
      * @param actionBuilder the action builder to use when creating the trajectories
      */
-    public BlueChamber(TrajectoryActionBuilder actionBuilder) {
+    public Chamber(TrajectoryActionBuilder actionBuilder) {
         this.actionBuilder = actionBuilder;
     }
 
