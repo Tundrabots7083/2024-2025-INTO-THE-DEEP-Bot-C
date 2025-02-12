@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Config
 public class MotionProfile2 {
+    // Constant for first pass of the motion profile
+    public static double DEFAULT_TIMESTEP = 0.01; // 100 milliseconds in seconds
+
     // Constants that help determine when the motion profile isAtTarget
     public static double TOLERABLE_POSITION_ERROR = 0.01;
     public static double TOLERABLE_VELOCITY_ERROR = 0.01;
@@ -47,10 +50,15 @@ public class MotionProfile2 {
      * @return the current position in units
      */
     public double update() {
+        double timeStep;
+
         // Reset the timer the first time the motion profile is run
         if (!hasRun) {
-            timer.reset();
             hasRun = true;
+            timer.reset();
+            timeStep = DEFAULT_TIMESTEP;
+        } else {
+            timeStep = timer.seconds();
         }
 
         double distanceToTarget = targetPosition - currentPosition;
@@ -59,7 +67,6 @@ public class MotionProfile2 {
         // Calculate the distance required to stop
         double stoppingDistance = Math.pow(currentVelocity, 2) / (2 * acceleration);
 
-        double timeStep = timer.seconds();
         if (Math.abs(distanceToTarget) <= stoppingDistance) {
             // Deceleration phase
             currentVelocity -= direction * acceleration * timeStep;
