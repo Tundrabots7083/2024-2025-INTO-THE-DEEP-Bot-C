@@ -28,17 +28,16 @@ public class MotionProfile2 {
 
     /**
      * Instantiates a motion trapezoidal motion profile.
-     *
-     * @param maxVelocity     the maximum velocity in units per second
      * @param acceleration    the acceleration in units per second^2
+     * @param maxVelocity     the maximum velocity in units per second
      * @param currentPosition the current position in units
      * @param targetPosition  the target position in units
      */
-    public MotionProfile2(double maxVelocity, double acceleration, double currentPosition, double targetPosition) {
-        this.maxVelocity = maxVelocity;
+    public MotionProfile2(double acceleration, double maxVelocity, double currentPosition, double targetPosition) {
         this.acceleration = acceleration;
-        this.targetPosition = targetPosition;
+        this.maxVelocity = maxVelocity;
         this.currentPosition = currentPosition;
+        this.targetPosition = targetPosition;
         this.currentVelocity = 0.0;
     }
 
