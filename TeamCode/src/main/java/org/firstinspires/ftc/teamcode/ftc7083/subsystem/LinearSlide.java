@@ -137,7 +137,7 @@ public class LinearSlide extends SubsystemBase {
         double currentLength = getCurrentLength();
         double targetLength;
         if (USE_MOTION_PROFILE) {
-            targetLength = profile.calculatePosition();
+            targetLength = profile.update();
         } else {
             targetLength = this.targetLength;
         }
