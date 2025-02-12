@@ -32,9 +32,8 @@ public class MotionProfile2 {
      * @param maxVelocity    the maximum velocity in units per second
      * @param acceleration   the acceleration in units per second^2
      * @param targetPosition the target position in units
-     * @param timeStep       the time step for each update in seconds
      */
-    public MotionProfile2(double maxVelocity, double acceleration, double targetPosition, double timeStep) {
+    public MotionProfile2(double maxVelocity, double acceleration, double targetPosition) {
         this.maxVelocity = maxVelocity;
         this.acceleration = acceleration;
         this.targetPosition = targetPosition;
@@ -51,7 +50,7 @@ public class MotionProfile2 {
             timer.reset();
             hasRun = true;
         }
-        
+
         double distanceToTarget = targetPosition - currentPosition;
         double direction = Math.signum(distanceToTarget);
 
