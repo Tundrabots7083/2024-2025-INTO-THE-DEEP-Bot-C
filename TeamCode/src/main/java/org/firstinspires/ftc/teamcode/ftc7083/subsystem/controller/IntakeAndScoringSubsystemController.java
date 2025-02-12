@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
@@ -229,17 +230,14 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_FAR_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    state = State.INTAKE_FAR_CLAW_OPENED;
+                    if (Robot.getInstance().claw.isAtTarget()) {
+                        intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
+                        state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
+                    } else {
+                        state = State.INTAKE_FAR_CLAW_OPENED;
+                    }
                     break;
                 case INTAKE_FAR_CLAW_OPENED:
-                    intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
-                    state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
-                    break;
-                case INTAKE_AUTO_GRAB_FAILED:
-                    intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
-                    state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
-                    break;
-                case INTAKE_AUTO_ORIENTED:
                     intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
                     state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
                     break;
@@ -248,9 +246,14 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.INTAKE_FAR_CLAW_CLOSED;
                     break;
                 case INTAKE_FAR_CLAW_CLOSED:
-                    intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
-                    state = State.INTAKE_FAR_ABOVE_SAMPLE;
-                     break;
+                    if (AUTOMATE_SAMPLE_PICKUP) {
+                        intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
+                        state = State.INTAKE_FAR_ABOVE_SAMPLE;
+                    } else {
+                        intakeAndScoringSubsystem.moveToNeutralPosition();
+                        state = State.NEUTRAL_POSITION;
+                    }
+                    break;
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
@@ -272,13 +275,14 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     break;
                 case INTAKE_CLOSE_ABOVE_SAMPLE:
                     intakeAndScoringSubsystem.openClaw();
-                    state = State.INTAKE_CLOSE_CLAW_OPENED;
+                    if (Robot.getInstance().claw.isAtTarget()) {
+                        intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                        state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
+                    } else {
+                        state = State.INTAKE_CLOSE_CLAW_OPENED;
+                    }
                     break;
                 case INTAKE_CLOSE_CLAW_OPENED:
-                    intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
-                    state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
-                    break;
-                case INTAKE_AUTO_GRAB_FAILED:
                     intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
                     state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
                     break;
@@ -286,13 +290,14 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.closeClaw();
                     state = State.INTAKE_CLOSE_CLAW_CLOSED;
                     break;
-                case INTAKE_AUTO_ORIENTED:
-                    intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
-                    state = State.INTAKE_CLOSE_LOWERED_TO_SAMPLE;
-                    break;
                 case INTAKE_CLOSE_CLAW_CLOSED:
-                    intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
-                    state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
+                    if (AUTOMATE_SAMPLE_PICKUP) {
+                        intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                        state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
+                    } else {
+                        intakeAndScoringSubsystem.moveToNeutralPosition();
+                        state = State.NEUTRAL_POSITION;
+                    }
                     break;
                 case HIGH_BASKET_PRE_SCORING:
                 case HIGH_BASKET_POST_SCORING:
