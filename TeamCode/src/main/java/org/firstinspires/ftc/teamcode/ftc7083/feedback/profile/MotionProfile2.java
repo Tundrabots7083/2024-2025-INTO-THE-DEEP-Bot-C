@@ -5,8 +5,6 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * A trapezoidal motion profile. This involves defining acceleration, constant velocity, and
  * deceleration phases to ensure smooth motion.
