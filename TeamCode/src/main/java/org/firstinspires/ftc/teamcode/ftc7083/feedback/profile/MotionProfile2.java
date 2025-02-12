@@ -45,11 +45,11 @@ public class MotionProfile2 {
     }
 
     /**
-     * Updates the current position based on the target position and the current velocity.
+     * Calculates the current position based on the target position and the current velocity.
      *
      * @return the current position in units
      */
-    public double update() {
+    public double calculatePosition() {
         double timeStep;
 
         if (!hasRun) {
