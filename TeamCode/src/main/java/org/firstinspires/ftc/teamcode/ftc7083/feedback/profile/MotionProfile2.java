@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc7083.feedback.profile;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -52,12 +54,13 @@ public class MotionProfile2 {
     public double update() {
         double timeStep;
 
-        // Reset the timer the first time the motion profile is run
         if (!hasRun) {
+            // First time through update, so use a default time step for calculations
             hasRun = true;
             timer.reset();
             timeStep = DEFAULT_TIMESTEP;
         } else {
+            // Seconds since last time update was called
             timeStep = timer.seconds();
         }
 
@@ -103,5 +106,22 @@ public class MotionProfile2 {
      */
     public boolean isAtTarget() {
         return Math.abs(targetPosition - currentPosition) < TOLERABLE_POSITION_ERROR && Math.abs(currentVelocity) < TOLERABLE_VELOCITY_ERROR;
+    }
+
+    /**
+     * Gets a string representation of this motion profile.
+     *
+     * @return a string representation of this motion profile
+     */
+    @NonNull
+    @Override
+    public String toString() {
+        return "MotionProfile2{" +
+                "maxVelocity=" + maxVelocity +
+                ", acceleration=" + acceleration +
+                ", targetPosition=" + targetPosition +
+                ", currentPosition=" + currentPosition +
+                ", currentVelocity=" + currentVelocity +
+                '}';
     }
 }
