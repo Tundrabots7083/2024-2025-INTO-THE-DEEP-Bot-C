@@ -22,21 +22,24 @@ public class MotionProfile2 {
     private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);  // Timer for each step, in seconds
 
     // Current values for the motion profile
-    private double currentPosition = 0.0;  // Current position in units
-    private double currentVelocity = 0.0;  // Current velocity in units per second
+    private double currentPosition;        // Current position in units
+    private double currentVelocity;        // Current velocity in units per second
     private boolean hasRun = false;        // The motion profile has run at least once
 
     /**
      * Instantiates a motion trapezoidal motion profile.
      *
-     * @param maxVelocity    the maximum velocity in units per second
-     * @param acceleration   the acceleration in units per second^2
-     * @param targetPosition the target position in units
+     * @param maxVelocity     the maximum velocity in units per second
+     * @param acceleration    the acceleration in units per second^2
+     * @param currentPosition the current position in units
+     * @param targetPosition  the target position in units
      */
-    public MotionProfile2(double maxVelocity, double acceleration, double targetPosition) {
+    public MotionProfile2(double maxVelocity, double acceleration, double currentPosition, double targetPosition) {
         this.maxVelocity = maxVelocity;
         this.acceleration = acceleration;
         this.targetPosition = targetPosition;
+        this.currentPosition = currentPosition;
+        this.currentVelocity = 0.0;
     }
 
     /**
