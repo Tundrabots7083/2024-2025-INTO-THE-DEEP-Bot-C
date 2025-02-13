@@ -50,8 +50,10 @@ public class Chamber {
     public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X = 37.5;
     public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y = -38;
     public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION = -200;
-    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y = -43.0; // INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y - 8.5;
+    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y = -43.0; // INTA
+    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_ORIENTATION = -65;// KE_SPECIMEN_1_AWAY_FROM_WALL_Y - 8.5;
     public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_Y = INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y - 2.5;
+    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_ORIENTATION = -60;// KE_SPECIMEN_1_AWAY_FROM_WALL_Y - 8.5;
 
     // Position for scoring specimen 1 on the high chamber
     public static double CHAMBER_SPECIMEN_1_X = CHAMBER_PRELOAD_X;
@@ -154,8 +156,9 @@ public class Chamber {
                 .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
                 .turn(Math.toRadians(INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION))
                 .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
-                .lineToY(INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y)
-                .lineToY(INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_Y)
+                .lineToYLinearHeading(INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y, Math.toRadians(INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_ORIENTATION))
+                .waitSeconds(1)
+                .lineToYLinearHeading(INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_Y, Math.toRadians(INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSpecimenFromWall())
                 .waitSeconds(15)
 //                // Move to the chamber and score specimen 1
