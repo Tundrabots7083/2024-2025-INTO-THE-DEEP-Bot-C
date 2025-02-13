@@ -54,7 +54,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;              // 3.4
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
-    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 0.9;          // 2.0
+    public static double INTAKE_CLOSE_LOWERED_Y = 4.9; // INTAKE_HEIGHT_LOWERED - 0.9;          // 2.0
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;                      // 15.0
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;                // 2.5
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;        // 15.0
@@ -228,7 +228,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToIntakeFarAboveSamplePosition() {
         moveToPosition(INTAKE_FAR_ABOVE_X, INTAKE_FAR_ABOVE_Y);
         robot.wrist.setToIntakeSample();
-        robot.claw.open();
         telemetry.addData("[IAS] position", "intake far above");
     }
 
@@ -788,6 +787,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
+            intakeAndScoringSubsystem.openClaw();
             intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
         }
     }

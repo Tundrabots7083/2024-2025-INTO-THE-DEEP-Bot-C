@@ -227,6 +227,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             switch (state) {
                 case START_POSITION:
                 case NEUTRAL_POSITION:
+                    intakeAndScoringSubsystem.openClaw();
                     intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
                     break;
@@ -377,6 +378,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         }
 
+        // Open and close the claw; used for acquiring samples/specimens and scoring
+        // or depositing them
+        if (gamepad2.left_bumper && !previousGamepad2.left_bumper) {
+            if (clawOpen) {
+                intakeAndScoringSubsystem.closeClaw();
+                clawOpen = false;
+            } else {
+                intakeAndScoringSubsystem.openClaw();
+                clawOpen = true;
+            }
+        }
+
         // Automate opening the claw, dropping the arm down, grabbing a sample, and raising the arm
         if (AUTOMATE_SAMPLE_PICKUP) {
             // Close intake position movements
@@ -389,7 +402,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 state = State.INTAKE_CLOSE_CLAW_CLOSED;
             }
             if (state == State.INTAKE_CLOSE_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
-                intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                // intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                intakeAndScoringSubsystem.moveToPosition(IntakeAndScoringSubsystem.INTAKE_CLOSE_ABOVE_X, IntakeAndScoringSubsystem.INTAKE_CLOSE_ABOVE_Y);
+                Robot.getInstance().wrist.setToIntakeSample();
                 state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
             }
 
@@ -403,7 +418,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 state = State.INTAKE_FAR_CLAW_CLOSED;
             }
             if (state == State.INTAKE_FAR_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
-                intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
+                // intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
+                intakeAndScoringSubsystem.moveToPosition(IntakeAndScoringSubsystem.INTAKE_FAR_ABOVE_X, IntakeAndScoringSubsystem.INTAKE_FAR_ABOVE_Y);
+                Robot.getInstance().wrist.setToIntakeSample();
                 state = State.INTAKE_FAR_ABOVE_SAMPLE;
             }
 
@@ -444,18 +461,6 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             if (state == State.HIGH_BASKET_POST_RETRACTED && intakeAndScoringSubsystem.isAtTarget()) {
                 intakeAndScoringSubsystem.moveToNeutralPosition();
                 state = State.NEUTRAL_POSITION;
-            }
-        }
-
-        // Open and close the claw; used for acquiring samples/specimens and scoring
-        // or depositing them
-        if (gamepad2.left_bumper && !previousGamepad2.left_bumper) {
-            if (clawOpen) {
-                intakeAndScoringSubsystem.closeClaw();
-                clawOpen = false;
-            } else {
-                intakeAndScoringSubsystem.openClaw();
-                clawOpen = true;
             }
         }
 
