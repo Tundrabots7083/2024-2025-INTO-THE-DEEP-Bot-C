@@ -135,7 +135,7 @@ public class LinearSlide extends SubsystemBase {
      */
     @Override
     public void execute() {
-        currentLength = getCurrentLength();
+        currentLength = slideMotor.getCurrentInches();
         double targetLength;
         if (USE_MOTION_PROFILE) {
             targetLength = profile.calculatePosition();
