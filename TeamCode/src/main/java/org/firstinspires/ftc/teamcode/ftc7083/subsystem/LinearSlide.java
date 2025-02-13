@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.FeedForward;
 import org.firstinspires.ftc.teamcode.ftc7083.feedback.PDFLController;
-import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile;
+import org.firstinspires.ftc.teamcode.ftc7083.feedback.profile.MotionProfile2;
 import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 
 /**
@@ -48,7 +48,7 @@ public class LinearSlide extends SubsystemBase {
     private final Motor slideMotor;
     private final Telemetry telemetry;
     private final PDFLController pidController;
-    private MotionProfile profile;
+    private MotionProfile2 profile;
     private double targetLength = Double.NaN;
     private int atTargetCount = 0;
 
@@ -96,7 +96,7 @@ public class LinearSlide extends SubsystemBase {
         double targetLength = Range.clip(length, MIN_EXTENSION_LENGTH, MAX_EXTENSION_LENGTH);
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
-            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentLength(), targetLength);
+            profile = new MotionProfile2(maxAcceleration, maxVelocity, getCurrentLength(), targetLength);
             pidController.reset();
             atTargetCount = 0;
         }
