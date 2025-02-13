@@ -49,7 +49,7 @@ public class LinearSlide extends SubsystemBase {
     private final Telemetry telemetry;
     private final PDFLController pidController;
     private MotionProfile profile;
-    private double targetLength = Double.NaN;
+    private double targetLength = 0;
     private int atTargetCount = 0;
     private double currentLength = MIN_EXTENSION_LENGTH;
 
@@ -75,7 +75,7 @@ public class LinearSlide extends SubsystemBase {
         slideMotor = new Motor(hardwareMap, telemetry, "linearSlide");
         configMotor(slideMotor);
         pidController = new PDFLController(KP, KI, KD, KS, feedForward);
-        setLength(MIN_EXTENSION_LENGTH);
+        profile = new MotionProfile(maxAcceleration, maxVelocity, currentLength, targetLength);
     }
 
     /**
@@ -97,7 +97,7 @@ public class LinearSlide extends SubsystemBase {
         double targetLength = Range.clip(length, MIN_EXTENSION_LENGTH, MAX_EXTENSION_LENGTH);
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
-            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentLength(), targetLength);
+            profile = new MotionProfile(maxAcceleration, maxVelocity, currentLength, targetLength);
             pidController.reset();
             atTargetCount = 0;
         }
