@@ -72,7 +72,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     private final Gamepad previousGamepad1 = new Gamepad();
     private final Gamepad previousGamepad2 = new Gamepad();
 
-    private State state = State.NEUTRAL_POSITION;
+    private State state = State.START_POSITION;
     private boolean clawOpen = false;
 
     /**
@@ -124,6 +124,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         } else if (gamepad2.triangle && !previousGamepad2.triangle) {
             switch (state) {
+                case START_POSITION:
                 case NEUTRAL_POSITION:
                     intakeAndScoringSubsystem.moveToBasketHighRetractedPosition();
                     state = State.HIGH_BASKET_PRE_RETRACTED;
@@ -224,6 +225,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             intakeAndScoringSubsystem.lowerArm();
         } else if (gamepad1.dpad_up && !previousGamepad1.dpad_up) {
             switch (state) {
+                case START_POSITION:
                 case NEUTRAL_POSITION:
                     intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
                     state = State.INTAKE_FAR_ABOVE_SAMPLE;
@@ -269,6 +271,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         } else if (gamepad1.dpad_down && !previousGamepad1.dpad_down) {
             switch (state) {
+                case START_POSITION:
                 case NEUTRAL_POSITION:
                     intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
                     state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
@@ -346,6 +349,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         } else if (gamepad1.cross && !previousGamepad1.cross) {
             switch (state) {
+                case START_POSITION:
                 case NEUTRAL_POSITION:
                     intakeAndScoringSubsystem.moveToDropOffSamplePosition();
                     state = State.DROP_OFF_SPECIMEN;
