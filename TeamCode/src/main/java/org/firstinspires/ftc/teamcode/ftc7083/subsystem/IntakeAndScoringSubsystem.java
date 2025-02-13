@@ -829,7 +829,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            intakeAndScoringSubsystem.moveToNeutralPosition();
+            intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
         }
     }
 

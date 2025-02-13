@@ -24,7 +24,7 @@ public class Chamber {
     public static double CHAMBER_PRELOAD_X = 0;
     public static double CHAMBER_PRELOAD_Y = -46;
     public static double CHAMBER_PRELOAD_ORIENTATION = 120;
-    public static double CHAMBER_PRELOAD_SCORE_Y = CHAMBER_PRELOAD_Y + 2.5;
+    public static double CHAMBER_PRELOAD_SCORE_Y = -44.5;// CHAMBER_PRELOAD_Y + 2.5;
 
     // Positions for being between the chamber and the spike marks
     public static double SPIKE_MARK_1_SIDE_OF_CHAMBER_X = 43.5;
@@ -47,22 +47,23 @@ public class Chamber {
     public static double SPIKE_MARK_3_OBSERVATION_ZONE_Y = SPIKE_MARK_1_OBSERVATION_ZONE_Y;
 
     // Pickup specimen 1 from wall
-    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X = 47;
-    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y = -50;
-    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION = -90;
-    public static double INTAKE_SPECIMEN_1_AT_WALL_Y = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y - 5.0;
+    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X = 37.5;
+    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y = -38;
+    public static double INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION = -200;
+    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y = -43.0; // INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y - 8.5;
+    public static double INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_Y = INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y - 2.5;
 
     // Position for scoring specimen 1 on the high chamber
     public static double CHAMBER_SPECIMEN_1_X = CHAMBER_PRELOAD_X;
     public static double CHAMBER_SPECIMEN_1_Y = CHAMBER_PRELOAD_Y;
     public static double CHAMBER_SPECIMEN_1_ORIENTATION = CHAMBER_PRELOAD_ORIENTATION;
-    public static double CHAMBER_SPECIMEN_1_SCORE_Y = CHAMBER_SPECIMEN_1_Y + 6.5;
+    public static double CHAMBER_SPECIMEN_1_SCORE_Y = 40.5; // CHAMBER_SPECIMEN_1_Y + 6.5;
 
     // Pickup specimen 2 from wall
     public static double INTAKE_SPECIMEN_2_AWAY_FROM_WALL_X = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X;
     public static double INTAKE_SPECIMEN_2_AWAY_FROM_WALL_Y = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y;
     public static double INTAKE_SPECIMEN_2_AWAY_FROM_WALL_ORIENTATION = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION;
-    public static double INTAKE_SPECIMEN_2_AT_WALL_Y = INTAKE_SPECIMEN_1_AT_WALL_Y;
+    public static double INTAKE_SPECIMEN_2_AT_WALL_Y = INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y;
 
     // Position for scoring specimen 2 on the high chamber
     public static double CHAMBER_SPECIMEN_2_X = CHAMBER_SPECIMEN_1_X;
@@ -74,7 +75,7 @@ public class Chamber {
     public static double INTAKE_SPECIMEN_3_AWAY_FROM_WALL_X = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X;
     public static double INTAKE_SPECIMEN_3_AWAY_FROM_WALL_Y = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y;
     public static double INTAKE_SPECIMEN_3_AWAY_FROM_WALL_ORIENTATION = INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION;
-    public static double INTAKE_SPECIMEN_3_AT_WALL_Y = INTAKE_SPECIMEN_1_AT_WALL_Y;
+    public static double INTAKE_SPECIMEN_3_AT_WALL_Y = INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y;
 
     // Position for scoring specimen 3 on the high chamber
     public static double CHAMBER_SPECIMEN_3_X = CHAMBER_SPECIMEN_1_X;
@@ -149,10 +150,14 @@ public class Chamber {
 //                .lineToX(SPIKE_MARK_3_X)
 //                .lineToY(SPIKE_MARK_3_OBSERVATION_ZONE_Y)
                 // Move to the observation zone to pickup specimen 1 from the wall and pickup the specimen
-                .strafeToSplineHeading(new Vector2d(INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X, INTAKE_SPECIMEN_1_AT_WALL_Y), Math.toRadians(INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION))
+                .strafeTo(new Vector2d(INTAKE_SPECIMEN_1_AWAY_FROM_WALL_X, INTAKE_SPECIMEN_1_AWAY_FROM_WALL_Y))
                 .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
-                .lineToY(INTAKE_SPECIMEN_1_AT_WALL_Y)
+                .turn(Math.toRadians(INTAKE_SPECIMEN_1_AWAY_FROM_WALL_ORIENTATION))
+                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
+                .lineToY(INTAKE_SPECIMEN_1_AT_WALL_STAGE_1_Y)
+                .lineToY(INTAKE_SPECIMEN_1_AT_WALL_STAGE_2_Y)
                 .stopAndAdd(ias.actionIntakeSpecimenFromWall())
+                .waitSeconds(15)
 //                // Move to the chamber and score specimen 1
 //                .strafeToSplineHeading(new Vector2d(CHAMBER_SPECIMEN_1_X, CHAMBER_SPECIMEN_1_Y), Math.toRadians(CHAMBER_SPECIMEN_1_ORIENTATION))
 //                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
