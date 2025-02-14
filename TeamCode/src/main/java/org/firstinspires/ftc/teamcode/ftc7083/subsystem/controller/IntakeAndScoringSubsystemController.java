@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
@@ -392,6 +394,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
 
         // Automate opening the claw, dropping the arm down, grabbing a sample, and raising the arm
         if (AUTOMATE_SAMPLE_PICKUP) {
+            ColorSensor colorSensor = Robot.getInstance().colorSensor;
             // Close intake position movements
             if (state == State.INTAKE_CLOSE_CLAW_OPENED && intakeAndScoringSubsystem.isAtTarget()) {
                 intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
@@ -402,15 +405,17 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 state = State.INTAKE_CLOSE_CLAW_CLOSED;
             }
             if (state == State.INTAKE_CLOSE_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
-                // intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
-                intakeAndScoringSubsystem.moveToPosition(IntakeAndScoringSubsystem.INTAKE_CLOSE_ABOVE_X, IntakeAndScoringSubsystem.INTAKE_CLOSE_ABOVE_Y);
-                Robot.getInstance().wrist.setToIntakeSample();
+                intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
                 state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
+            }
+            if (state == State.INTAKE_CLOSE_ABOVE_SAMPLE && intakeAndScoringSubsystem.isAtTarget() && colorSensor != null && colorSensor.getDistance(DistanceUnit.INCH) < 1.0) {
+                intakeAndScoringSubsystem.moveToNeutralPosition();
+                state = State.NEUTRAL_POSITION;
             }
 
             // Far intake position movements
             if (state == State.INTAKE_FAR_CLAW_OPENED && intakeAndScoringSubsystem.isAtTarget()) {
-                intakeAndScoringSubsystem.moveToIntakeCloseLoweredPosition();
+                intakeAndScoringSubsystem.moveToIntakeFarLoweredPosition();
                 state = State.INTAKE_FAR_LOWERED_TO_SAMPLE;
             }
             if (state == State.INTAKE_FAR_LOWERED_TO_SAMPLE && intakeAndScoringSubsystem.isAtTarget()) {
@@ -418,10 +423,12 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 state = State.INTAKE_FAR_CLAW_CLOSED;
             }
             if (state == State.INTAKE_FAR_CLAW_CLOSED && intakeAndScoringSubsystem.isAtTarget()) {
-                // intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
-                intakeAndScoringSubsystem.moveToPosition(IntakeAndScoringSubsystem.INTAKE_FAR_ABOVE_X, IntakeAndScoringSubsystem.INTAKE_FAR_ABOVE_Y);
-                Robot.getInstance().wrist.setToIntakeSample();
+                intakeAndScoringSubsystem.moveToIntakeFarAboveSamplePosition();
                 state = State.INTAKE_FAR_ABOVE_SAMPLE;
+            }
+            if (state == State.INTAKE_FAR_ABOVE_SAMPLE && intakeAndScoringSubsystem.isAtTarget() && colorSensor != null && colorSensor.getDistance(DistanceUnit.INCH) < 1.0) {
+                intakeAndScoringSubsystem.moveToNeutralPosition();
+                state = State.NEUTRAL_POSITION;
             }
 
             // Automate intake off wall
