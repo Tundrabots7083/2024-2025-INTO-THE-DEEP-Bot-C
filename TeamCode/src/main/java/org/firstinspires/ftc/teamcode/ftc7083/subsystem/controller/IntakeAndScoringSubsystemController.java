@@ -68,6 +68,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
     public static boolean AUTOMATE_SAMPLE_PICKUP = true;
     public static boolean AUTOMATE_DROPOFF_SAMPLE = true;
 
+    // Minimum distance to a sample in inches before we determine there is a sample in the claw
+    public static double SAMPLE_IN_CLAW_MIN_DISTANCE = 1.0;
+
     private final IntakeAndScoringSubsystem intakeAndScoringSubsystem;
     private final Telemetry telemetry;
 
@@ -408,7 +411,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                 intakeAndScoringSubsystem.moveToIntakeCloseAboveSamplePosition();
                 state = State.INTAKE_CLOSE_ABOVE_SAMPLE;
             }
-            if (state == State.INTAKE_CLOSE_ABOVE_SAMPLE && intakeAndScoringSubsystem.isAtTarget() && colorSensor != null && colorSensor.getDistance(DistanceUnit.INCH) < 1.0) {
+            if (state == State.INTAKE_CLOSE_ABOVE_SAMPLE && intakeAndScoringSubsystem.isAtTarget() && colorSensor != null && colorSensor.getDistance(DistanceUnit.INCH) < SAMPLE_IN_CLAW_MIN_DISTANCE) {
                 intakeAndScoringSubsystem.moveToNeutralPosition();
                 state = State.NEUTRAL_POSITION;
             }
