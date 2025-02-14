@@ -64,7 +64,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
 @Config
 public class IntakeAndScoringSubsystemController implements SubsystemController {
     // Automate certain intake and scoring actions
-    public static boolean AUTOMATE_HIGH_BASKET_SCORING = true;
+    public static boolean AUTOMATE_HIGH_BASKET_SCORING = false;
     public static boolean AUTOMATE_SAMPLE_PICKUP = true;
     public static boolean AUTOMATE_DROPOFF_SAMPLE = true;
 
