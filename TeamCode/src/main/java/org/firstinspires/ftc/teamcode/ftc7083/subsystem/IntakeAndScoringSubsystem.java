@@ -47,20 +47,20 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // (x, y) distances in inches from the center of rotation of the arm that the
     // scoring subsystem needs to reach to intake specimens and samples.
-    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
-    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE;                      // 6.9
-    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
-    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 2.0;            // 2.9
+    public static double DEPOSIT_SAMPLE_X = ARM_LENGTH + 7.5;                           // 22.5
+    public static double DEPOSIT_SAMPLE_Y = INTAKE_HEIGHT_LOWERED;                      // 4.9
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE - 2.0;              // 4.9
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
     public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                // 4.9
+    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE;                      // 6.9
+    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
+    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 2.0;            // 2.9
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;                      // 15.0
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;                // 2.5
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;        // 15.0
     public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;  // 7.5
-    public static double DEPOSIT_SAMPLE_X = INTAKE_CLOSE_ABOVE_X;                       // 22.5
-    public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;                       // 3.6
     public static double NEUTRAL_X = ARM_LENGTH;                                        // 15.0
     public static double NEUTRAL_Y = ARM_HEIGHT;                                        // 9.5
     public static double START_X = ARM_LENGTH - 4.5;                                    // 10.5
