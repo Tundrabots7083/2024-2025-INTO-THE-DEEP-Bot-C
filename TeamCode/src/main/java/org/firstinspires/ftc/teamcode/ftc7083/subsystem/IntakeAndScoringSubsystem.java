@@ -544,8 +544,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public ActionEx actionIntakeSpecimenFromWall() {
         return new SequentialAction(
                 actionCloseClawWithWait(),
-                new MoveToIntakeSpecimenRaisedPosition(this),
-                new MoveToNeutralPosition(this)
+                new MoveToIntakeSpecimenRaisedPosition(this)
         );
     }
 
@@ -829,7 +828,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
         @Override
         public void initialize() {
-            intakeAndScoringSubsystem.moveToNeutralPosition();
+            intakeAndScoringSubsystem.moveToIntakeSpecimenOffWallPosition();
         }
     }
 
