@@ -20,30 +20,30 @@ public class Basket {
     public static double INITIAL_POSE_Y = -60.0;
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
-    // Position for scoring in the high basket
-    public static double BASKET_HIGH_PRELOAD_X = -52.5;
-    public static double BASKET_HIGH_PRELOAD_Y = -65.5;;
-    public static double BASKET_HIGH_PRELOAD_ORIENTATION = 65;
+    // Position for scoring the pre-loaded specimen in the high basket
+    public static double BASKET_HIGH_SPECIMEN_1_X = -52.5;
+    public static double BASKET_HIGH_SPECIMEN_1_Y = -65.5;;
+    public static double BASKET_HIGH_SPECIMEN_1_ORIENTATION = 65;
 
     // Intake positions for spike mark 1
     public static double YELLOW_SPIKE_MARK_1_X = -57.5;
     public static double YELLOW_SPIKE_MARK_1_Y = -55.5;
     public static double YELLOW_SPIKE_MARK_1_ORIENTATION = 120;
 
-    // Position for scoring in the high basket
-    public static double BASKET_HIGH_SPECIMEN_1_X = -52.5;
-    public static double BASKET_HIGH_SPECIMEN_1_Y = -65.5;;
-    public static double BASKET_HIGH_SPECIMEN_1_ORIENTATION = 65;
+    // Position for scoring specimen 2 in the high basket
+    public static double BASKET_HIGH_SPECIMEN_2_X = -52.5;
+    public static double BASKET_HIGH_SPECIMEN_2_Y = -65.5;;
+    public static double BASKET_HIGH_SPECIMEN_2_ORIENTATION = 65;
 
     // Intake positions for spike mark 2
     public static double YELLOW_SPIKE_MARK_2_X = -67.5;
     public static double YELLOW_SPIKE_MARK_2_Y = -55.5;
     public static double YELLOW_SPIKE_MARK_2_ORIENTATION = 120;
 
-    // Position for scoring in the high basket
-    public static double BASKET_HIGH_SPECIMEN_2_X = -57.5;
-    public static double BASKET_HIGH_SPECIMEN_2_Y = -65.5;;
-    public static double BASKET_HIGH_SPECIMEN_2_ORIENTATION = 65;
+    // Position for scoring specimen 3 in the high basket
+    public static double BASKET_HIGH_SPECIMEN_3_X = -57.5;
+    public static double BASKET_HIGH_SPECIMEN_3_Y = -65.5;;
+    public static double BASKET_HIGH_SPECIMEN_3_ORIENTATION = 65;
 
     private final TrajectoryActionBuilder actionBuilder;
 
@@ -88,18 +88,21 @@ public class Basket {
         IntakeAndScoringSubsystem ias = Robot.getInstance().intakeAndScoringSubsystem;
         return actionBuilder
                 // Score pre-loaded sample in the basket
-                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_PRELOAD_X, BASKET_HIGH_PRELOAD_Y), Math.toRadians(BASKET_HIGH_PRELOAD_ORIENTATION))
+                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_1_X, BASKET_HIGH_SPECIMEN_1_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_1_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
+
                 // Pick up the sample from Spike Mark 1 and score in the high basket
                 .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_1_X, YELLOW_SPIKE_MARK_1_Y), Math.toRadians(YELLOW_SPIKE_MARK_1_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_1_X, BASKET_HIGH_SPECIMEN_1_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_1_ORIENTATION))
+                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_2_X, BASKET_HIGH_SPECIMEN_2_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_2_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
+
                 // Pick up the sample from Spike Mark 2 and score in the high basket
                 .strafeToSplineHeading(new Vector2d(YELLOW_SPIKE_MARK_2_X, YELLOW_SPIKE_MARK_2_Y), Math.toRadians(YELLOW_SPIKE_MARK_2_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
-                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_2_X, BASKET_HIGH_SPECIMEN_2_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_2_ORIENTATION))
+                .strafeToSplineHeading(new Vector2d(BASKET_HIGH_SPECIMEN_3_X, BASKET_HIGH_SPECIMEN_3_Y), Math.toRadians(BASKET_HIGH_SPECIMEN_3_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
+
                 // Move to the start position
                 .stopAndAdd(ias.actionMoveToStartPosition())
                 .build();
