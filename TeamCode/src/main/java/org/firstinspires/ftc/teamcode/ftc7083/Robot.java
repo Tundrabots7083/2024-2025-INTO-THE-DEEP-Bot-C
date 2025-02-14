@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunParams;
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
+import org.firstinspires.ftc.teamcode.ftc7083.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
@@ -129,7 +130,7 @@ public class Robot {
     public Limelight limelight;
     public final SparkFunOTOS otos;
     public GlobalShutterCamera globalShutterCamera;
-    //public final ColorSensor colorSensor;
+    public ColorSensor colorSensor;
 
     public List<Webcam> webcams;
 
@@ -168,6 +169,7 @@ public class Robot {
         globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
         limelight = new Limelight(hardwareMap, telemetry);
         //colorSensor = new ColorSensor(hardwareMap, telemetry);
+        colorSensor = null;
 
         if (USE_SPARKFUN_OTOS_CORRECTED) {
             otos = hardwareMap.get(SparkFunOTOSCorrected.class, "otos");
