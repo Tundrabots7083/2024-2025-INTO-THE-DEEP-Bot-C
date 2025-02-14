@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.AutoMecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
 
 /**
- * Autonomous trajectory builder for the Red Alliance when scoring specimen on the chamber.
+ * Autonomous trajectory builder for scoring specimen on the high chamber.
  */
 @Config
 public class Chamber {
@@ -74,8 +74,8 @@ public class Chamber {
     private final TrajectoryActionBuilder actionBuilder;
 
     /**
-     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
-     * chamber. This uses the default Pose2d for the robot.
+     * Creates a new autonomous trajectory builder for scoring on the high chamber.
+     * This uses the default Pose2d for the robot.
      *
      * @param drive the Mecanum Drive used to move the robot autonomously
      */
@@ -84,8 +84,8 @@ public class Chamber {
     }
 
     /**
-     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
-     * chamber. This uses the specified pose for the robot, which allows the invoker to override
+     * Creates a new autonomous trajectory builder for scoring on the high chamber.
+     * This uses the specified pose for the robot, which allows the invoker to override
      * the pose if desired.
      *
      * @param drive       the Mecanum Drive used to move the robot autonomously
@@ -96,8 +96,8 @@ public class Chamber {
     }
 
     /**
-     * Creates a new autonomous trajectory builder for the Red Alliance when scoring on the
-     * chamber. This uses the specified trajectory action builder for building the trajectories.
+     * Creates a new autonomous trajectory builder for scoring on the high chamber.
+     * This uses the specified trajectory action builder for building the trajectories.
      *
      * @param actionBuilder the action builder to use when creating the trajectories
      */
