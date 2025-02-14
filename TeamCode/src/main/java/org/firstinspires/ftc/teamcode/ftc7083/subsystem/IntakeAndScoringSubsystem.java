@@ -42,19 +42,19 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double ARM_HEIGHT = 9.5;
 
     // Arm Movement Constants
-    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.1;                        // 4.4
-    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;             // 2.9
+    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 2.6;                        // 6.9
+    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 2.0;             // 4.9
 
     // (x, y) distances in inches from the center of rotation of the arm that the
     // scoring subsystem needs to reach to intake specimens and samples.
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
-    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.5;                // 6.9
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE;                      // 6.9
     public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
-    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                  // 2.9
+    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 2.0;            // 2.9
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
-    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;              // 3.4
+    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE - 2.0;              // 4.9
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
-    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED + 2.0;          // 4.9
+    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                // 4.9
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;                      // 15.0
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;                // 2.5
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;        // 15.0
