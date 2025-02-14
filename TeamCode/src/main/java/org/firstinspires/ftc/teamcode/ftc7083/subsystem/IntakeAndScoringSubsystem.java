@@ -26,11 +26,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // Heights of scoring places for game are in inches
     public static double HIGH_CHAMBER_HEIGHT = 26.0;
-    public static double LOW_CHAMBER_HEIGHT = 13.0;
     public static double HIGH_BASKET_HEIGHT = 43.0;
     public static double LOW_BASKET_HEIGHT = 25.75;
     public static double LOW_ASCENT_BAR_HEIGHT = 20.0;
-    public static double HIGH_ASCENT_BAR_HEIGHT = 36.0;
 
     // Maximum horizontal length of robot when extended
     public static double MAX_EXTENDED_ROBOT_LENGTH = 40.0;
@@ -71,17 +69,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;                      // 0.0
     public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 6.5;               // 49.5
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;                   // 0.0
-    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 9.0
+    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 10.0
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;                     // -3.0
-    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;                  // 50.5
+    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;                  // 49.5
+    public static double HIGH_CHAMBER_SCORING_RELEASE_X = ARM_LENGTH + 2.5;             // 17.5
+    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_HEIGHT - 11;     // 15.0
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;                           // 15.0
     public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;              // 25.0
-    public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X + 2.5; // 17.5
-    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;  // 15
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 15.5
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 32.0
+    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 20.0
+    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 26.0
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;              // 0.0
-    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 9.0
+    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 10.0
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;                      // -5.0
     public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 8;                  // 33.75
 
