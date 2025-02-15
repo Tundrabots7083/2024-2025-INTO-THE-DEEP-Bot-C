@@ -25,9 +25,9 @@ public class Chamber {
 
     // Position for scoring the preloaded specimen on the high chamber
     public static double SPECIMEN_1_CHAMBER_X = -4;
-    public static double SPECIMEN_1_CHAMBER_Y = -46;
+    public static double SPECIMEN_1_CHAMBER_Y = -49;
     public static double SPECIMEN_1_CHAMBER_ORIENTATION = 120;
-    public static double SPECIMEN_1_SCORE_CHAMBER_Y = -44.5;
+    public static double SPECIMEN_1_SCORE_CHAMBER_Y = -47.5;
 
     // Positions for strafing the sample from spike mark 1 into the observation zone
     public static double SPIKE_MARK_1_REVERSE_FROM_CHAMBER_Y = -48;
@@ -46,9 +46,9 @@ public class Chamber {
 
     // Position for scoring specimen 2 on the high chamber
     public static double SPECIMEN_2_CHAMBER_X = -2;
-    public static double SPECIMEN_2_CHAMBER_Y = -49.5;
+    public static double SPECIMEN_2_CHAMBER_Y = -50.5;
     public static double SPECIMEN_2_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
-    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -47.5;
+    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -48.5;
 
     // Pickup specimen 3 from wall
     public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X = 37.5;
@@ -66,9 +66,9 @@ public class Chamber {
     public static double SPECIMEN_3_CHAMBER_SCORE_Y = -47;
 
     // Park in the observation zone
-    public static double PARK_X = 55;
-    public static double PARK_Y = -40;
-    public static double PARK_ORIENTATION = 120;
+    public static double PARK_X = 50;
+    public static double PARK_Y = -35;
+    public static double PARK_ORIENTATION = 140;
 
     private final TrajectoryActionBuilder actionBuilder;
 
