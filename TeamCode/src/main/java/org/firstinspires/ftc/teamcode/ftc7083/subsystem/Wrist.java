@@ -34,6 +34,8 @@ public class Wrist extends SubsystemBase {
     public static double INTAKE_SAMPLE_PITCH = 0.0;
     public static double INTAKE_SAMPLE_ROLL = 0.0;
     public static double INTAKE_SPECIMEN_PITCH = 140.0;
+    public static double RAISE_TO_BASKET_PITCH = 40.0;
+    public static double RAISE_TO_BASKET_ROLL = 0.0;
     public static double INTAKE_SPECIMEN_ROLL = 0.0;
     public static double SCORE_BASKET_PITCH = 155.0;
     public static double SCORE_BASKET_ROLL = 0.0;
@@ -43,7 +45,7 @@ public class Wrist extends SubsystemBase {
     public static double START_POSITION_ROLL = 0.0;
 
     // Time to move to the target position
-    public static long PITCH_SERVO_TIME = 250; // ms
+    public static long PITCH_SERVO_TIME = 500; // ms
     public static long ROLL_SERVO_TIME = 250; // ms
 
     private final Telemetry telemetry;
@@ -87,6 +89,14 @@ public class Wrist extends SubsystemBase {
     public void setToIntakeSample() {
         setPitchDegrees(INTAKE_SAMPLE_PITCH);
         setRollDegrees(INTAKE_SAMPLE_ROLL);
+    }
+
+    /**
+     * Sets the wrist so that it can intake a specimen off the wall.
+     */
+    public void setToRaiseToBasket() {
+        setPitchDegrees(RAISE_TO_BASKET_PITCH);
+        setRollDegrees(RAISE_TO_BASKET_ROLL);
     }
 
     /**

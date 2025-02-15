@@ -50,7 +50,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
     public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE - 2.0;              // 4.9
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
-    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                // 4.9
+    public static double INTAKE_CLOSE_LOWERED_Y = 2.25; // INTAKE_HEIGHT_LOWERED;       // 2.25
     public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
     public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE;                      // 6.9
     public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
@@ -286,7 +286,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketHighRaisedPosition() {
         moveToPosition(HIGH_BASKET_RAISED_X, HIGH_BASKET_RAISED_Y);
-        robot.wrist.setToIntakeSpecimen();
+        robot.wrist.setToRaiseToBasket();
         telemetry.addData("[IAS] position", "high basket raised");
     }
 
@@ -296,7 +296,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketHighRetractedPosition() {
         moveToPosition(HIGH_BASKET_RETRACTED_X, HIGH_BASKET_RETRACTED_Y);
-        robot.wrist.setToIntakeSpecimen();
+        robot.wrist.setToRaiseToBasket();
         telemetry.addData("[IAS] position", "high basket retracted");
     }
 

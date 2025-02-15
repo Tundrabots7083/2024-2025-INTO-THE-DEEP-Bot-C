@@ -39,7 +39,7 @@ public class LinearSlide extends SubsystemBase {
     public static double maxAcceleration = 95;
 
     // Constants for determining if the arm is at target
-    public static double TOLERABLE_ERROR = 0.25; // inches
+    public static double TOLERABLE_ERROR = 1.0; // inches
     public static int AT_TARGET_COUNT = 3;
 
     public static double MIN_EXTENSION_LENGTH = 0.0;
@@ -51,6 +51,7 @@ public class LinearSlide extends SubsystemBase {
     private MotionProfile profile;
     private double targetLength = Double.NaN;
     private int atTargetCount = 0;
+    private double currentLength = 0;
 
     /**
      * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
@@ -96,7 +97,7 @@ public class LinearSlide extends SubsystemBase {
         double targetLength = Range.clip(length, MIN_EXTENSION_LENGTH, MAX_EXTENSION_LENGTH);
         if (this.targetLength != targetLength) {
             this.targetLength = targetLength;
-            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentLength(), targetLength);
+            profile = new MotionProfile(maxAcceleration, maxVelocity, currentLength, targetLength);
             pidController.reset();
             atTargetCount = 0;
         }
@@ -109,7 +110,7 @@ public class LinearSlide extends SubsystemBase {
      * @return slide length in inches
      */
     public double getCurrentLength() {
-        return slideMotor.getCurrentInches();
+        return currentLength;
     }
 
     /**
@@ -134,7 +135,7 @@ public class LinearSlide extends SubsystemBase {
      */
     @Override
     public void execute() {
-        double currentLength = getCurrentLength();
+        currentLength = slideMotor.getCurrentInches();
         double targetLength;
         if (USE_MOTION_PROFILE) {
             targetLength = profile.calculatePosition();
@@ -162,6 +163,8 @@ public class LinearSlide extends SubsystemBase {
      */
     public boolean isAtTarget() {
         boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        telemetry.addData("[Slide] target", targetLength);
+        telemetry.addData("[Slide] current", currentLength);
         telemetry.addData("[Slide] atTarget", atTarget);
         return atTarget;
     }
