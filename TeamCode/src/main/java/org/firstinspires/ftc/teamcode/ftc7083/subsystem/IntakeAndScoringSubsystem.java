@@ -41,7 +41,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // Arm Movement Constants
     public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 2.6;                        // 6.9
-    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 2.0;             // 4.9
+    public static double INTAKE_HEIGHT_LOWERED = 2.0;             // 4.9
 
     // (x, y) distances in inches from the center of rotation of the arm that the
     // scoring subsystem needs to reach to intake specimens and samples.
