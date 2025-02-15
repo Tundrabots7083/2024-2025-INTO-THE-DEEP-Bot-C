@@ -26,11 +26,9 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
 
     // Heights of scoring places for game are in inches
     public static double HIGH_CHAMBER_HEIGHT = 26.0;
-    public static double LOW_CHAMBER_HEIGHT = 13.0;
     public static double HIGH_BASKET_HEIGHT = 43.0;
     public static double LOW_BASKET_HEIGHT = 25.75;
     public static double LOW_ASCENT_BAR_HEIGHT = 20.0;
-    public static double HIGH_ASCENT_BAR_HEIGHT = 36.0;
 
     // Maximum horizontal length of robot when extended
     public static double MAX_EXTENDED_ROBOT_LENGTH = 40.0;
@@ -42,25 +40,25 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double ARM_HEIGHT = 9.5;
 
     // Arm Movement Constants
-    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 5.1;                        // 4.4
-    public static double INTAKE_HEIGHT_LOWERED = INTAKE_HEIGHT_ABOVE - 1.5;             // 2.9
+    public static double INTAKE_HEIGHT_ABOVE = ARM_HEIGHT - 2.6;                        // 6.9
+    public static double INTAKE_HEIGHT_LOWERED = 2.0;             // 4.9
 
     // (x, y) distances in inches from the center of rotation of the arm that the
     // scoring subsystem needs to reach to intake specimens and samples.
-    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
-    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 2.5;                // 6.9
-    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
-    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                  // 2.9
+    public static double DEPOSIT_SAMPLE_X = ARM_LENGTH + 7.5;                           // 22.5
+    public static double DEPOSIT_SAMPLE_Y = INTAKE_HEIGHT_LOWERED;                      // 4.9
     public static double INTAKE_CLOSE_ABOVE_X = ARM_LENGTH + 7.5;                       // 22.5
-    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE + 0.5;              // 3.4
+    public static double INTAKE_CLOSE_ABOVE_Y = INTAKE_HEIGHT_ABOVE - 2.0;              // 4.9
     public static double INTAKE_CLOSE_LOWERED_X = INTAKE_CLOSE_ABOVE_X;                 // 22.5
-    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 0.9;          // 2.0
+    public static double INTAKE_CLOSE_LOWERED_Y = INTAKE_HEIGHT_LOWERED;                // 4.9
+    public static double INTAKE_FAR_ABOVE_X = ARM_LENGTH + 15.0;                        // 30.0
+    public static double INTAKE_FAR_ABOVE_Y = INTAKE_HEIGHT_ABOVE;                      // 6.9
+    public static double INTAKE_FAR_LOWERED_X = INTAKE_FAR_ABOVE_X;                     // 30.0
+    public static double INTAKE_FAR_LOWERED_Y = INTAKE_HEIGHT_LOWERED - 2.0;            // 2.9
     public static double INTAKE_SPECIMEN_FROM_WALL_X = ARM_LENGTH;                      // 15.0
     public static double INTAKE_SPECIMEN_FROM_WALL_Y = ARM_HEIGHT - 7.0;                // 2.5
     public static double INTAKE_SPECIMEN_RAISED_X = INTAKE_SPECIMEN_FROM_WALL_X;        // 15.0
     public static double INTAKE_SPECIMEN_RAISED_Y = INTAKE_SPECIMEN_FROM_WALL_Y + 5.0;  // 7.5
-    public static double DEPOSIT_SAMPLE_X = INTAKE_CLOSE_ABOVE_X;                       // 22.5
-    public static double DEPOSIT_SAMPLE_Y = INTAKE_CLOSE_ABOVE_Y;                       // 3.6
     public static double NEUTRAL_X = ARM_LENGTH;                                        // 15.0
     public static double NEUTRAL_Y = ARM_HEIGHT;                                        // 9.5
     public static double START_X = ARM_LENGTH - 4.5;                                    // 10.5
@@ -71,17 +69,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_BASKET_RAISED_X = ARM_LENGTH - 15.0;                      // 0.0
     public static double HIGH_BASKET_RAISED_Y = HIGH_BASKET_HEIGHT + 6.5;               // 49.5
     public static double HIGH_BASKET_RETRACTED_X = ARM_LENGTH - 15.0;                   // 0.0
-    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 9.0
+    public static double HIGH_BASKET_RETRACTED_Y = ARM_HEIGHT + 0.5;                    // 10.0
     public static double HIGH_BASKET_SCORING_X = ARM_LENGTH - 18.0;                     // -3.0
-    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;                  // 50.5
+    public static double HIGH_BASKET_SCORING_Y = HIGH_BASKET_RAISED_Y;                  // 49.5
+    public static double HIGH_CHAMBER_SCORING_RELEASE_X = ARM_LENGTH + 2.5;             // 17.5
+    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_HEIGHT - 11;     // 15.0
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;                           // 15.0
     public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;              // 25.0
-    public static double HIGH_CHAMBER_SCORING_RELEASE_X = HIGH_CHAMBER_SCORING_X + 2.5; // 17.5
-    public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_SCORING_Y - 10;  // 15
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 15.5
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 32.0
+    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 20.0
+    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 26.0
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;              // 0.0
-    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 9.0
+    public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 10.0
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;                      // -5.0
     public static double LOW_BASKET_SCORING_Y = LOW_BASKET_HEIGHT + 8;                  // 33.75
 
@@ -517,6 +515,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
                 new MoveToIntakeCloseAboveSamplePosition(this),
                 new MoveToIntakeCloseLoweredPosition(this),
                 actionCloseClawWithWait(),
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
+     * Gets an action to ove the intake and scoring system to a neutral position
+     *
+     * @return an action to ove the intake and scoring system to a neutral position
+     */
+    public ActionEx actionMoveToNeutralPosition() {
+        return new SequentialAction(
                 new MoveToNeutralPosition(this)
         );
     }
