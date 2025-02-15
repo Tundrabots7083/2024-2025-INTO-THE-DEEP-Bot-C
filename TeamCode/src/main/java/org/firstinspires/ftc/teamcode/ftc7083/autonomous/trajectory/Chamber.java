@@ -54,7 +54,7 @@ public class Chamber {
     public static double SPECIMEN_3_REVERSE_FROM_CHAMBER_Y = -48;
     public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X = 37.5;
     public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_Y = -38;
-    public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_ORIENTATION = -200;
+    public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_ORIENTATION = -50;
     public static double SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_Y = -43.0;
     public static double SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_ORIENTATION = -50;
     public static double SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_Y = SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_Y - 2.5;
