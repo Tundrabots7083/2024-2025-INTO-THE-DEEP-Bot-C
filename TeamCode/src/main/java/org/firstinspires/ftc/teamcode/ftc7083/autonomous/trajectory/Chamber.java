@@ -24,7 +24,7 @@ public class Chamber {
     public static double INITIAL_POSE_ORIENTATION = 90.0;
 
     // Position for scoring the preloaded specimen on the high chamber
-    public static double SPECIMEN_1_CHAMBER_X = -2;
+    public static double SPECIMEN_1_CHAMBER_X = -4;
     public static double SPECIMEN_1_CHAMBER_Y = -46;
     public static double SPECIMEN_1_CHAMBER_ORIENTATION = 120;
     public static double SPECIMEN_1_SCORE_CHAMBER_Y = -44.5;
@@ -43,11 +43,9 @@ public class Chamber {
     // Pickup specimen 2 from wall
     public static double SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_Y = -43;
     public static double SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_ORIENTATION = -65;
-    public static double SPECIMEN_2_INTAKE_AT_WALL_STAGE_2_Y = SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_Y - 1;
-    public static double SPECIMEN_2_INTAKE_AT_WALL_STAGE_2_ORIENTATION = SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_ORIENTATION;
 
     // Position for scoring specimen 2 on the high chamber
-    public static double SPECIMEN_2_CHAMBER_X = SPECIMEN_1_CHAMBER_X;
+    public static double SPECIMEN_2_CHAMBER_X = -2;
     public static double SPECIMEN_2_CHAMBER_Y = -49;
     public static double SPECIMEN_2_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
     public static double SPECIMEN_2_CHAMBER_SCORE_Y = -47;
@@ -62,7 +60,7 @@ public class Chamber {
     public static double SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_ORIENTATION = -45;
 
     // Position for scoring specimen 3 on the high chamber
-    public static double SPECIMEN_3_CHAMBER_X = SPECIMEN_1_CHAMBER_X;
+    public static double SPECIMEN_3_CHAMBER_X = 0;
     public static double SPECIMEN_3_CHAMBER_Y = -48;
     public static double SPECIMEN_3_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
     public static double SPECIMEN_3_CHAMBER_SCORE_Y = -46;
@@ -130,7 +128,6 @@ public class Chamber {
                 // Move to the wall and pickup specimen 2
                 .waitSeconds(INTAKE_SPECIMEN_WALL_TIMEOUT)
                 .lineToYLinearHeading(SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_Y, Math.toRadians(SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_ORIENTATION))
-//                .lineToYLinearHeading(SPECIMEN_2_INTAKE_AT_WALL_STAGE_2_Y, Math.toRadians(SPECIMEN_2_INTAKE_AT_WALL_STAGE_2_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSpecimenFromWall())
 
                 // Move to the chamber and score specimen 2

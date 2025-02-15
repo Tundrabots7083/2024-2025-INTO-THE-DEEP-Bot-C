@@ -29,7 +29,7 @@ import java.util.List;
  * Base autonomous op mode
  */
 public abstract class AutonomousOpMode extends LinearOpMode {
-    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 27000;
+    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 40000; // TODO: reset to 27000;
     public static int RETRACT_SLIDE_TIMEOUT = 1500;
 
     @Override
