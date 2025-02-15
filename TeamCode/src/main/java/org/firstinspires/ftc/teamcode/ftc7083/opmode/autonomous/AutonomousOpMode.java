@@ -49,12 +49,12 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         telemetry.update();
 
         // Run during init but before the start button is pressed
-        while (opModeInInit()) {
-            robot.localizer.update();
-            telemetry.update();
-        }
+//        while (opModeInInit()) {
+//            robot.localizer.update();
+//            telemetry.update();
+//        }
 
-        waitForStart();
+        robot.localizer.update();
 
         ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         // Create the trajectory to run and, once done, move to the start position, all the while
@@ -74,6 +74,11 @@ public abstract class AutonomousOpMode extends LinearOpMode {
                         robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
                 )
         );
+
+        telemetry.addLine("Initialization Complete");
+        telemetry.update();
+
+        waitForStart();
 
         // Handle the stop button being pressed immediately after the start button has been pressed
         if (isStopRequested()) return;

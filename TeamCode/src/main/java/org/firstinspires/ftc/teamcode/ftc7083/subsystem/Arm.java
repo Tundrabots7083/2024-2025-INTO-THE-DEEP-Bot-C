@@ -52,6 +52,7 @@ public class Arm extends SubsystemBase {
     private MotionProfile profile;
     private double targetAngle = Double.NaN;
     private int atTargetCount = 0;
+    double currentAngle = START_ANGLE;
 
     /**
      * Makes an arm that can raise and lower.
@@ -89,7 +90,7 @@ public class Arm extends SubsystemBase {
      * @return the current position in degrees to which the arm has moved
      */
     public double getCurrentAngle() {
-        return shoulderMotor.getCurrentDegrees() + START_ANGLE;
+        return currentAngle;
     }
 
     /**
@@ -110,7 +111,7 @@ public class Arm extends SubsystemBase {
         double targetAngle = Range.clip(angle, MIN_ANGLE, MAX_ANGLE);
         if (this.targetAngle != targetAngle) {
             this.targetAngle = targetAngle;
-            profile = new MotionProfile(maxAcceleration, maxVelocity, getCurrentAngle(), targetAngle);
+            profile = new MotionProfile(maxAcceleration, maxVelocity, currentAngle, targetAngle);
             pidController.reset();
             atTargetCount = 0;
         }
@@ -121,7 +122,7 @@ public class Arm extends SubsystemBase {
      */
     @Override
     public void execute() {
-        double currentAngle = getCurrentAngle();
+        currentAngle = shoulderMotor.getCurrentDegrees() + START_ANGLE;
         double targetAngle;
         if (USE_MOTION_PROFILE) {
             targetAngle = profile.calculatePosition();
@@ -151,6 +152,8 @@ public class Arm extends SubsystemBase {
      */
     public boolean isAtTarget() {
         boolean atTarget = atTargetCount >= AT_TARGET_COUNT;
+        telemetry.addData("[Arm] target", targetAngle);
+        telemetry.addData("[Arm] current", currentAngle);
         telemetry.addData("[Arm] atTarget", atTarget);
         return atTarget;
     }
@@ -172,7 +175,7 @@ public class Arm extends SubsystemBase {
     public String toString() {
         return "Arm{" +
                 "target=" + targetAngle +
-                ", current=" + getCurrentAngle() +
+                ", current=" + currentAngle +
                 "}";
     }
 

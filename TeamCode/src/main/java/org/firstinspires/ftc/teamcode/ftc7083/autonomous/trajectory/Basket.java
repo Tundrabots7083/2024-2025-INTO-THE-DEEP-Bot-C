@@ -26,23 +26,23 @@ public class Basket {
     public static double SAMPLE_1_BASKET_ORIENTATION = 65;
 
     // Intake positions for spike mark 1
-    public static double SPIKE_MARK_1_X = -50.5;
+    public static double SPIKE_MARK_1_X = -52.5;
     public static double SPIKE_MARK_1_Y = -54;
-    public static double SPIKE_MARK_1_ORIENTATION = 140;
+    public static double SPIKE_MARK_1_ORIENTATION = 135;
 
     // Position for scoring sample 2 in the high basket
-    public static double SAMPLE_2_BASKET_X = -50.5;
-    public static double SAMPLE_2_BASKET_Y = -63.5;;
+    public static double SAMPLE_2_BASKET_X = -50;
+    public static double SAMPLE_2_BASKET_Y = -63;;
     public static double SAMPLE_2_BASKET_ORIENTATION = 45; // 65;
 
     // Intake positions for spike mark 2
-    public static double SPIKE_MARK_2_X = -58.5;
-    public static double SPIKE_MARK_2_Y = -57.5;
-    public static double SPIKE_MARK_2_ORIENTATION = 150;
+    public static double SPIKE_MARK_2_X = -61.5;
+    public static double SPIKE_MARK_2_Y = -60.5;
+    public static double SPIKE_MARK_2_ORIENTATION = 135;
 
     // Position for scoring sample 3 in the high basket
-    public static double SAMPLE_3_BASKET_X = -55.5;
-    public static double SAMPLE_3_BASKET_Y = -63.5;;
+    public static double SAMPLE_3_BASKET_X = -50;
+    public static double SAMPLE_3_BASKET_Y = -65;;
     public static double SAMPLE_3_BASKET_ORIENTATION = 45;
 
     private final TrajectoryActionBuilder actionBuilder;

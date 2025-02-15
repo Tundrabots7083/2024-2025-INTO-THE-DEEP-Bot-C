@@ -286,7 +286,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketHighRaisedPosition() {
         moveToPosition(HIGH_BASKET_RAISED_X, HIGH_BASKET_RAISED_Y);
-        robot.wrist.setToIntakeSpecimen();
+        robot.wrist.setToRaiseToBasket();
         telemetry.addData("[IAS] position", "high basket raised");
     }
 
@@ -296,7 +296,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToBasketHighRetractedPosition() {
         moveToPosition(HIGH_BASKET_RETRACTED_X, HIGH_BASKET_RETRACTED_Y);
-        robot.wrist.setToIntakeSpecimen();
+        robot.wrist.setToRaiseToBasket();
         telemetry.addData("[IAS] position", "high basket retracted");
     }
 
