@@ -137,7 +137,7 @@ public class Chamber {
                 .lineToY(SPECIMEN_2_CHAMBER_SCORE_Y)
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 
-                // Move to the wall and prepare to pickup specimen 3
+                // Move to the wall in preparation to pickup specimen 3
                 .lineToY(SPECIMEN_3_REVERSE_FROM_CHAMBER_Y)
                 .strafeToSplineHeading(new Vector2d(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X, SPECIMEN_3_INTAKE_AWAY_FROM_WALL_Y), Math.toRadians(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_ORIENTATION))
                 .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
