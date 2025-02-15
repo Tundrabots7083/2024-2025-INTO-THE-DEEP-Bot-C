@@ -29,8 +29,7 @@ import java.util.List;
  * Base autonomous op mode
  */
 public abstract class AutonomousOpMode extends LinearOpMode {
-    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 40000; // TODO: reset to 27000;
-    public static int RETRACT_SLIDE_TIMEOUT = 1500;
+    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 28500;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -72,7 +71,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
                 },
                 new SequentialAction(
                         new TimeoutAction(getTrajectory(), AUTONOMOUS_ACTIONS_TIMEOUT),
-                        robot.intakeAndScoringSubsystem.actionRetractLinearSlide().withTimeout(RETRACT_SLIDE_TIMEOUT),
                         robot.intakeAndScoringSubsystem.actionMoveToStartPosition()
                 )
         );

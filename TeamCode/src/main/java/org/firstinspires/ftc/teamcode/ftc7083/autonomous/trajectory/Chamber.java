@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsyste
 @Config
 public class Chamber {
     // Timeout for moving the intake to the wall
-    public static double INTAKE_SPECIMEN_WALL_TIMEOUT = 0.4;
+    public static double INTAKE_SPECIMEN_WALL_TIMEOUT = 0.3;
 
     // Initial pose for the robot
     public static double INITIAL_POSE_X = 22.5;
@@ -46,9 +46,9 @@ public class Chamber {
 
     // Position for scoring specimen 2 on the high chamber
     public static double SPECIMEN_2_CHAMBER_X = -2;
-    public static double SPECIMEN_2_CHAMBER_Y = -49;
+    public static double SPECIMEN_2_CHAMBER_Y = -49.5;
     public static double SPECIMEN_2_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
-    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -47;
+    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -47.5;
 
     // Pickup specimen 3 from wall
     public static double SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X = 37.5;
@@ -61,9 +61,9 @@ public class Chamber {
 
     // Position for scoring specimen 3 on the high chamber
     public static double SPECIMEN_3_CHAMBER_X = 0;
-    public static double SPECIMEN_3_CHAMBER_Y = -48;
-    public static double SPECIMEN_3_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
-    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -46;
+    public static double SPECIMEN_3_CHAMBER_Y = -49;
+    public static double SPECIMEN_3_CHAMBER_ORIENTATION = 135;
+    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -47;
 
     // Park in the observation zone
     public static double PARK_X = 55;
@@ -136,26 +136,25 @@ public class Chamber {
                 .lineToY(SPECIMEN_2_CHAMBER_SCORE_Y)
                 .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 
-                // Move to the observation zone to pickup specimen 3 from the wall and pickup the specimen
-                .strafeTo(new Vector2d(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X, SPECIMEN_3_INTAKE_AWAY_FROM_WALL_Y))
-                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
-                .turn(Math.toRadians(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_ORIENTATION))
-                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
-                .lineToYLinearHeading(SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_Y, Math.toRadians(SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_ORIENTATION))
-                .waitSeconds(INTAKE_SPECIMEN_WALL_TIMEOUT)
-                .lineToYLinearHeading(SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_Y, Math.toRadians(SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_ORIENTATION))
-                .stopAndAdd(ias.actionIntakeSpecimenFromWall())
-
-                // Move to the chamber and score specimen 3
-                .strafeToSplineHeading(new Vector2d(SPECIMEN_3_CHAMBER_X, SPECIMEN_3_CHAMBER_Y), Math.toRadians(SPECIMEN_3_CHAMBER_ORIENTATION))
-                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
-                .lineToY(SPECIMEN_3_CHAMBER_SCORE_Y)
-                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
+//                // Move to the observation zone to pickup specimen 3 from the wall and pickup the specimen
+//                .strafeTo(new Vector2d(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_X, SPECIMEN_3_INTAKE_AWAY_FROM_WALL_Y))
+//                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
+//                .turn(Math.toRadians(SPECIMEN_3_INTAKE_AWAY_FROM_WALL_ORIENTATION))
+//                .stopAndAdd(ias.actionMoveToIntakeSpecimenOffWallPosition())
+//                .lineToYLinearHeading(SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_Y, Math.toRadians(SPECIMEN_3_INTAKE_AT_WALL_STAGE_1_ORIENTATION))
+//                .waitSeconds(INTAKE_SPECIMEN_WALL_TIMEOUT)
+//                .lineToYLinearHeading(SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_Y, Math.toRadians(SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_ORIENTATION))
+//                .stopAndAdd(ias.actionIntakeSpecimenFromWall())
+//
+//                // Move to the chamber and score specimen 3
+//                .strafeToSplineHeading(new Vector2d(SPECIMEN_3_CHAMBER_X, SPECIMEN_3_CHAMBER_Y), Math.toRadians(SPECIMEN_3_CHAMBER_ORIENTATION))
+//                .stopAndAdd(ias.actionMoveToScoreSpecimenHighChamber())
+//                .lineToY(SPECIMEN_3_CHAMBER_SCORE_Y)
+//                .stopAndAdd(ias.actionScoreSpecimenHighChamber())
 
                 // Park the robot
                 .strafeToSplineHeading(new Vector2d(PARK_X, PARK_Y), Math.toRadians(PARK_ORIENTATION))
                 .stopAndAdd(ias.actionMoveToStartPosition())
-                .waitSeconds(15)
                 .build();
     }
 }

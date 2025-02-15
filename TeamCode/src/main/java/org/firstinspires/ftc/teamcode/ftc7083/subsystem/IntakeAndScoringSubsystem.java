@@ -520,6 +520,17 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Gets an action to ove the intake and scoring system to a neutral position
+     *
+     * @return an action to ove the intake and scoring system to a neutral position
+     */
+    public ActionEx actionMoveToNeutralPosition() {
+        return new SequentialAction(
+                new MoveToNeutralPosition(this)
+        );
+    }
+
+    /**
      * Gets an action to ove the intake and scoring system so that it can pick up a specimen off
      * the wall.
      *
