@@ -43,7 +43,7 @@ public class Basket {
     // Position for scoring sample 3 in the high basket
     public static double SAMPLE_3_BASKET_X = -55.5;
     public static double SAMPLE_3_BASKET_Y = -63.5;;
-    public static double SAMPLE_3_BASKET_ORIENTATION = 125;
+    public static double SAMPLE_3_BASKET_ORIENTATION = 45;
 
     private final TrajectoryActionBuilder actionBuilder;
 
