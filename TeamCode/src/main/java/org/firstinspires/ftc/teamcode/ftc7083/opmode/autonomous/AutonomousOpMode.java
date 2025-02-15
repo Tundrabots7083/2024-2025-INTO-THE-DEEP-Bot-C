@@ -29,7 +29,7 @@ import java.util.List;
  * Base autonomous op mode
  */
 public abstract class AutonomousOpMode extends LinearOpMode {
-    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 28500;
+    public static int AUTONOMOUS_ACTIONS_TIMEOUT = 28000;
 
     @Override
     public void runOpMode() throws InterruptedException {
