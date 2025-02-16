@@ -9,13 +9,12 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Basket;
 
 /**
- * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
+ * Autonomous OpMode used for scoring on the basket.
  */
-@Autonomous(name = "Red Basket", group = "red", preselectTeleOp = "Primary TeleOp")
-public class RedBasketOpMode extends AutonomousOpMode {
+@Autonomous(name = "Basket", group = "red", preselectTeleOp = "Primary TeleOp")
+public class BasketOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.RED;
         Robot robot = Robot.getInstance();
         Basket trajectoryBuilder = new Basket(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();

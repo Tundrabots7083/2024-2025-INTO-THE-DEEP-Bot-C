@@ -9,13 +9,12 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.SparkFunOTOSDrive
 import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Chamber;
 
 /**
- * Autonomous OpMode used for scoring on the chamber when in the blue alliance.
+ * Autonomous OpMode used for scoring on the chamber.
  */
-@Autonomous(name = "Blue Chamber", group = "blue", preselectTeleOp = "Primary TeleOp")
-public class BlueChamberOpMode extends AutonomousOpMode {
+@Autonomous(name = "Chamber", group = "red", preselectTeleOp = "Primary TeleOp")
+public class ChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
-        Robot.INTAKE_COLOR = Robot.SampleIntakeColor.BLUE;
         Robot robot = Robot.getInstance();
         Chamber trajectoryBuilder = new Chamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));
         return trajectoryBuilder.getTrajectory();
