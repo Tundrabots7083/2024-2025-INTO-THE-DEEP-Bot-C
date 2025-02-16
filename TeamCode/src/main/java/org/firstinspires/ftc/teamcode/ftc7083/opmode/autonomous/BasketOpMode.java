@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Basket;
 /**
  * Autonomous OpMode used for scoring on the basket.
  */
-@Autonomous(name = "Basket", group = "red", preselectTeleOp = "Primary TeleOp")
+@Autonomous(name = "Basket", group = "Active", preselectTeleOp = "Primary TeleOp")
 public class BasketOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {

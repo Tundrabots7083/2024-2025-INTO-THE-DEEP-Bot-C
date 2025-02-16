@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Chamber;
 /**
  * Autonomous OpMode used for scoring on the chamber.
  */
-@Autonomous(name = "Chamber", group = "red", preselectTeleOp = "Primary TeleOp")
+@Autonomous(name = "Chamber", group = "Active", preselectTeleOp = "Primary TeleOp")
 public class ChamberOpMode extends AutonomousOpMode {
     @Override
     public Action getTrajectory() {
