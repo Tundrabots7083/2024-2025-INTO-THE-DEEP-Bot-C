@@ -51,10 +51,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.MecanumDrive;
-import org.firstinspires.ftc.teamcode.messages.DriveCommandMessage;
-import org.firstinspires.ftc.teamcode.messages.MecanumCommandMessage;
-import org.firstinspires.ftc.teamcode.messages.MecanumLocalizerInputsMessage;
-import org.firstinspires.ftc.teamcode.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumCommandMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumLocalizerInputsMessage;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 import org.firstinspires.ftc.teamcode.roadrunner.Drawing;
 
 import java.util.Arrays;
@@ -279,7 +279,7 @@ public class AutoMecanumDrive {
             }
 
             Pose2dDual<Time> txWorldTarget = timeTrajectory.get(t);
-            targetPoseWriter.write(new org.firstinspires.ftc.teamcode.messages.PoseMessage(txWorldTarget.value()));
+            targetPoseWriter.write(new org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage(txWorldTarget.value()));
 
             PoseVelocity2d robotVelRobot = updatePoseEstimate();
 
@@ -288,7 +288,7 @@ public class AutoMecanumDrive {
                     Params.axialVelGain, Params.lateralVelGain, Params.headingVelGain
             )
                     .compute(txWorldTarget, pose, robotVelRobot);
-            driveCommandWriter.write(new org.firstinspires.ftc.teamcode.messages.DriveCommandMessage(command));
+            driveCommandWriter.write(new org.firstinspires.ftc.teamcode.roadrunner.messages.DriveCommandMessage(command));
 
             MecanumKinematics.WheelVelocities<Time> wheelVels = kinematics.inverse(command);
             double voltage = voltageSensor.getVoltage();
@@ -299,7 +299,7 @@ public class AutoMecanumDrive {
             double leftBackPower = feedforward.compute(wheelVels.leftBack) / voltage;
             double rightBackPower = feedforward.compute(wheelVels.rightBack) / voltage;
             double rightFrontPower = feedforward.compute(wheelVels.rightFront) / voltage;
-            mecanumCommandWriter.write(new org.firstinspires.ftc.teamcode.messages.MecanumCommandMessage(
+            mecanumCommandWriter.write(new org.firstinspires.ftc.teamcode.roadrunner.messages.MecanumCommandMessage(
                     voltage, leftFrontPower, leftBackPower, rightBackPower, rightFrontPower
             ));
 
@@ -371,7 +371,7 @@ public class AutoMecanumDrive {
             }
 
             Pose2dDual<Time> txWorldTarget = turn.get(t);
-            targetPoseWriter.write(new org.firstinspires.ftc.teamcode.messages.PoseMessage(txWorldTarget.value()));
+            targetPoseWriter.write(new org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage(txWorldTarget.value()));
 
             PoseVelocity2d robotVelRobot = updatePoseEstimate();
 
