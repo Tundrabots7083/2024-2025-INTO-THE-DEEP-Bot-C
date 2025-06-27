@@ -8,18 +8,27 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.AscentMotor;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 
 @TeleOp(name = "Ascent Test", group = "tests")
 public class AscentTest extends OpMode {
     private Robot robot;
+    private Arm arm;
+    private LinearSlide linearSlide;
+    private AscentMotor ascentMotor;
     private final Gamepad previousGamepad1 = new Gamepad();
-    private boolean ascend = false;
+    private int buttonCount = 0;
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot = Robot.init(hardwareMap, telemetry);
+        arm = robot.arm;
+        linearSlide = robot.linearSlide;
+        ascentMotor = new AscentMotor(hardwareMap, telemetry);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -28,15 +37,21 @@ public class AscentTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.cross && !previousGamepad1.cross) {
-            ascend = !ascend;
+            buttonCount++;
         }
 
-        if (ascend) {
-            robot.intakeAndScoringSubsystem.moveToAscentLevelOne();
-            telemetry.addData("[ASCENT] pos", "ascent");
-        } else {
-            robot.intakeAndScoringSubsystem.moveToStartPosition();
-            telemetry.addData("[ASCENT] pos", "start");
+        switch (buttonCount) {
+            case 1 : arm.setTargetAngle(50);
+                    linearSlide.setLength(15);
+                    telemetry.addData("[ASCENT] pos", "ascent");
+                    break;
+            case 2 : arm.setTargetAngle(-20);
+                    break;
+            case 3 : linearSlide.setLength(8);
+                    ascentMotor.setLength(0);
+
+
+
         }
 
         robot.arm.execute();
