@@ -28,7 +28,7 @@ public class AscentTest extends OpMode {
         robot = Robot.init(hardwareMap, telemetry);
         arm = robot.arm;
         linearSlide = robot.linearSlide;
-        ascentMotor = new AscentMotor(hardwareMap, telemetry);
+        ascentMotor = new AscentMotor(linearSlide, hardwareMap, telemetry);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -41,21 +41,33 @@ public class AscentTest extends OpMode {
         }
 
         switch (buttonCount) {
-            case 1 : arm.setTargetAngle(50);
-                    linearSlide.setLength(15);
-                    telemetry.addData("[ASCENT] pos", "ascent");
-                    break;
-            case 2 : arm.setTargetAngle(-20);
-                    break;
-            case 3 : linearSlide.setLength(8);
-                    ascentMotor.setLength(0);
-
+            case 1:
+                arm.setTargetAngle(50);
+                linearSlide.setLength(15);
+                telemetry.addData("[ASCENT] pos", "ascent");
+                break;
+            case 2:
+                arm.setTargetAngle(-20);
+                break;
+            case 3:
+                linearSlide.setSlideToZeroPower();
+                ascentMotor.ascend();
+                buttonCount++;
+                break;
+            case 4:
+                if (ascentMotor.isAtTarget()) {
+                    gamepad1.rumble(500);
+                }
+                break;
 
 
         }
 
+        linearSlide.isAscending = ascentMotor.isAscending;
+
         robot.arm.execute();
         robot.linearSlide.execute();
+        ascentMotor.execute();
 
         previousGamepad1.copy(gamepad1);
     }

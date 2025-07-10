@@ -52,6 +52,7 @@ public class LinearSlide extends SubsystemBase {
     private double targetLength = Double.NaN;
     private int atTargetCount = 0;
     private double currentLength = 0;
+    public boolean isAscending = false;
 
     /**
      * Instantiates the linear slide for the robot with a static feed forward value of <code>KG</code>.
@@ -103,6 +104,10 @@ public class LinearSlide extends SubsystemBase {
         }
     }
 
+    public void setSlideToZeroPower() {
+        slideMotor.setPower(0);
+    }
+
     /**
      * Gets the slide length in inches
      * Finds the value for the length
@@ -110,7 +115,7 @@ public class LinearSlide extends SubsystemBase {
      * @return slide length in inches
      */
     public double getCurrentLength() {
-        return currentLength;
+        return slideMotor.getCurrentInches();
     }
 
     /**
@@ -135,26 +140,28 @@ public class LinearSlide extends SubsystemBase {
      */
     @Override
     public void execute() {
-        currentLength = slideMotor.getCurrentInches();
-        double targetLength;
-        if (USE_MOTION_PROFILE) {
-            targetLength = profile.calculatePosition();
-        } else {
-            targetLength = this.targetLength;
-        }
-        double power = pidController.calculate(targetLength, currentLength);
-        slideMotor.setPower(power);
+        if(!isAscending) {
+            currentLength = slideMotor.getCurrentInches();
+            double targetLength;
+            if (USE_MOTION_PROFILE) {
+                targetLength = profile.calculatePosition();
+            } else {
+                targetLength = this.targetLength;
+            }
+            double power = pidController.calculate(targetLength, currentLength);
+            slideMotor.setPower(power);
 
-        telemetry.addData("[Slide] PID Target", this.targetLength);
-        telemetry.addData("[Slide] Power", power);
+            telemetry.addData("[Slide] PID Target", this.targetLength);
+            telemetry.addData("[Slide] Power", power);
 
-        // Make sure the slide is at it's target for a number of consecutive loops. This is designed
-        // to handle cases of "bounce" in the slide when moving to the target length.
-        double error = Math.abs(this.targetLength - currentLength);
-        if (error <= TOLERABLE_ERROR) {
-            atTargetCount++;
-        } else {
-            atTargetCount = 0;
+            // Make sure the slide is at it's target for a number of consecutive loops. This is designed
+            // to handle cases of "bounce" in the slide when moving to the target length.
+            double error = Math.abs(this.targetLength - currentLength);
+            if (error <= TOLERABLE_ERROR) {
+                atTargetCount++;
+            } else {
+                atTargetCount = 0;
+            }
         }
     }
 
