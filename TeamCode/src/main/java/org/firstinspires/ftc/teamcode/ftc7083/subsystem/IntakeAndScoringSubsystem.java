@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -76,8 +77,12 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public static double HIGH_CHAMBER_SCORING_RELEASE_Y = HIGH_CHAMBER_HEIGHT - 11;     // 15.0
     public static double HIGH_CHAMBER_SCORING_X = ARM_LENGTH;                           // 15.0
     public static double HIGH_CHAMBER_SCORING_Y = HIGH_CHAMBER_HEIGHT - 1;              // 25.0
-    public static double LOW_ASCENT_BAR_X = ARM_LENGTH + 5.0;                           // 20.0
-    public static double LOW_ASCENT_BAR_Y = LOW_ASCENT_BAR_HEIGHT + 6;                  // 26.0
+    public static double LOW_ASCENT_BAR_X = 27;                                         // 27
+    public static double LOW_ASCENT_BAR_Y = 30;                                         // 30
+    public static double LOW_ASCENT_RETRACTED_X = 18;
+    public static double LOW_ASCENT_RETRACTED_Y = 21;
+    public static double LOW_ASCENT_SQUISHED_X = 22;
+    public static double LOW_ASCENT_SQUISHED_Y = 9.5;
     public static double LOW_BASKET_RETRACTED_X = HIGH_BASKET_RETRACTED_X;              // 0.0
     public static double LOW_BASKET_RETRACTED_Y = HIGH_BASKET_RETRACTED_Y;              // 10.0
     public static double LOW_BASKET_SCORING_X = ARM_LENGTH - 20.0;                      // -5.0
@@ -110,6 +115,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
         // Update each components of the intake/scoring subsystem.
         robot.arm.execute();
         robot.linearSlide.execute();
+        robot.ascentMotor.execute();
         robot.wrist.execute();
         robot.claw.execute();
     }
@@ -342,6 +348,19 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
      */
     public void moveToAscentLevelOne() {
         moveToPosition(LOW_ASCENT_BAR_X, LOW_ASCENT_BAR_Y);
+    }
+
+    public void moveToAscentRetractedPosition() {
+        moveToPosition(LOW_ASCENT_RETRACTED_X,LOW_ASCENT_RETRACTED_Y);
+    }
+
+    public void moveToAscentSquishedPosition() {
+        moveToPosition(LOW_ASCENT_SQUISHED_X, LOW_ASCENT_SQUISHED_Y);
+    }
+
+    public void engageAscentMotor(Gamepad gamepad){
+        robot.linearSlide.isAscending = true;
+        robot.ascentMotor.setGamepad(gamepad);
     }
 
     /**

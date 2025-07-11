@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.ftc7083.subsystem;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.Range;
@@ -19,16 +22,11 @@ import org.firstinspires.ftc.teamcode.ftc7083.hardware.Motor;
 @Config
 public class AscentMotor extends SubsystemBase {
 
-    // Constants for determining if the slide is at target
-    public static double TOLERABLE_ERROR = 1.0; // inches
-
     private final Motor ascentMotor;
-    private LinearSlide realLinearSlide;
     private final Telemetry telemetry;
-    private double linearSlideTargetLength = 5;
-    private double currentLinearSlideLength;
-    public boolean isAscending = false;
-    private boolean atTarget = false;
+    private Gamepad gamepad;
+
+    double power = 0;
 
 
     /**
@@ -37,29 +35,19 @@ public class AscentMotor extends SubsystemBase {
      * @param hardwareMap  Hardware Map
      * @param telemetry    Telemetry
      */
-    public AscentMotor(LinearSlide linearSlide, HardwareMap hardwareMap, Telemetry telemetry) {
+    public AscentMotor(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
-        realLinearSlide = linearSlide;
-        currentLinearSlideLength = realLinearSlide.getCurrentLength();
         ascentMotor = new Motor(hardwareMap, telemetry, "ascentMotor");
         configMotor(ascentMotor);
     }
 
-
-    /**
-     * Gets the slide length in inches
-     * Finds the value for the length
-     *
-     * @return slide length in inches
-     */
-    public double getCurrentLinearSlideLength() {
-        return realLinearSlide.getCurrentLength();
+    public void setGamepad(Gamepad gamepad) {
+        this.gamepad = gamepad;
     }
 
-    /**
-     * sets the ascent motor's "state" to ascending
-     */
-    public void ascend() {isAscending = true;}
+    public void setPower(double power) {
+        ascentMotor.setPower(power);
+    }
 
     /**
      * Configures the motor used for the linear slide
@@ -71,7 +59,7 @@ public class AscentMotor extends SubsystemBase {
         motor.setMotorType(motorConfigurationType);
         motor.setMode(Motor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(Motor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setDirection(Motor.Direction.FORWARD);
+        motor.setDirection(Motor.Direction.REVERSE);
     }
 
     /**
@@ -79,41 +67,9 @@ public class AscentMotor extends SubsystemBase {
      */
     @Override
     public void execute() {
-
-        if(isAscending) {
-            currentLinearSlideLength = getCurrentLinearSlideLength();
-            double error = currentLinearSlideLength - linearSlideTargetLength;
-            double power = 0;
-            if (error <= TOLERABLE_ERROR) {
-                power = 1;
-            } else {
-                atTarget = true;
-            }
-            ascentMotor.setPower(power);
-
-            telemetry.addData("[Slide] PID Target", this.currentLinearSlideLength);
-            telemetry.addData("[Slide] Power", power);
+        if(gamepad != null) {
+            setPower(gamepad.right_trigger);
+        }
+         telemetry.addData("[Ascent Motor] Power", power);
         }
     }
-
-    /**
-     * returns whether the motor is at target
-     */
-    public boolean isAtTarget() {
-        telemetry.addData("[Slide] current", currentLinearSlideLength);
-        telemetry.addData("[Slide] atTarget", atTarget);
-        return atTarget;
-    }
-
-    /**
-     * Returns a string representation of the linear slide.
-     *
-     * @return a string representation of the linear slide
-     */
-    @Override
-    @NonNull
-    public String toString() {
-        return "AscentMotor{" +", current=" + getCurrentLinearSlideLength() +
-                "}";
-    }
-}

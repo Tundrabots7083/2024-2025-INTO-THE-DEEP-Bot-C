@@ -186,6 +186,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     state = State.ASCENT_LEVEL_ONE;
                     break;
                 case ASCENT_LEVEL_ONE:
+                    intakeAndScoringSubsystem.moveToAscentRetractedPosition();
+                    state = State.ASCENT_RETRACTED_POS;
+                    break;
+                case ASCENT_RETRACTED_POS:
+                    intakeAndScoringSubsystem.moveToAscentSquishedPosition();
+                    state = State.ASCENT_SQUISHED_POS;
+                    break;
+                case ASCENT_SQUISHED_POS:
+                    intakeAndScoringSubsystem.engageAscentMotor(gamepad2);
+                    state = State.ENGAGED_ASCENT_MOTOR;
+                    break;
+                case ENGAGED_ASCENT_MOTOR:
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
                     break;
@@ -388,30 +400,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
                     intakeAndScoringSubsystem.moveToNeutralPosition();
                     state = State.NEUTRAL_POSITION;
             }
-        } /*else if (gamepad1.touchpad && ! previousGamepad1.touchpad){
-            switch (state) {
-                case NEUTRAL_POSITION:
-                    Status result = Status.RUNNING;
-                    this.intakeSampleBehaviorTree = new IntakeSampleBehaviorTree(hardwareMap,telemetry);
-                    while(result == Status.RUNNING) {
-                        result = this.intakeSampleBehaviorTree.tick();
-                    }
-                    if (result == Status.FAILURE) {
-                        state = State.INTAKE_AUTO_GRAB_FAILED;
-                        gamepad1.rumble(1000);
-                    } else {
-                        state = State.NEUTRAL_POSITION;
-                    }
-                    break;
-                case INTAKE_AUTO_GRAB_FAILED:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
-                    break;
-                default:
-                    intakeAndScoringSubsystem.moveToNeutralPosition();
-                    state = State.NEUTRAL_POSITION;
-            }
-        }*/
+        }
 
         // Open and close the claw; used for acquiring samples/specimens and scoring
         // or depositing them
@@ -440,6 +429,9 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
      */
     enum State {
         ASCENT_LEVEL_ONE,
+        ASCENT_RETRACTED_POS,
+        ASCENT_SQUISHED_POS,
+        ENGAGED_ASCENT_MOTOR,
         DROP_OFF_SPECIMEN,
         DROP_OFF_SPECIMEN_CLAW_OPEN,
         HIGH_BASKET_PRE_SCORING,

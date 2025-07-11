@@ -10,18 +10,14 @@ import org.firstinspires.ftc.teamcode.ftc7083.subsystem.AscentMotor;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.LinearSlide;
 
 @Config
-@TeleOp(name = "Ascent Motor Test", group = "tests")
-public class AscentMotorTest extends OpMode {
-    public static double LINEAR_SLIDE_LENGTH = 0.0;
-    private double lastLinearSlideLength = 0.0;
+@TeleOp(name = "Reset Ascent Motor", group = "tests")
+public class ResetAscentMotor extends OpMode {
     private AscentMotor ascentMotor;
-    private LinearSlide linearSlide;
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        linearSlide = new LinearSlide(hardwareMap, telemetry);
-        ascentMotor = new AscentMotor(linearSlide, hardwareMap, telemetry);
+        ascentMotor = new AscentMotor(hardwareMap, telemetry);
 
         telemetry.addLine("Initialization Complete");
         telemetry.update();
@@ -29,15 +25,7 @@ public class AscentMotorTest extends OpMode {
 
     @Override
     public void loop() {
-
-        if(LINEAR_SLIDE_LENGTH != lastLinearSlideLength) {
-            linearSlide.setSlideToZeroPower();
-            lastLinearSlideLength = LINEAR_SLIDE_LENGTH;
-        }
-
-        ascentMotor.execute();
-        telemetry.addData("Current Length", ascentMotor.getCurrentLinearSlideLength());
-        telemetry.update();
+      ascentMotor.setPower(-1);
     }
 
 }

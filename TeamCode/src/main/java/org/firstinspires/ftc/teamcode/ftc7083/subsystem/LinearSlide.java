@@ -162,6 +162,8 @@ public class LinearSlide extends SubsystemBase {
             } else {
                 atTargetCount = 0;
             }
+        } else {
+            setSlideToZeroPower();
         }
     }
 

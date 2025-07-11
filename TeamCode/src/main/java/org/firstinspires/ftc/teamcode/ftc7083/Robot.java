@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.drive.Params;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.Localizer;
 import org.firstinspires.ftc.teamcode.ftc7083.localization.SparkFunOTOSLocalizer;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Arm;
+import org.firstinspires.ftc.teamcode.ftc7083.subsystem.AscentMotor;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.Claw;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.GlobalShutterCamera;
 import org.firstinspires.ftc.teamcode.ftc7083.subsystem.IntakeAndScoringSubsystem;
@@ -124,6 +125,7 @@ public class Robot {
     public Webcam rightWebcam;
     public final Arm arm;
     public final LinearSlide linearSlide;
+    public final AscentMotor ascentMotor;
     public final Wrist wrist;
     public final Claw claw;
     public Limelight limelight;
@@ -162,6 +164,7 @@ public class Robot {
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         arm = new Arm(hardwareMap, telemetry);
         linearSlide = new LinearSlide(hardwareMap, telemetry, new LinearSlideFeedForward(arm, LinearSlide.KG));
+        ascentMotor = new AscentMotor(hardwareMap, telemetry);
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
