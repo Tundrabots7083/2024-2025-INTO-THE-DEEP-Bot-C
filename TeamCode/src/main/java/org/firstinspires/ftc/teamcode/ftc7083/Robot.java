@@ -126,7 +126,7 @@ public class Robot {
     public final LinearSlide linearSlide;
     public final Wrist wrist;
     public final Claw claw;
-    public Limelight limelight;
+    //public Limelight limelight;
     public final SparkFunOTOS otos;
     public GlobalShutterCamera globalShutterCamera;
     //public final ColorSensor colorSensor;
@@ -165,8 +165,8 @@ public class Robot {
         wrist = new Wrist(hardwareMap, telemetry);
         claw = new Claw(hardwareMap, telemetry);
         intakeAndScoringSubsystem = new IntakeAndScoringSubsystem(hardwareMap, telemetry);
-        globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
-        limelight = new Limelight(hardwareMap, telemetry);
+        //globalShutterCamera = new GlobalShutterCamera(hardwareMap, telemetry);
+        //limelight = new Limelight(hardwareMap, telemetry);
         //colorSensor = new ColorSensor(hardwareMap, telemetry);
 
         if (USE_SPARKFUN_OTOS_CORRECTED) {
