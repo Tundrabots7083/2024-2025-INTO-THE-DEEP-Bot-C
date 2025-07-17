@@ -108,13 +108,18 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         if (gamepad2.dpad_up && !previousGamepad2.dpad_up) {
             switch (state) {
                 case INTAKE_SPECIMEN_OFF_WALL:
-                case HIGH_CHAMBER_LOWERED:
+                case HIGH_CHAMBER_LOWERED_OPEN:
                     intakeAndScoringSubsystem.moveToChamberHighScoringPosition();
                     state = State.HIGH_CHAMBER_SCORING;
                     break;
                 case HIGH_CHAMBER_SCORING:
                     intakeAndScoringSubsystem.moveToChamberHighLoweredPosition();
                     state = State.HIGH_CHAMBER_LOWERED;
+                    break;
+                case HIGH_CHAMBER_LOWERED:
+                    intakeAndScoringSubsystem.openClaw();
+                    clawOpen = true;
+                    state = State.HIGH_CHAMBER_LOWERED_OPEN;
                     break;
                 case HIGH_BASKET_SCORING:
                     intakeAndScoringSubsystem.moveToBasketHighRaisedPosition();
@@ -447,6 +452,7 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
         HIGH_BASKET_RETRACTED,
         HIGH_BASKET_SCORING,
         HIGH_CHAMBER_LOWERED,
+        HIGH_CHAMBER_LOWERED_OPEN,
         HIGH_CHAMBER_SCORING,
         INTAKE_CLOSE_ABOVE_SAMPLE,
         INTAKE_CLOSE_LOWERED_TO_SAMPLE,
