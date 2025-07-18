@@ -430,6 +430,8 @@ public class IntakeAndScoringSubsystemController implements SubsystemController 
             }
         }
 
+        intakeAndScoringSubsystem.setWristRoll(gamepad2.left_stick_x);
+
         // Update the scoring subsystem. This allows it to adjust the position of the managed
         // components as they move to a target position.
         intakeAndScoringSubsystem.execute();

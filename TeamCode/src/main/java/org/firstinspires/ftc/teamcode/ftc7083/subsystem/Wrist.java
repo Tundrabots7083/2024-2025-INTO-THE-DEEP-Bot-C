@@ -23,6 +23,7 @@ public class Wrist extends SubsystemBase {
     // Offset for the pitch and roll servos to make the "zero" position the middle
     public static double PITCH_DEGREES_OFFSET = 0.0;
     public static double ROLL_DEGREES_OFFSET = 156.0;
+    public static double ROLL_POSITION_OFFSET = 0.44;
 
     // Minimum and maximum pitch and roll values we allow to be set
     public static double MIN_ROLL = -45;
@@ -176,6 +177,18 @@ public class Wrist extends SubsystemBase {
             rollServoAngle = roll;
             rollServoTimer.reset();
         }
+    }
+
+    /**
+     * Set the position of the roll servo.
+     *
+     * @param position position the servo should go to from -1 to 1
+     */
+    public void setRollPosition(double position) {
+        double roll = Range.clip(position, MIN_ROLL/ROLL_SERVO_MAX_DEGREES, MAX_ROLL/ROLL_SERVO_MAX_DEGREES) + ROLL_POSITION_OFFSET;
+            rollServo.setPosition(roll);
+            rollServoAngle = roll;
+            rollServoTimer.reset();
     }
 
     /**

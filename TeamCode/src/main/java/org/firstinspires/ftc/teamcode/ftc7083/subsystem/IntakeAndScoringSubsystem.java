@@ -385,6 +385,14 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     }
 
     /**
+     * Sets the position of the roll servo directly from -1 to 1
+     * @param position the desired position of the roll servo from -1 to 1 (value gets clipped eventually though)
+     */
+    public void setWristRoll(double position) {
+        robot.wrist.setRollPosition(position);
+    }
+
+    /**
      * Returns a string representation of the intake and scoring subsystem.
      *
      * @return a string representation of the intake and scoring subsystem
