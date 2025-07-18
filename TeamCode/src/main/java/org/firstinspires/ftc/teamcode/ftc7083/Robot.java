@@ -126,7 +126,7 @@ public class Robot {
     public final LinearSlide linearSlide;
     public final Wrist wrist;
     public final Claw claw;
-    //public Limelight limelight;
+    public Limelight limelight;
     public final SparkFunOTOS otos;
     public GlobalShutterCamera globalShutterCamera;
     //public final ColorSensor colorSensor;

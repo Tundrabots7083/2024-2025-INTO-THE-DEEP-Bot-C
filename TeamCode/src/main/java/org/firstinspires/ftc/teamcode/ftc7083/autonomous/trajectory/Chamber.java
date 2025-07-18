@@ -27,7 +27,7 @@ public class Chamber {
     public static double SPECIMEN_1_CHAMBER_X = -4;
     public static double SPECIMEN_1_CHAMBER_Y = -49;
     public static double SPECIMEN_1_CHAMBER_ORIENTATION = 120;
-    public static double SPECIMEN_1_SCORE_CHAMBER_Y = -47.5;
+    public static double SPECIMEN_1_SCORE_CHAMBER_Y = -46;
 
     // Positions for strafing the sample from spike mark 1 into the observation zone
     public static double SPIKE_MARK_1_REVERSE_FROM_CHAMBER_Y = -48;
@@ -45,10 +45,10 @@ public class Chamber {
     public static double SPECIMEN_2_INTAKE_AT_WALL_STAGE_1_ORIENTATION = -65;
 
     // Position for scoring specimen 2 on the high chamber
-    public static double SPECIMEN_2_CHAMBER_X = -2;
-    public static double SPECIMEN_2_CHAMBER_Y = -50.5;
+    public static double SPECIMEN_2_CHAMBER_X = 1;
+    public static double SPECIMEN_2_CHAMBER_Y = -50;
     public static double SPECIMEN_2_CHAMBER_ORIENTATION = SPECIMEN_1_CHAMBER_ORIENTATION;
-    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -49;
+    public static double SPECIMEN_2_CHAMBER_SCORE_Y = -46;
 
     // Pickup specimen 3 from wall
     public static double SPECIMEN_3_REVERSE_FROM_CHAMBER_Y = -50;
@@ -64,12 +64,12 @@ public class Chamber {
     public static double SPECIMEN_3_CHAMBER_X = 4;
     public static double SPECIMEN_3_CHAMBER_Y = -53;
     public static double SPECIMEN_3_CHAMBER_ORIENTATION = 135;
-    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -51;
+    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -46;
 
     // Park in the observation zone
-    public static double PARK_X = 40;
-    public static double PARK_Y = -40;
-    public static double PARK_ORIENTATION = 140;
+    public static double PARK_X = 33;
+    public static double PARK_Y = -30;
+    public static double PARK_ORIENTATION = 135;
 
     private final TrajectoryActionBuilder actionBuilder;
 
