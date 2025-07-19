@@ -91,6 +91,7 @@ public class Basket {
                 .strafeToSplineHeading(new Vector2d(SAMPLE_1_BASKET_X, SAMPLE_1_BASKET_Y), Math.toRadians(SAMPLE_1_BASKET_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
 
+                /*
                 // Pick up the sample from Spike Mark 1
                 .strafeToSplineHeading(new Vector2d(SPIKE_MARK_1_X, SPIKE_MARK_1_Y), Math.toRadians(SPIKE_MARK_1_ORIENTATION))
                 .stopAndAdd(ias.actionIntakeSampleFromSpikeMark())
@@ -106,6 +107,7 @@ public class Basket {
                 // Score sample 3 in the basket
                 .strafeToSplineHeading(new Vector2d(SAMPLE_3_BASKET_X, SAMPLE_3_BASKET_Y), Math.toRadians(SAMPLE_3_BASKET_ORIENTATION))
                 .stopAndAdd(ias.actionScoreSampleHighBasket())
+                 */
 
                 // Move to the start position
                 .stopAndAdd(ias.actionMoveToStartPosition())

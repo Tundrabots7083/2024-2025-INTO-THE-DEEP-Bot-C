@@ -13,6 +13,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.DetectBlueSamplesBehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTree.DetectRedSamplesBehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.ActionFunctions.DetectRedSamplesSimplied;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.BehaviorTree;
+import org.firstinspires.ftc.teamcode.ftc7083.BehaviorTree.BehaviorTreeComponents.general.Status;
 import org.firstinspires.ftc.teamcode.ftc7083.Robot;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionEx;
 import org.firstinspires.ftc.teamcode.ftc7083.action.ActionExBase;
@@ -30,6 +35,9 @@ import java.util.List;
  */
 public abstract class AutonomousOpMode extends LinearOpMode {
     public static int AUTONOMOUS_ACTIONS_TIMEOUT = 28000;
+    public DetectBlueSamplesBehaviorTree blueBehaviorTree = null;
+    public DetectRedSamplesBehaviorTree redBehaviorTree = null;
+    public boolean isFirstMarkBarnacle;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -45,9 +53,35 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         robot.claw.close();
         robot.claw.execute();
 
-        telemetry.addLine("Initialization Complete");
-        telemetry.update();
+        Initialize();
 
+        if (blueBehaviorTree != null) {
+            Status result = blueBehaviorTree.tick();
+
+            while (result == Status.RUNNING && !isStopRequested()) {
+                result = blueBehaviorTree.tick();
+                telemetry.addData("Detect Sample BT", "Behavior tree result: %s", result);
+            }
+
+            if (result == Status.SUCCESS || result == Status.FAILURE) {
+                isFirstMarkBarnacle = !(boolean) blueBehaviorTree.blackBoard.getValue("BlueSampleDetected");
+                telemetry.addLine("Initialization Complete");
+                telemetry.update();
+            }
+        } else if (redBehaviorTree != null) {
+            Status result = redBehaviorTree.tick();
+
+            while (result == Status.RUNNING && !isStopRequested()) {
+                result = redBehaviorTree.tick();
+                telemetry.addData("Detect Sample BT", "Behavior tree result: %s", result);
+            }
+
+            if (result == Status.SUCCESS || result == Status.FAILURE) {
+                isFirstMarkBarnacle = !(boolean) redBehaviorTree.blackBoard.getValue("BlueSampleDetected");
+                telemetry.addLine("Initialization Complete");
+                telemetry.update();
+            }
+        }
         // Run during init but before the start button is pressed
 //        while (opModeInInit()) {
 //            robot.localizer.update();
@@ -86,6 +120,11 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         // Run the autonomous actions
         Actions.runBlocking(autonomousActions);
     }
+
+    /**
+     * Initializes BT and provides color.
+     */
+    public abstract void Initialize();
 
     /**
      * Gets the initial pose for the trajectory.

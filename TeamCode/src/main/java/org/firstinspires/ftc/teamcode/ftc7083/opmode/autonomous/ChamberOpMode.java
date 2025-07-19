@@ -14,6 +14,9 @@ import org.firstinspires.ftc.teamcode.ftc7083.autonomous.trajectory.Chamber;
 @Autonomous(name = "Chamber", group = "Active", preselectTeleOp = "Primary TeleOp")
 public class ChamberOpMode extends AutonomousOpMode {
     @Override
+    public void Initialize() {}
+
+    @Override
     public Action getTrajectory() {
         Robot robot = Robot.getInstance();
         Chamber trajectoryBuilder = new Chamber(new SparkFunOTOSDrive(hardwareMap, robot.localizer.getPose()));

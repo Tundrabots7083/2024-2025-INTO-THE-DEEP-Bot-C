@@ -30,8 +30,8 @@ public class GlobalShutterSeparatedTest extends LinearOpMode {
 
 
                     Double yellowAngle = sampleProcessor.execute(globalShutterCamera.getYellowDetections());
-                    // double blueAngle = sampleProcessor.execute(globalShutterCamera.getBlueDetections());
-                    // double redAngle = sampleProcessor.execute(globalShutterCamera.getRedDetections());
+                    // double blueAngle = sampleProcessor.execute(limelight.getBlueDetections());
+                    // double redAngle = sampleProcessor.execute(limelight.getRedDetections());
 
                     telemetry.addData("Yellow Angle", yellowAngle);
                     // telemetry.addData("Blue Angle", blueAngle);
