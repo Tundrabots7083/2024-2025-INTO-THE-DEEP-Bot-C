@@ -195,7 +195,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToIntakeCloseAboveSamplePosition() {
         moveToPosition(INTAKE_CLOSE_ABOVE_X, INTAKE_CLOSE_ABOVE_Y);
         robot.wrist.setToIntakeSample();
-        robot.claw.open();
         telemetry.addData("[IAS] position", "intake close above");
     }
 
@@ -206,6 +205,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToIntakeCloseLoweredPosition() {
         moveToPosition(INTAKE_CLOSE_LOWERED_X, INTAKE_CLOSE_LOWERED_Y);
         robot.wrist.setToIntakeSample();
+        robot.claw.open();
         telemetry.addData("[IAS] position", "intake close lowered");
     }
 
@@ -226,7 +226,6 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToIntakeFarAboveSamplePosition() {
         moveToPosition(INTAKE_FAR_ABOVE_X, INTAKE_FAR_ABOVE_Y);
         robot.wrist.setToIntakeSample();
-        robot.claw.open();
         telemetry.addData("[IAS] position", "intake far above");
     }
 
@@ -237,6 +236,7 @@ public class IntakeAndScoringSubsystem extends SubsystemBase {
     public void moveToIntakeFarLoweredPosition() {
         moveToPosition(INTAKE_FAR_LOWERED_X, INTAKE_FAR_LOWERED_Y);
         robot.wrist.setToIntakeSample();
+        robot.claw.open();
         telemetry.addData("[IAS] position", "intake far lowered");
     }
 

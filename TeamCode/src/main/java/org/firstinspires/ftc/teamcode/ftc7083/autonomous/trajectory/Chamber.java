@@ -61,10 +61,10 @@ public class Chamber {
     public static double SPECIMEN_3_INTAKE_AT_WALL_STAGE_2_ORIENTATION = -45;
 
     // Position for scoring specimen 3 on the high chamber
-    public static double SPECIMEN_3_CHAMBER_X = 4;
+    public static double SPECIMEN_3_CHAMBER_X = 7;
     public static double SPECIMEN_3_CHAMBER_Y = -53;
     public static double SPECIMEN_3_CHAMBER_ORIENTATION = 135;
-    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -46;
+    public static double SPECIMEN_3_CHAMBER_SCORE_Y = -47.5;
 
     // Park in the observation zone
     public static double PARK_X = 33;
